@@ -13,12 +13,10 @@ import lombok.NoArgsConstructor;
 public class AuthCode {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String code;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    @MapsId
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "fk_account", referencedColumnName = "id")
     private Account account;
-
-    private String code;
 }

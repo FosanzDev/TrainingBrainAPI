@@ -1,8 +1,6 @@
 package com.fosanzdev.trainingBrainAPI.controllers;
 
-import com.fosanzdev.trainingBrainAPI.services.auth.AuthService;
 import com.fosanzdev.trainingBrainAPI.services.auth.interfaces.IAuthService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +28,22 @@ public class AuthController {
         Map<String, String> response = new HashMap<>();
         response.put("access_token", "token" + username + password);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/verify")
+    void verify(@RequestBody Map<String, String> body) {
+    }
+
+    @PostMapping("/refresh")
+    void refresh(@RequestBody Map<String, String> body) {
+    }
+
+    @PostMapping("/register")
+    void register(@RequestBody Map<String, String> body) {
+    }
+
+    @PostMapping("/logout")
+    void logout(@RequestBody Map<String, String> body) {
     }
 
 }

@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -19,12 +21,12 @@ public class Account {
     private String username;
     private String password;
 
-    @OneToOne(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private RefreshToken refreshToken;
+    @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    private List<RefreshToken> refreshToken;
 
-    @OneToOne(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private AccessToken accessToken;
+    @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    private List<AccessToken> accessToken;
 
-    @OneToOne(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private AuthCode authCode;
+    @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    private List<AuthCode> authCode;
 }
