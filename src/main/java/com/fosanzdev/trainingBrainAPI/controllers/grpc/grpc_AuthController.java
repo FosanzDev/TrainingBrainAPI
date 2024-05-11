@@ -1,10 +1,8 @@
 package com.fosanzdev.trainingBrainAPI.controllers.grpc;
 
 import com.fosanzdev.trainingBrainAPI.models.AccessToken;
-import com.fosanzdev.trainingBrainAPI.models.Account;
 import com.fosanzdev.trainingBrainAPI.models.AuthCode;
 import com.fosanzdev.trainingBrainAPI.models.RefreshToken;
-import com.fosanzdev.trainingBrainAPI.services.auth.AuthService;
 import com.fosanzdev.trainingBrainAPI.services.auth.interfaces.IAuthService;
 import com.fosanzdev.trainingBrainGrpcInterface.auth.*;
 import io.grpc.Status;
@@ -20,24 +18,41 @@ public class grpc_AuthController extends AuthServiceGrpc.AuthServiceImplBase {
 
     @Override
     public void login(LoginRequest request, StreamObserver<LoginResponse> responseObserver) {
-        LoginResponse response = LoginResponse.newBuilder()
-                .setAuthToken(authService.createAuthCode(request.getUsername()).getCode())
-                .build();
+        // Get the request parameters
+        String username = request.getUsername();
+        String password = request.getPassword();
 
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
+        // Verify the account
+        boolean validAccount = authService.verifyAccount(username, password, false);
+
+        if (validAccount) {
+            authService.forceLogout(username);
+            AuthCode code = authService.createAuthCode(username);
+
+            // Send the auth code to the client
+            LoginResponse response = LoginResponse.newBuilder()
+                    .setAuthToken(code.getCode())
+                    .build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } else {
+            // If the account is invalid, return an error
+            Status status = Status.INVALID_ARGUMENT.withDescription("Invalid username or password");
+            responseObserver.onError(status.asRuntimeException());
+        }
     }
 
     @Override
     public void verify(VerifyRequest request, StreamObserver<VerifyResponse> responseStreamObserver) {
         // Get the request parameters
         String username = request.getUsername();
+        String password = request.getPassword();
         String authToken = request.getAuthToken();
 
         // Verify the auth code
-        boolean valid = authService.validateAuthCode(authToken, username);
-        if (valid) {
-            authService.verifyAccount(username);
+        boolean validAccount = authService.verifyAccount(username, password, true);
+        boolean validAuthCode = authService.validateAuthCode(authToken, username);
+        if (validAccount && validAuthCode) {
             authService.invalidateAuthCode(authToken);
             RefreshToken refreshToken = authService.createRefreshToken(username);
             AccessToken accessToken = authService.createAccessToken(username);

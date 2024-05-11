@@ -58,14 +58,19 @@ public class AuthService implements IAuthService {
 
     @Transactional
     @Override
-    public boolean verifyAccount(String username) {
+    public boolean verifyAccount(String username, String password, boolean setValidated) {
         Account account = accountRepository.findByUsername(username);
         if (account == null) {
             //Account not found
             return false;
         }
 
-        account.setVerified(true);
+        if (!account.getPassword().equals(password.hashCode() + "")) {
+            //Incorrect password
+            return false;
+        }
+
+        account.setVerified(setValidated);
         accountRepository.save(account);
         return true;
     }
@@ -90,6 +95,22 @@ public class AuthService implements IAuthService {
 
         //Token does not belong to account
         return false;
+    }
+
+    /**
+     * Internal call to delete all access and refresh tokens for an account
+     * @param username
+     * @return
+     */
+    @Transactional
+    @Override
+    public boolean forceLogout(String username) {
+        Account account = accountRepository.findByUsername(username);
+        if (account == null) return false;
+
+        invalidateAllAccessTokens(account);
+        invalidateAllRefreshTokens(account);
+        return true;
     }
 
     /**
@@ -211,14 +232,14 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public boolean validateRefreshToken(String refreshToken, String username) {
-        Account account = accountRepository.findByUsername(username);
-        if (account == null) return false;
+    public boolean validateRefreshToken(String refreshToken, String accessToken) {
+        AccessToken aToken = accessTokenRepository.find(accessToken);
+        if (aToken == null) return false;
 
-        RefreshToken token = refreshTokenRepository.find(refreshToken);
-        if (token == null) return false;
+        RefreshToken rToken = refreshTokenRepository.find(refreshToken);
+        if (rToken == null) return false;
 
-        return token.getAccount().getId().equals(account.getId());
+        return aToken.getAccount().getId().equals(rToken.getAccount().getId());
     }
 
     /**

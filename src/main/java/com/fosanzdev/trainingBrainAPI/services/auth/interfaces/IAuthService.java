@@ -8,8 +8,9 @@ public interface IAuthService {
 
     // Basic user management
     public AuthCode register(String name, String username, String password);
-    public boolean verifyAccount(String username);
+    public boolean verifyAccount(String username, String password, boolean setValidated);
     public boolean logout(String username, String refreshToken);
+    public boolean forceLogout(String username);
 
     //Token generation
     public AuthCode createAuthCode(String username);
