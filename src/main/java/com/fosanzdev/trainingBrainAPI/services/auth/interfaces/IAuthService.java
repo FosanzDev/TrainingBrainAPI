@@ -9,6 +9,7 @@ public interface IAuthService {
     // Basic user management
     public AuthCode register(String name, String username, String password);
     public boolean verifyAccount(String username);
+    public boolean logout(String username, String refreshToken);
 
     //Token generation
     public AuthCode createAuthCode(String username);
@@ -18,7 +19,7 @@ public interface IAuthService {
     // Token validation
     public boolean validateAuthCode(String authCode, String username);
     public boolean validateAccessToken(String accessToken, String username);
-    public boolean validateRefreshToken(String refreshToken, String username);
+    public boolean validateRefreshToken(String refreshToken, String accessToken);
 
     // Token invalidation
     public boolean invalidateAuthCode(String authCode);

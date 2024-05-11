@@ -70,6 +70,28 @@ public class AuthService implements IAuthService {
         return true;
     }
 
+    @Transactional
+    @Override
+    public boolean logout(String username, String refreshToken) {
+        //Find account
+        Account account = accountRepository.findByUsername(username);
+        if (account == null) return false;
+
+        //Check if refresh token belongs to account
+        RefreshToken token = refreshTokenRepository.find(refreshToken);
+        if (token == null) return false;
+
+        if (token.getAccount().getId().equals(account.getId())) {
+            // Token belongs to account
+            invalidateAllAccessTokens(account);
+            invalidateRefreshToken(refreshToken);
+            return true;
+        }
+
+        //Token does not belong to account
+        return false;
+    }
+
     /**
      * Create a new auth code for an account
      * @param username Username of account to create auth code for
@@ -190,7 +212,13 @@ public class AuthService implements IAuthService {
 
     @Override
     public boolean validateRefreshToken(String refreshToken, String username) {
-        return false;
+        Account account = accountRepository.findByUsername(username);
+        if (account == null) return false;
+
+        RefreshToken token = refreshTokenRepository.find(refreshToken);
+        if (token == null) return false;
+
+        return token.getAccount().getId().equals(account.getId());
     }
 
     /**
@@ -210,16 +238,28 @@ public class AuthService implements IAuthService {
 
     @Override
     public boolean invalidateAccessToken(String accessToken) {
-        return false;
+        AccessToken token = accessTokenRepository.find(accessToken);
+        if (token == null) return false;
+
+        accessTokenRepository.delete(token);
+        return true;
     }
 
     @Override
     public boolean invalidateRefreshToken(String refreshToken) {
-        return false;
+        RefreshToken token = refreshTokenRepository.find(refreshToken);
+        if (token == null) return false;
+
+        refreshTokenRepository.delete(token);
+        return true;
     }
 
+    @Transactional
     @Override
     public AccessToken refreshAccessToken(String refreshToken, String accessToken) {
-        return null;
+        invalidateAccessToken(accessToken);
+        AccessToken newAccessToken = new AccessToken();
+        newAccessToken.setAccount(refreshTokenRepository.find(refreshToken).getAccount());
+        return accessTokenRepository.save(newAccessToken);
     }
 }

@@ -12,4 +12,7 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Inte
 
     @Query("SELECT r FROM RefreshToken r WHERE r.account.id = :account_id")
     List<RefreshToken> findByAccount(@Param("account_id") String account_id);
+
+    @Query("SELECT r FROM RefreshToken r WHERE r.token = :token")
+    RefreshToken find(@Param("token") String token);
 }

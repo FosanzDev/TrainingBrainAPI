@@ -12,4 +12,7 @@ public interface AccessTokenRepository extends JpaRepository<AccessToken, Intege
 
     @Query("SELECT a FROM AccessToken a WHERE a.account.id = :account_id")
     List<AccessToken> findByAccount(@Param("account_id") String account_id);
+
+    @Query("SELECT a FROM AccessToken a WHERE a.token = :token")
+    AccessToken find(@Param("token") String token);
 }

@@ -57,7 +57,27 @@ public class grpc_AuthController extends AuthServiceGrpc.AuthServiceImplBase {
 
     @Override
     public void refreshToken(RefreshTokenRequest request, StreamObserver<RefreshTokenResponse> responseStreamObserver) {
+        // Get the request parameters
+        String refreshToken = request.getRefreshToken();
+        String accessToken = request.getAccessToken();
 
+        // Validate the sent tokens
+        boolean valid = authService.validateRefreshToken(refreshToken, accessToken);
+
+        if (valid) {
+            // Refresh the access token and return it
+            AccessToken newAccessToken = authService.refreshAccessToken(refreshToken, accessToken);
+            RefreshTokenResponse response = RefreshTokenResponse.newBuilder()
+                    .setAccessToken(newAccessToken.getToken())
+                    .build();
+
+            responseStreamObserver.onNext(response);
+            responseStreamObserver.onCompleted();
+        } else {
+            // If the tokens are invalid, return an error
+            Status status = Status.INVALID_ARGUMENT.withDescription("Invalid refresh token or access token");
+            responseStreamObserver.onError(status.asRuntimeException());
+        }
     }
 
     @Override
@@ -87,6 +107,22 @@ public class grpc_AuthController extends AuthServiceGrpc.AuthServiceImplBase {
 
     @Override
     public void logout(LogoutRequest request, StreamObserver<LogoutResponse> responseStreamObserver) {
+        // Get the request parameters
+        String username = request.getUsername();
+        String accessToken = request.getRefreshToken();
 
+        boolean success = authService.logout(username, accessToken);
+
+        if (success){
+            LogoutResponse response = LogoutResponse.newBuilder()
+                    .setLogout(true)
+                    .build();
+            responseStreamObserver.onNext(response);
+            responseStreamObserver.onCompleted();
+
+        } else {
+            Status status = Status.INVALID_ARGUMENT.withDescription("Invalid username or refresh token");
+            responseStreamObserver.onError(status.asRuntimeException());
+        }
     }
 }
