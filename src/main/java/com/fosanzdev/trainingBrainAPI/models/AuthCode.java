@@ -16,7 +16,7 @@ public class AuthCode {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String code;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "fk_account", referencedColumnName = "id")
     private Account account;
 }

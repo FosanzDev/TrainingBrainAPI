@@ -13,4 +13,7 @@ public interface AuthCodeRepository extends JpaRepository<AuthCode, Integer> {
 
     @Query("SELECT a FROM AuthCode a WHERE a.account.id = :account_id")
     List<AuthCode> findByAccount(@Param("account_id") String account_id);
+
+    @Query("SELECT a FROM AuthCode a WHERE a.code = :code")
+    AuthCode find(@Param("code") String code);
 }

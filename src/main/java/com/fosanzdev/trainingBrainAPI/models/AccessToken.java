@@ -16,7 +16,7 @@ public class AccessToken {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String token;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "fk_account", referencedColumnName = "id")
     private Account account;
 }

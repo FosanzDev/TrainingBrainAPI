@@ -20,6 +20,7 @@ public class Account {
 
     private String username;
     private String password;
+    private boolean verified;
 
     @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     private List<RefreshToken> refreshToken;
