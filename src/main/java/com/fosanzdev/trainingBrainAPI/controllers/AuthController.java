@@ -4,6 +4,12 @@ import com.fosanzdev.trainingBrainAPI.models.AccessToken;
 import com.fosanzdev.trainingBrainAPI.models.AuthCode;
 import com.fosanzdev.trainingBrainAPI.models.RefreshToken;
 import com.fosanzdev.trainingBrainAPI.services.auth.interfaces.IAuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,11 +23,23 @@ import java.util.Map;
 
 @RequestMapping("/auth")
 @RestController
+@Tag(name="Controlador de autenticación")
 public class AuthController {
 
     @Autowired
     private IAuthService authService;
 
+    @Operation(summary = "Genera el proceso de inicio de sesión")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Codigo de autorización generado correctamente",
+                content = @Content(mediaType = "application/json",
+                    schema = @Schema(example = """
+                            {"authToken": "2ksh31ls-wsiduoia-..."}
+                            """))),
+            @ApiResponse(responseCode = "400", description = "Datos de inicio de sesión inválidos")
+    }
+
+    )
     @PostMapping("/login")
     ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> body) {
         //Get username and password from body
