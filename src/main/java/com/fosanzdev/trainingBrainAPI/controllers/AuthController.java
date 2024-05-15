@@ -36,12 +36,23 @@ public class AuthController {
                     schema = @Schema(example = """
                             {"authToken": "2ksh31ls-wsiduoia-..."}
                             """))),
-            @ApiResponse(responseCode = "400", description = "Datos de inicio de sesión inválidos")
+            @ApiResponse(responseCode = "400", description = "Datos de inicio de sesión inválidos",
+            content = @Content(mediaType = "none"))
     }
 
     )
     @PostMapping("/login")
-    ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> body) {
+    ResponseEntity<Map<String, String>> login(@io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Datos de inicio de sesión",
+            required = true,
+            content = @Content(
+                    schema = @Schema(
+                            example = """
+                            {"username": "user", "password": "pass"}
+                            """
+                    )
+            )
+    )  @RequestBody Map<String, String> body) {
         //Get username and password from body
         String username = body.get("username");
         String password = body.get("password");
@@ -60,8 +71,30 @@ public class AuthController {
         }
     }
 
+    @Operation(summary = "Verifica y completa el proceso de registro e inicio de sesión")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Inicio de sesión completado correctamente",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = """
+                            {"refreshToken": "2ksh31ls-wsiduoia-...", "accessToken": "2ksh31ls-wsiduoia-..."}
+                            """))),
+            @ApiResponse(responseCode = "400", description = "Datos de inicio de sesión inválidos",
+                    content = @Content(mediaType = "none"))
+    })
     @PostMapping("/verify")
-    ResponseEntity<Map<String, String>> verify(@RequestBody Map<String, String> body) {
+    ResponseEntity<Map<String, String>> verify(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Datos de inicio de sesión",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(
+                                    example = """
+                            {"username": "user", "password": "pass", "authToken": "2ksh31ls-wsiduoia-..."}
+                            """
+                            )
+                    )
+            )
+            @RequestBody Map<String, String> body) {
         //Get username, password and authToken from body
         String username = body.get("username");
         String password = body.get("password");
@@ -85,8 +118,29 @@ public class AuthController {
         return ResponseEntity.badRequest().build();
     }
 
+    @Operation(summary = "Refresca el token de acceso")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Token de acceso refrescado correctamente",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = """
+                            {"accessToken": "2ksh31ls-wsiduoia-..."}
+                            """))),
+            @ApiResponse(responseCode = "400", description = "Datos de inicio de sesión inválidos",
+                    content = @Content(mediaType = "none"))
+    })
     @PostMapping("/refresh")
-    ResponseEntity<Map<String, String>> refresh(@RequestBody Map<String, String> body) {
+    ResponseEntity<Map<String, String>> refresh(@io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Datos de inicio de sesión",
+            required = true,
+            content = @Content(
+                    schema = @Schema(
+                            example = """
+                            {"refreshToken": "2ksh31ls-wsiduoia-...", "accessToken": "2ksh31ls-wsiduoia-..."}
+                            """
+                    )
+            )
+    )
+            @RequestBody Map<String, String> body) {
         // Get the request parameters
         String refreshToken = body.get("refreshToken");
         String accessToken = body.get("accessToken");
@@ -108,8 +162,30 @@ public class AuthController {
         }
     }
 
+
+    @Operation(summary = "Registra un nuevo usuario en el sistema")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuario registrado correctamente",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = """
+                            {"authToken": "2ksh31ls-wsiduoia-..."}
+                            """))),
+            @ApiResponse(responseCode = "409", description = "Usuario ya registrado",
+                    content = @Content(mediaType = "none"))
+    })
     @PostMapping("/register")
-    void register(@RequestBody Map<String, String> body) {
+    void register(@io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Datos de inicio de sesión",
+            required = true,
+            content = @Content(
+                    schema = @Schema(
+                            example = """
+                            {"username": "user", "password": "pass", "name": "name"}
+                            """
+                    )
+            )
+    )
+            @RequestBody Map<String, String> body) {
         //Get username, name and password from body
         String username = body.get("username");
         String name = body.get("name");
@@ -127,8 +203,27 @@ public class AuthController {
         }
     }
 
+    @Operation(summary = "Cierra la sesión de un usuario e invalida sus tokens")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Sesión cerrada correctamente",
+                    content = @Content(mediaType = "none")),
+            @ApiResponse(responseCode = "400", description = "Datos de inicio de sesión inválidos",
+                    content = @Content(mediaType = "none"))
+    })
     @PostMapping("/logout")
-    void logout(@RequestBody Map<String, String> body) {
+    void logout(@io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Datos de inicio de sesión",
+            required = true,
+            content = @Content(
+                    schema = @Schema(
+                            example = """
+                            {"username": "user", "refreshToken": "2ksh31ls-wsiduoia-..."}
+                            """
+                    )
+            )
+    )
+
+            @RequestBody Map<String, String> body) {
         // Get the request parameters
         String username = body.get("username");
         String refreshToken = body.get("refreshToken");
