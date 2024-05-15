@@ -12,6 +12,7 @@ public interface IMoodService {
     public void removeEntry(AccountMood accountMood);
     public void updateEntry(AccountMood accountMood);
     public AccountMood getEntry(Long id);
+    public List<Mood> getMoods();
     public List<AccountMood> getHistory(String accountId);
     public List<AccountMood> getHistory(String accountId, int limit);
     public List<AccountMood> getHistory(String accountId, int limit, int offset);

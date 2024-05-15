@@ -55,6 +55,11 @@ public class MoodService implements IMoodService {
     }
 
     @Override
+    public List<Mood> getMoods() {
+        return moodRepository.findAll();
+    }
+
+    @Override
     public List<AccountMood> getHistory(String accountId) {
         return accountMoodRepository.findByAccount(accountId);
     }
