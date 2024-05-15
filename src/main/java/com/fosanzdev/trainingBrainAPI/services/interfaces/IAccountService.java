@@ -1,6 +1,6 @@
 package com.fosanzdev.trainingBrainAPI.services.interfaces;
 
-import com.fosanzdev.trainingBrainAPI.models.Account;
+import com.fosanzdev.trainingBrainAPI.models.auth.Account;
 
 public interface IAccountService {
 

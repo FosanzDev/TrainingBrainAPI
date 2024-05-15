@@ -1,5 +1,6 @@
-package com.fosanzdev.trainingBrainAPI.models;
+package com.fosanzdev.trainingBrainAPI.models.auth;
 
+import com.fosanzdev.trainingBrainAPI.models.mood.AccountMood;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,6 +34,9 @@ public class Account {
 
     @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     private List<AuthCode> authCode;
+
+    @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    private List<AccountMood> accountMoods;
 
     public Map<String, String> toMap(){
         return Map.of(

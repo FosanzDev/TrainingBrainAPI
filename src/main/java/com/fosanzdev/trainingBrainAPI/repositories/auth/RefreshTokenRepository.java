@@ -1,12 +1,11 @@
 package com.fosanzdev.trainingBrainAPI.repositories.auth;
 
-import com.fosanzdev.trainingBrainAPI.models.RefreshToken;
+import com.fosanzdev.trainingBrainAPI.models.auth.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Integer> {
 

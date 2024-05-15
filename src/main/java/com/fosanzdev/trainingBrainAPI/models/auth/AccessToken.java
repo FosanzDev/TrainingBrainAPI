@@ -1,4 +1,4 @@
-package com.fosanzdev.trainingBrainAPI.models;
+package com.fosanzdev.trainingBrainAPI.models.auth;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "refresh_tokens")
-public class RefreshToken {
+@Table(name = "access_tokens")
+public class AccessToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

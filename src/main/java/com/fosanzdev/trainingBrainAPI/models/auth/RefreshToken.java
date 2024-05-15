@@ -1,4 +1,4 @@
-package com.fosanzdev.trainingBrainAPI.models;
+package com.fosanzdev.trainingBrainAPI.models.auth;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "auth_codes")
-public class AuthCode {
+@Table(name = "refresh_tokens")
+public class RefreshToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String code;
+    private String token;
 
     @ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "fk_account", referencedColumnName = "id")

@@ -1,12 +1,11 @@
 package com.fosanzdev.trainingBrainAPI.repositories.auth;
 
-import com.fosanzdev.trainingBrainAPI.models.AccessToken;
+import com.fosanzdev.trainingBrainAPI.models.auth.AccessToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface AccessTokenRepository extends JpaRepository<AccessToken, Integer> {
 

@@ -1,6 +1,6 @@
-package com.fosanzdev.trainingBrainAPI.services.auth;
+package com.fosanzdev.trainingBrainAPI.services.accounts;
 
-import com.fosanzdev.trainingBrainAPI.models.Account;
+import com.fosanzdev.trainingBrainAPI.models.auth.Account;
 import com.fosanzdev.trainingBrainAPI.repositories.auth.AccessTokenRepository;
 import com.fosanzdev.trainingBrainAPI.repositories.auth.AccountRepository;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.IAccountService;

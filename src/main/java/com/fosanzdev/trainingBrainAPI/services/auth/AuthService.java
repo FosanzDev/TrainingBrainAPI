@@ -1,9 +1,9 @@
 package com.fosanzdev.trainingBrainAPI.services.auth;
 
-import com.fosanzdev.trainingBrainAPI.models.AccessToken;
-import com.fosanzdev.trainingBrainAPI.models.Account;
-import com.fosanzdev.trainingBrainAPI.models.AuthCode;
-import com.fosanzdev.trainingBrainAPI.models.RefreshToken;
+import com.fosanzdev.trainingBrainAPI.models.auth.AccessToken;
+import com.fosanzdev.trainingBrainAPI.models.auth.Account;
+import com.fosanzdev.trainingBrainAPI.models.auth.AuthCode;
+import com.fosanzdev.trainingBrainAPI.models.auth.RefreshToken;
 import com.fosanzdev.trainingBrainAPI.repositories.auth.*;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.IAuthService;
 import jakarta.transaction.Transactional;

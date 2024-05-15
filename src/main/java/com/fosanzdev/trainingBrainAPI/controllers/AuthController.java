@@ -1,8 +1,8 @@
 package com.fosanzdev.trainingBrainAPI.controllers;
 
-import com.fosanzdev.trainingBrainAPI.models.AccessToken;
-import com.fosanzdev.trainingBrainAPI.models.AuthCode;
-import com.fosanzdev.trainingBrainAPI.models.RefreshToken;
+import com.fosanzdev.trainingBrainAPI.models.auth.AccessToken;
+import com.fosanzdev.trainingBrainAPI.models.auth.AuthCode;
+import com.fosanzdev.trainingBrainAPI.models.auth.RefreshToken;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.IAuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
