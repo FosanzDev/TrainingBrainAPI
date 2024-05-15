@@ -3,7 +3,7 @@ package com.fosanzdev.trainingBrainAPI.controllers;
 import com.fosanzdev.trainingBrainAPI.models.AccessToken;
 import com.fosanzdev.trainingBrainAPI.models.AuthCode;
 import com.fosanzdev.trainingBrainAPI.models.RefreshToken;
-import com.fosanzdev.trainingBrainAPI.services.auth.interfaces.IAuthService;
+import com.fosanzdev.trainingBrainAPI.services.interfaces.IAuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,7 +23,7 @@ import java.util.Map;
 
 @RequestMapping("/auth")
 @RestController
-@Tag(name="Controlador de autenticación")
+@Tag(name="Auth", description = "Controlador de autenticación")
 public class AuthController {
 
     @Autowired
@@ -174,7 +174,7 @@ public class AuthController {
                     content = @Content(mediaType = "none"))
     })
     @PostMapping("/register")
-    void register(@io.swagger.v3.oas.annotations.parameters.RequestBody(
+    ResponseEntity<Map<String, String>> register(@io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = "Datos de inicio de sesión",
             required = true,
             content = @Content(
@@ -190,16 +190,17 @@ public class AuthController {
         String username = body.get("username");
         String name = body.get("name");
         String password = body.get("password");
+        boolean professional = Boolean.parseBoolean(body.get("professional"));
 
-        AuthCode authCode = authService.register(name, username, password);
+        AuthCode authCode = authService.register(name, username, password, professional);
 
         if (authCode != null) {
             Map<String, String> response = new HashMap<>();
             response.put("authToken", authCode.getCode());
-            ResponseEntity.ok(response);
+            return ResponseEntity.ok(response);
         } else {
             // Return 409 (conflict) if the account already exists
-            ResponseEntity.status(409).build();
+            return ResponseEntity.status(409).build();
         }
     }
 
@@ -211,7 +212,7 @@ public class AuthController {
                     content = @Content(mediaType = "none"))
     })
     @PostMapping("/logout")
-    void logout(@io.swagger.v3.oas.annotations.parameters.RequestBody(
+    ResponseEntity<Map<String, String>> logout(@io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = "Datos de inicio de sesión",
             required = true,
             content = @Content(
@@ -230,9 +231,9 @@ public class AuthController {
 
         boolean success = authService.logout(username, refreshToken);
         if (success) {
-            ResponseEntity.ok().build();
+            return ResponseEntity.ok().build();
         } else {
-            ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().build();
         }
     }
 

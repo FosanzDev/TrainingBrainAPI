@@ -5,7 +5,7 @@ import com.fosanzdev.trainingBrainAPI.models.Account;
 import com.fosanzdev.trainingBrainAPI.models.AuthCode;
 import com.fosanzdev.trainingBrainAPI.models.RefreshToken;
 import com.fosanzdev.trainingBrainAPI.repositories.auth.*;
-import com.fosanzdev.trainingBrainAPI.services.auth.interfaces.IAuthService;
+import com.fosanzdev.trainingBrainAPI.services.interfaces.IAuthService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class AuthService implements IAuthService {
 
     @Transactional
     @Override
-    public AuthCode register(String name, String username, String password) {
+    public AuthCode register(String name, String username, String password, boolean professional) {
         Account account = accountRepository.findByUsername(username);
 
         if (account != null) {
@@ -47,9 +47,11 @@ public class AuthService implements IAuthService {
         //Account does not exist
         //Create new account
         account = new Account();
+        account.setName(name);
         account.setUsername(username);
         account.setPassword(password.hashCode() + "");
         account.setVerified(false);
+        account.setProfessional(professional);
         accountRepository.save(account);
 
         //Generate auth code for verification

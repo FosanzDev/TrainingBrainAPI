@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +20,9 @@ public class Account {
     private String id;
 
     private String username;
+    private String name;
     private String password;
+    private boolean professional;
     private boolean verified;
 
     @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
@@ -30,4 +33,21 @@ public class Account {
 
     @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     private List<AuthCode> authCode;
+
+    public Map<String, String> toMap(){
+        return Map.of(
+            "id", id,
+            "name", name,
+            "username", username,
+            "isProfessional", String.valueOf(professional),
+            "isVerified", String.valueOf(verified)
+        );
+    }
+
+    public Map<String, String> toBasicMap(){
+        return Map.of(
+            "id", id,
+            "username", username
+        );
+    }
 }

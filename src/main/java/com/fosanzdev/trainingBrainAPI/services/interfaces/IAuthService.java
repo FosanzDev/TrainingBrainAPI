@@ -1,4 +1,4 @@
-package com.fosanzdev.trainingBrainAPI.services.auth.interfaces;
+package com.fosanzdev.trainingBrainAPI.services.interfaces;
 
 import com.fosanzdev.trainingBrainAPI.models.AccessToken;
 import com.fosanzdev.trainingBrainAPI.models.AuthCode;
@@ -7,7 +7,7 @@ import com.fosanzdev.trainingBrainAPI.models.RefreshToken;
 public interface IAuthService {
 
     // Basic user management
-    public AuthCode register(String name, String username, String password);
+    public AuthCode register(String name, String username, String password, boolean professional);
     public boolean verifyAccount(String username, String password, boolean setValidated);
     public boolean logout(String username, String refreshToken);
     public boolean forceLogout(String username);

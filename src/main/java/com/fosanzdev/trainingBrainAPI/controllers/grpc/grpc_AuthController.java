@@ -3,7 +3,7 @@ package com.fosanzdev.trainingBrainAPI.controllers.grpc;
 import com.fosanzdev.trainingBrainAPI.models.AccessToken;
 import com.fosanzdev.trainingBrainAPI.models.AuthCode;
 import com.fosanzdev.trainingBrainAPI.models.RefreshToken;
-import com.fosanzdev.trainingBrainAPI.services.auth.interfaces.IAuthService;
+import com.fosanzdev.trainingBrainAPI.services.interfaces.IAuthService;
 import com.fosanzdev.trainingBrainGrpcInterface.auth.*;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
@@ -101,9 +101,10 @@ public class grpc_AuthController extends AuthServiceGrpc.AuthServiceImplBase {
         String username = request.getUsername();
         String name = request.getName();
         String password = request.getPassword();
+        boolean professional = request.getProfessional();
 
         // Register the user
-        AuthCode authCode = authService.register(name, username, password);
+        AuthCode authCode = authService.register(name, username, password, professional);
 
         // If authCode is not null, the account was created successfully
         if (authCode != null) {
