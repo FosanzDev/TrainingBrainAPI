@@ -26,18 +26,6 @@ public class Account {
     private boolean professional;
     private boolean verified;
 
-    @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    private List<RefreshToken> refreshToken;
-
-    @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    private List<AccessToken> accessToken;
-
-    @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    private List<AuthCode> authCode;
-
-    @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    private List<AccountMood> accountMoods;
-
     public Map<String, String> toMap(){
         return Map.of(
             "id", id,
