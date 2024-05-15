@@ -58,19 +58,14 @@ public class MoodService implements IMoodService {
     public List<Mood> getMoods() {
         return moodRepository.findAll();
     }
-
     @Override
-    public List<AccountMood> getHistory(String accountId) {
-        return accountMoodRepository.findByAccount(accountId);
-    }
-
-    @Override
-    public List<AccountMood> getHistory(String accountId, int limit) {
-        return accountMoodRepository.findByAccountWithLimit(accountId, 0, limit);
-    }
-
-    @Override
-    public List<AccountMood> getHistory(String accountId, int limit, int offset) {
-        return accountMoodRepository.findByAccountWithLimit(accountId, offset, limit);
+    public List<AccountMood> getHistory(String accountId, Integer limit, Integer offset) {
+        if (limit == null || limit < 0) {
+            limit = 10;
+        }
+        if (offset == null || offset < 0) {
+            offset = 0;
+        }
+        return accountMoodRepository.findByAccountWithLimit(accountId, limit, offset);
     }
 }

@@ -1,5 +1,6 @@
 package com.fosanzdev.trainingBrainAPI.models.mood;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fosanzdev.trainingBrainAPI.models.auth.Account;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ public class AccountMood {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "fk_account", referencedColumnName = "id")
     private Account account;

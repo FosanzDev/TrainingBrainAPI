@@ -33,22 +33,35 @@ public class MoodController {
         String moodId = body.get("moodId");
         Account account = accountService.getAccountByAccessToken(token);
 
-        //TEST: AddEntry
-        moodService.addEntry(account.getId(), moodId);
-
-        //TEST: List of entries
-        List<AccountMood> accountMoods = moodService.getHistory(account.getId());
-        for (AccountMood accountMood : accountMoods) {
-            System.out.println(accountMood.getMood().getName());
+        if (account == null) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Invalid token"));
         }
 
-        //Test: List entries with limit and offset
-        List<AccountMood> accountMoods2 = moodService.getHistory(account.getId(), 2, 0);
-        for (AccountMood accountMood : accountMoods2) {
-            System.out.println(accountMood.getMood().getName());
+        try{
+            moodService.addEntry(account.getId(), moodId);
+            return ResponseEntity.ok(Map.of("message", "Entry added"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Invalid request, check moodId"));
+        }
+    }
+
+    @GetMapping("/history")
+    ResponseEntity<Map<String, Object>> getHistory(
+            @RequestHeader("Authorization") String bearer,
+            @RequestParam(required = false) Integer limit,
+            @RequestParam(required = false) Integer offset
+    ) {
+        String token = bearer.split(" ")[1]; // Bearer token
+        Account account = accountService.getAccountByAccessToken(token);
+
+        if (account == null) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Invalid token"));
         }
 
-        return ResponseEntity.ok(Map.of("message", "Entry added"));
+        List<AccountMood> accountMoods;
+        accountMoods = moodService.getHistory(account.getId(), limit, offset);
+
+        return ResponseEntity.ok(Map.of("history", accountMoods));
     }
 
     @GetMapping("/all")
