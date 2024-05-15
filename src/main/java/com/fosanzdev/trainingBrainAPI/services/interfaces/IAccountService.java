@@ -4,6 +4,8 @@ import com.fosanzdev.trainingBrainAPI.models.auth.Account;
 
 public interface IAccountService {
 
-    public Account getAccount(String username);
+
+    public Account getAccountById(String id);
+    public Account getAccountByUsername(String username);
     public Account getAccountByAccessToken(String accessToken);
 }

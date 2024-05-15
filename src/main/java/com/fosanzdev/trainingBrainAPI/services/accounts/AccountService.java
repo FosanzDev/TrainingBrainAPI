@@ -17,7 +17,12 @@ public class AccountService implements IAccountService {
     private AccessTokenRepository accessTokenRepository;
 
     @Override
-    public Account getAccount(String username) {
+    public Account getAccountById(String id) {
+        return accountRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Account getAccountByUsername(String username) {
         return accountRepository.findByUsername(username);
     }
 

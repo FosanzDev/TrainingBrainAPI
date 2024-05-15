@@ -7,6 +7,8 @@ import com.fosanzdev.trainingBrainAPI.services.interfaces.IAccountService;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.IMoodService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,11 +33,11 @@ public class MoodController {
     @Operation(summary = "Añade un estado de ánimo al historial del usuario")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Estado de ánimo añadido correctamente",
-                    content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json",
-                            schema = @io.swagger.v3.oas.annotations.media.Schema(example = "{\"message\":\"Entry added\"}"))),
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"message\":\"Entry added\"}"))),
             @ApiResponse(responseCode = "400", description = "Petición inválida",
-                    content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json",
-                            schema = @io.swagger.v3.oas.annotations.media.Schema(example = "{\"message\":\"Invalid request, check moodId\"}")))
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"message\":\"Invalid request, check moodId\"}")))
     })
     @PostMapping("/add")
     ResponseEntity<Map<String, String>> addEntry(
@@ -43,8 +45,8 @@ public class MoodController {
             @RequestHeader("Authorization") String bearer,
 
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "ID del estado de ánimo", required = true,
-                    content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json",
-                            schema = @io.swagger.v3.oas.annotations.media.Schema(example = "{\"moodId\":\"<id>\"}")))
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"moodId\":\"<id>\"}")))
             @RequestBody Map<String, String> body
     ) {
         String token = bearer.split(" ")[1]; // Bearer token
@@ -53,6 +55,10 @@ public class MoodController {
 
         if (account == null) {
             return ResponseEntity.badRequest().body(Map.of("message", "Invalid token"));
+        }
+
+        if (account.isProfessional()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Professionals can't add moods"));
         }
 
         try{
@@ -69,11 +75,11 @@ public class MoodController {
             """)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Historial de estados de ánimo",
-                    content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json",
-                            schema = @io.swagger.v3.oas.annotations.media.Schema(example = "{\"history\":[{\"mood\":\"<mood>\",\"date\":\"2024-05-15T16:08:48.255+00:00\"}]}"))),
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"history\":[{\"mood\":\"<mood>\",\"date\":\"2024-05-15T16:08:48.255+00:00\"}]}"))),
             @ApiResponse(responseCode = "400", description = "Token inválido",
-                    content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json",
-                            schema = @io.swagger.v3.oas.annotations.media.Schema(example = "{\"message\":\"Invalid token\"}")))
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"message\":\"Invalid token\"}")))
     })
     @GetMapping("/history")
     ResponseEntity<Map<String, Object>> getHistory(
@@ -93,6 +99,10 @@ public class MoodController {
             return ResponseEntity.badRequest().body(Map.of("message", "Invalid token"));
         }
 
+        if (account.isProfessional()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Professionals can't see self moods history"));
+        }
+
         List<AccountMood> accountMoods;
         accountMoods = moodService.getHistory(account.getId(), limit, offset);
 
@@ -100,11 +110,67 @@ public class MoodController {
     }
 
 
+    @Operation(summary = "Obtiene el historial de estados de ánimo de un usuario")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Historial de estados de ánimo",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"history\":[{\"mood\":\"<mood>\",\"date\":\"2024-05-15T16:08:48.255+00:00\"}]}"))),
+            @ApiResponse(responseCode = "401", description = "Token inválido",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"message\":\"Invalid token\"}"))),
+            @ApiResponse(responseCode = "404", description = "ID de usuario inválido",
+                    content = @Content(mediaType = "application/json",
+                            schema = @io.swagger.v3.oas.annotations.media.Schema(example = "{\"message\":\"Invalid user id\"}"))),
+            @ApiResponse(responseCode = "403", description = "Usuarios no pueden ver el historial de estados de ánimo de otros usuarios",
+                    content = @Content(mediaType = "application/json",
+                            schema = @io.swagger.v3.oas.annotations.media.Schema(example = "{\"message\":\"Users can't see other users moods history\"}")))
+    })
+    @GetMapping("/history/{id}")
+    ResponseEntity<Map<String, Object>> getHistoryById(
+            @Parameter(description = "Token de autorización", required = true, example="Bearer <token>")
+            @RequestHeader("Authorization") String bearer,
+
+            @Parameter(description = "ID del usuario", required = true, example = "0b7173da-9e99-4347-8c4f-1663d82ef511")
+            @PathVariable String id,
+
+            @Parameter(description = "Número de resultados a obtener", required = false, example = "10")
+            @RequestParam(required = false) Integer limit,
+
+            @Parameter(description = "Desplazamiento de resultados", required = false, example = "0")
+            @RequestParam(required = false) Integer offset
+    ) {
+        String token = bearer.split(" ")[1]; // Bearer token
+        Account account = accountService.getAccountByAccessToken(token);
+
+        if (account == null) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Invalid token"));
+        }
+
+        if (!account.isProfessional()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Users can't see other users moods history"));
+        }
+
+        List<AccountMood> accountMoods;
+        Account user = accountService.getAccountById(id);
+        if (user == null) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Invalid user id"));
+        }
+
+        if (user.isProfessional()){
+            return ResponseEntity.badRequest().body(Map.of("message", "Professionals don't have moods history"));
+        }
+
+
+        accountMoods = moodService.getHistory(id, limit, offset);
+        return ResponseEntity.ok(Map.of("history", accountMoods));
+    }
+
+
     @Operation(summary = "Obtiene todos los estados de ánimo disponibles")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Estados de ánimo",
-                    content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json",
-                            schema = @io.swagger.v3.oas.annotations.media.Schema(example = "{\"moods\":[{\"id\":\"0b7173da-9e99-4347-8c4f-1663d82ef511\",\"name\":\"Energetic\", \"description\":\"You feel energetic, awake or lively\", \"color\":\"YELLOW\", \"icon\":\"/static/img/moods/energetic.png\"}, {\"...\": \"...\"}]}"))),
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"moods\":[{\"id\":\"0b7173da-9e99-4347-8c4f-1663d82ef511\",\"name\":\"Energetic\", \"description\":\"You feel energetic, awake or lively\", \"color\":\"YELLOW\", \"icon\":\"/static/img/moods/energetic.png\"}, {\"...\": \"...\"}]}"))),
     })
     @GetMapping("/all")
     ResponseEntity<Map<String, List<Mood>>> getMoods() {
