@@ -180,7 +180,7 @@ public class AuthController {
             content = @Content(
                     schema = @Schema(
                             example = """
-                            {"username": "user", "password": "pass", "name": "name"}
+                            {"username": "user", "password": "pass", "name": "name", "professional": "true/false"}
                             """
                     )
             )
