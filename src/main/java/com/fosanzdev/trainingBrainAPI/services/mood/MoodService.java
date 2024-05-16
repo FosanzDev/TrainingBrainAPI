@@ -60,7 +60,7 @@ public class MoodService implements IMoodService {
     }
     @Override
     public List<AccountMood> getHistory(String accountId, Integer limit, Integer offset) {
-        if (limit == null || limit < 0) {
+        if (limit == null || limit <= 0) {
             limit = 10;
         }
         if (offset == null || offset < 0) {

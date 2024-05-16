@@ -103,8 +103,7 @@ public class MoodController {
             return ResponseEntity.badRequest().body(Map.of("message", "Professionals can't see self moods history"));
         }
 
-        List<AccountMood> accountMoods;
-        accountMoods = moodService.getHistory(account.getId(), limit, offset);
+        List<AccountMood> accountMoods = moodService.getHistory(account.getId(), limit, offset);
 
         return ResponseEntity.ok(Map.of("history", accountMoods));
     }

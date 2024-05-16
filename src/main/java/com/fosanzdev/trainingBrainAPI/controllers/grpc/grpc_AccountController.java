@@ -4,8 +4,6 @@ import com.fosanzdev.trainingBrainAPI.models.auth.Account;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.IAccountService;
 import com.fosanzdev.trainingBrainGrpcInterface.auth.*;
 import com.google.protobuf.Empty;
-import io.grpc.Context;
-import io.grpc.Metadata;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
