@@ -4,7 +4,12 @@ import com.fosanzdev.trainingBrainAPI.models.auth.Account;
 import com.fosanzdev.trainingBrainAPI.models.details.User;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.IAccountService;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.IUserDataService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +28,15 @@ public class UserDataController {
     @Autowired
     private IAccountService accountService;
 
+    @Operation(summary = "Obtiene la información del usuario actual")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Información del usuario",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"username\":\"usuario\",\"isVerified\":\"true/false\",\"id\":\"364f2933-c91e-4641-...\",\"name\":\"Minombre\",  \"isProfessional\":\"true/false\"}"))),
+            @ApiResponse(responseCode = "401", description = "Usuario no autorizado o no encontrado",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"error\":\"Unauthorized\"}")))
+    })
     @GetMapping("/me")
     ResponseEntity<Map<String, String>> me(
             @Parameter(description = "Token de autorización", required = true, example = "Bearer <token>")
@@ -42,6 +56,18 @@ public class UserDataController {
         }
     }
 
+    @Operation(summary = "Obtiene la información de un usuario por su ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Información COMPLETA del usuario (Solo para cuentas profesionales o propias)",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"id\":\"364f2933-c91e-4641-...\",\"publicBio\":\"Bio pública\",\"privateBio\":\"Bio privada\",\"history\":\"Historial\",\"dateOfBirth\":\"2000-01-01\"}"))),
+            @ApiResponse(responseCode = "206", description = "Información PÚBLICA del usuario (Solo para cuentas normales)",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"username\":\"usuario\",\"id\":\"364f2933-c91e-4641-...\"}"))),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"error\":\"User not found\"}")))
+    })
     @GetMapping("/{id}")
     ResponseEntity<Map<String, String>> getUser(
             @Parameter(description = "ID de la cuenta", required = true)
@@ -62,7 +88,7 @@ public class UserDataController {
                 return ResponseEntity.ok(user.toMap());
 
             else
-                return ResponseEntity.ok(user.toPublicMap());
+                return ResponseEntity.status(206).body(user.toPublicMap());
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
@@ -91,7 +117,11 @@ public class UserDataController {
             if (user.getHistory() != null)
                 userToUpdate.setHistory(user.getHistory());
             if (user.getDateOfBirth() != null)
-                userToUpdate.setDateOfBirth(user.getDateOfBirth());
+                try{
+                    userToUpdate.setDateOfBirth(user.getDateOfBirth());
+                } catch (Exception e) {
+                    return ResponseEntity.status(400).body(Map.of("error", "Invalid date format"));
+                }
 
             userDataService.updateUser(userToUpdate);
             return ResponseEntity.ok(userToUpdate.toMap());

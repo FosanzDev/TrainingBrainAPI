@@ -5,8 +5,12 @@ import com.fosanzdev.trainingBrainAPI.models.auth.Account;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
@@ -26,13 +30,27 @@ public class User {
     private String privateBio;
     private String history;
 
-    @Temporal(TemporalType.DATE)
-    private Date dateOfBirth;
+    @Getter
+    private String dateOfBirth;
 
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "fk_account", referencedColumnName = "id")
     private Account account;
+
+    public void setDateOfBirth(String dateOfBirth) throws ParseException {
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    Date date = sdf.parse(dateOfBirth);
+
+    // Check if the user is at least 13 years old
+    Calendar thirteenYearsAgo = Calendar.getInstance();
+    thirteenYearsAgo.add(Calendar.YEAR, -13);
+
+    if (date.after(thirteenYearsAgo.getTime()))
+        throw new ParseException("User must be at least 13 years old", 0);
+
+    this.dateOfBirth = sdf.format(date);
+}
 
     public Map<String, String> toMap() {
         return Map.of(
@@ -40,7 +58,7 @@ public class User {
                 "public_bio", publicBio,
                 "private_bio", privateBio,
                 "history", history,
-                "date_of_birth", dateOfBirth.toString(),
+                "date_of_birth", dateOfBirth,
                 "account_id", account.getId()
         );
     }
