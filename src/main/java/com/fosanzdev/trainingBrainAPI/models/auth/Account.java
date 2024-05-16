@@ -39,6 +39,7 @@ public class Account {
     public Map<String, String> toBasicMap(){
         return Map.of(
             "id", id,
+            "name", name,
             "username", username
         );
     }

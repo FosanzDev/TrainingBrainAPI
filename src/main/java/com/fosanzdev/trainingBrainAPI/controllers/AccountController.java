@@ -71,9 +71,19 @@ public class AccountController {
             String token = bearer.split(" ")[1];
             Account account = accountService.getAccountByAccessToken(token);
             if (account.getId().equals(id) || account.isProfessional()) {
-                return ResponseEntity.ok(account.toMap());
+                Account accountById = accountService.getAccountById(id);
+                if (accountById != null) {
+                    return ResponseEntity.ok(accountById.toMap());
+                } else {
+                    return ResponseEntity.badRequest().build();
+                }
             } else {
-                return ResponseEntity.status(206).body(account.toBasicMap());
+                Account accountById = accountService.getAccountById(id);
+                if (accountById != null) {
+                    return ResponseEntity.ok(accountById.toBasicMap());
+                } else {
+                    return ResponseEntity.badRequest().build();
+                }
             }
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();

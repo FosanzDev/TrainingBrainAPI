@@ -47,7 +47,7 @@
         <dependency>
             <groupId>com.github.FosanzDev</groupId>
             <artifactId>trainingBrainGrpcInterface</artifactId>
-            <version>047fd5fd20</version>
+            <version>1650120dfe</version>
         </dependency>
 
         <dependency>
