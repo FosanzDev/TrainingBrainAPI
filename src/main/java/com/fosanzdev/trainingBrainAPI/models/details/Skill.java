@@ -19,4 +19,10 @@ public class Skill {
     private Long id;
 
     private String name;
+    private String description;
+
+    public Skill(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }

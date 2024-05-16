@@ -30,7 +30,7 @@ public class Professional {
     private WorkTitle workTitle;
 
     @OneToOne(mappedBy = "professional")
-    private WorkDetails workDetails;
+    private WorkDetail workDetail;
 
     @OneToMany(mappedBy = "professional", cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private List<ProfessionalSkill> professionalSkills;
