@@ -7,27 +7,26 @@ import com.fosanzdev.trainingBrainAPI.models.auth.RefreshToken;
 public interface IAuthService {
 
     // Basic user management
-    public AuthCode register(String name, String username, String password, boolean professional);
-    public boolean validAccount(String username, String password, boolean alsoVerify);
-    public boolean logout(String username, String refreshToken);
-    public void forceLogout(String username);
+    AuthCode register(String name, String username, String password, boolean professional);
+    boolean validAccount(String username, String password, boolean alsoVerify);
+    boolean logout(String username, String refreshToken);
+    void forceLogout(String username);
 
     //Token generation
-    public AuthCode createAuthCode(String username);
-    public AccessToken createAccessToken(String username);
-    public RefreshToken createRefreshToken(String username);
+    AuthCode createAuthCode(String username);
+    AccessToken createAccessToken(String username);
+    RefreshToken createRefreshToken(String username);
 
     // Token validation
-    public boolean validateAuthCode(String authCode, String username);
-    public boolean validateAccessToken(String accessToken, String username);
-    public boolean validateRefreshToken(String refreshToken, String accessToken);
+    boolean validateAuthCode(String authCode, String username);
+    boolean validateRefreshToken(String refreshToken, String accessToken);
 
     // Token invalidation
-    public boolean invalidateAuthCode(String authCode);
-    public boolean invalidateAccessToken(String accessToken);
-    public boolean invalidateRefreshToken(String refreshToken);
+    void invalidateAuthCode(String authCode);
+    void invalidateAccessToken(String accessToken);
+    void invalidateRefreshToken(String refreshToken);
 
     // Token refresh
-    public AccessToken refreshAccessToken(String refreshToken, String accessToken);
+    AccessToken refreshAccessToken(String refreshToken, String accessToken);
 
 }

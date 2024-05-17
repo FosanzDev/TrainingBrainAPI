@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,5 +25,12 @@ public class Skill {
     public Skill(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    public Map<String, String> toMap(){
+        return Map.of(
+            "name", name,
+            "description", description
+        );
     }
 }

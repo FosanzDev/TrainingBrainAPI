@@ -1,9 +1,12 @@
 package com.fosanzdev.trainingBrainAPI.models.details;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Map;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,7 +28,19 @@ public class WorkDetail {
     @JoinColumn(name = "fk_work_title", referencedColumnName = "id")
     private WorkTitle workTitle;
 
-    @OneToOne(cascade = {CascadeType.PERSIST})
+    @JsonIgnore
+    @ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "fk_professional", referencedColumnName = "id")
     private Professional professional;
+
+    public Map<String, String> toMap(){
+        return Map.of(
+            "id", id.toString(),
+            "description", description,
+            "start_date", start_date,
+            "end_date", end_date,
+            "enterprise", enterprise,
+            "workTitle", workTitle.toMap().toString()
+        );
+    }
 }

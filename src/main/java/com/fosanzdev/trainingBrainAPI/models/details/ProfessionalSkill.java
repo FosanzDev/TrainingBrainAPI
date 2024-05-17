@@ -1,9 +1,12 @@
 package com.fosanzdev.trainingBrainAPI.models.details;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Map;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,10 +15,12 @@ import lombok.NoArgsConstructor;
 @Table(name = "professional_skills")
 public class ProfessionalSkill {
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "fk_professional", referencedColumnName = "id")
     private Professional professional;
@@ -24,5 +29,14 @@ public class ProfessionalSkill {
     @JoinColumn(name = "fk_skill", referencedColumnName = "id")
     private Skill skill;
 
-    private String level; // This is the additional field
+    private String level;
+
+    public Map<String, String> toMap(){
+        return Map.of(
+            "id", id.toString(),
+            "professional", professional.toMap().toString(),
+            "skill", skill.toMap().toString(),
+            "level", level
+        );
+    }
 }

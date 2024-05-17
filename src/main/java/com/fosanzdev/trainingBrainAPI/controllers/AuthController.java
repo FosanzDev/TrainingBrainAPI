@@ -190,6 +190,9 @@ public class AuthController {
         String username = body.get("username");
         String name = body.get("name");
         String password = body.get("password");
+        if (body.get("professional") == null) {
+            return ResponseEntity.badRequest().build();
+        }
         boolean professional = Boolean.parseBoolean(body.get("professional"));
 
         AuthCode authCode = authService.register(name, username, password, professional);

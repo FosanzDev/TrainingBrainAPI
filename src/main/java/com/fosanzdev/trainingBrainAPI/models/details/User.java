@@ -34,7 +34,7 @@ public class User {
     private String dateOfBirth;
 
     @JsonIgnore
-    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @OneToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "fk_account", referencedColumnName = "id")
     private Account account;
 

@@ -6,6 +6,7 @@ import com.fosanzdev.trainingBrainAPI.models.auth.AuthCode;
 import com.fosanzdev.trainingBrainAPI.models.auth.RefreshToken;
 import com.fosanzdev.trainingBrainAPI.repositories.auth.*;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.IAuthService;
+import com.fosanzdev.trainingBrainAPI.services.interfaces.IProDataService;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.IUserDataService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class AuthService implements IAuthService {
 
     @Autowired
     private IUserDataService userDataService;
+
+    @Autowired
+    private IProDataService proDataService;
 
 
     @Transactional
@@ -73,7 +77,7 @@ public class AuthService implements IAuthService {
             if (account.isVerified()) return true;
             account.setVerified(true);
             if (account.isProfessional())
-                System.out.println("Unimplemented professional account creation");
+                proDataService.createProfessionalIfNotExists(account.getId());
             else
                 userDataService.createUserIfNotExists(account.getId());
         }
@@ -161,7 +165,6 @@ public class AuthService implements IAuthService {
     public AccessToken createAccessToken(String username) {
         Account account = accountRepository.findByUsername(username);
         if (account == null) {
-            System.out.println("Account not found");
             return null;
         }
 
@@ -185,7 +188,6 @@ public class AuthService implements IAuthService {
     public RefreshToken createRefreshToken(String username) {
         Account account = accountRepository.findByUsername(username);
         if (account == null) {
-            System.out.println("Account not found");
             return null;
         }
 
@@ -232,11 +234,6 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public boolean validateAccessToken(String accessToken, String username) {
-        return false;
-    }
-
-    @Override
     public boolean validateRefreshToken(String refreshToken, String accessToken) {
         AccessToken aToken = accessTokenRepository.find(accessToken);
         if (aToken == null) return false;
@@ -249,35 +246,32 @@ public class AuthService implements IAuthService {
 
     /**
      * Invalidate an auth code
+     *
      * @param authCode Auth code to invalidate
-     * @return True if auth code was invalidated, false otherwise
      */
     @Transactional
     @Override
-    public boolean invalidateAuthCode(String authCode) {
+    public void invalidateAuthCode(String authCode) {
         AuthCode code = authCodeRepository.find(authCode);
-        if (code == null) return false;
+        if (code == null) return;
 
         authCodeRepository.delete(code);
-        return true;
     }
 
     @Override
-    public boolean invalidateAccessToken(String accessToken) {
+    public void invalidateAccessToken(String accessToken) {
         AccessToken token = accessTokenRepository.find(accessToken);
-        if (token == null) return false;
+        if (token == null) return;
 
         accessTokenRepository.delete(token);
-        return true;
     }
 
     @Override
-    public boolean invalidateRefreshToken(String refreshToken) {
+    public void invalidateRefreshToken(String refreshToken) {
         RefreshToken token = refreshTokenRepository.find(refreshToken);
-        if (token == null) return false;
+        if (token == null) return;
 
         refreshTokenRepository.delete(token);
-        return true;
     }
 
     @Transactional

@@ -4,8 +4,8 @@ import com.fosanzdev.trainingBrainAPI.models.details.User;
 
 public interface IUserDataService {
 
-    public User getUserByAccountID(String accountID);
-    public User getUserByAccessToken(String accessToken);
-    public void updateUser(User user);
-    public void createUserIfNotExists(String accountID);
+    User getUserByAccountID(String accountID);
+    User getUserByAccessToken(String accessToken);
+    void updateUser(User user);
+    void createUserIfNotExists(String accountID);
 }

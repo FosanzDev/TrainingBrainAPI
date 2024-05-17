@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,5 +28,12 @@ public class WorkTitle {
     public WorkTitle(String title, Branch branch) {
         this.title = title;
         this.branch = branch;
+    }
+
+    public Map<String, Object> toMap(){
+        return Map.of(
+            "title", title,
+            "branch", branch.toMap()
+        );
     }
 }

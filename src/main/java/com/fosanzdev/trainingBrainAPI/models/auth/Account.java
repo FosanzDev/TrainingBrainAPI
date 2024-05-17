@@ -1,11 +1,14 @@
 package com.fosanzdev.trainingBrainAPI.models.auth;
 
+import com.fosanzdev.trainingBrainAPI.models.details.Professional;
+import com.fosanzdev.trainingBrainAPI.models.details.User;
 import com.fosanzdev.trainingBrainAPI.models.mood.AccountMood;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,17 +29,29 @@ public class Account {
     private boolean professional;
     private boolean verified;
 
-    public Map<String, String> toMap(){
-        return Map.of(
-            "id", id,
-            "name", name,
-            "username", username,
-            "isProfessional", String.valueOf(professional),
-            "isVerified", String.valueOf(verified)
-        );
+    @OneToOne(mappedBy = "account")
+    private Professional professionalDetails;
+
+    @OneToOne(mappedBy = "account")
+    private User userDetails;
+
+    public Map<String, Object> toMap(){
+        Map<String, Object> map = new HashMap<>(Map.of(
+                "id", id,
+                "name", name,
+                "username", username,
+                "isProfessional", professional,
+                "isVerified", verified
+        ));
+        if (professionalDetails != null)
+            map.put("professionalDetails", professionalDetails.toMap());
+        if (userDetails != null)
+            map.put("userDetails", userDetails.toMap());
+
+        return map;
     }
 
-    public Map<String, String> toBasicMap(){
+    public Map<String, Object> toBasicMap(){
         return Map.of(
             "id", id,
             "name", name,

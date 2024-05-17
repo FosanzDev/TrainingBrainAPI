@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,4 +18,10 @@ public class Branch {
     @Id
     private Long id;
     private String name;
+
+    public Map<String, String> toMap(){
+        return Map.of(
+            "name", name
+        );
+    }
 }

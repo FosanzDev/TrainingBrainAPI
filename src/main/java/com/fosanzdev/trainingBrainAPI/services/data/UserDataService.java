@@ -2,6 +2,7 @@ package com.fosanzdev.trainingBrainAPI.services.data;
 
 import com.fosanzdev.trainingBrainAPI.models.auth.Account;
 import com.fosanzdev.trainingBrainAPI.models.details.User;
+import com.fosanzdev.trainingBrainAPI.repositories.auth.AccountRepository;
 import com.fosanzdev.trainingBrainAPI.repositories.data.UserRepository;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.IAccountService;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.IUserDataService;
@@ -15,13 +16,22 @@ public class UserDataService implements IUserDataService {
     @Autowired
     private UserRepository userRepository;
 
+
+    //TODO: Use IAccountService instead of AccountRepository
+    @Autowired
+    private AccountRepository accountRepository;
+
     @Autowired
     private IAccountService accountService;
 
     @Transactional
     @Override
     public User getUserByAccountID(String accountID) {
-        return userRepository.findById(accountID).orElse(null);
+        Account account = accountService.getAccountById(accountID);
+        if (account != null && account.isVerified() && !account.isProfessional())
+            return account.getUserDetails();
+        else
+            return null;
     }
 
     @Transactional
@@ -36,11 +46,19 @@ public class UserDataService implements IUserDataService {
         userRepository.save(user);
     }
 
+    @Transactional
     @Override
     public void createUserIfNotExists(String accountID) {
-        if (userRepository.findById(accountID).orElse(null) == null){
+        Account account = accountService.getAccountById(accountID);
+        if (account.getUserDetails() == null){
+            //Create user details
             User user = new User();
-            user.setId(accountID);
+
+            //Set user details
+            user.setAccount(account);
+            account.setUserDetails(user);
+
+            //Save to database
             userRepository.save(user);
         }
     }

@@ -33,7 +33,7 @@ public class AccountController {
                             schema = @Schema(example = "{\"error\":\"Unauthorized\"}")))
     })
     @GetMapping("/me")
-    ResponseEntity<Map<String, String>> me(
+    ResponseEntity<Map<String, Object>> me(
             @Parameter(description = "Token de autorización", required = true, example = "Bearer <token>")
             @RequestHeader("Authorization") String bearer) {
         try{
@@ -42,10 +42,12 @@ public class AccountController {
             if (account != null) {
                 return ResponseEntity.ok(account.toMap());
             } else {
-                Map<String, String> error = Map.of("error", "Unauthorized");
+                Map<String, Object> error = Map.of("error", "Unauthorized");
                 return ResponseEntity.status(401).body(error);
             }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
@@ -60,7 +62,7 @@ public class AccountController {
                             schema = @Schema(example = "{\"username\":\"usuario\",\"id\":\"364f2933-c91e-4641-...\"}"))),
     })
     @GetMapping("/id/{id}")
-    ResponseEntity<Map<String, String>> getById(
+    ResponseEntity<Map<String, Object>> getById(
             @Parameter(description = "Token de autorización", required = true, example="Bearer <token>")
             @RequestHeader("Authorization") String bearer,
 

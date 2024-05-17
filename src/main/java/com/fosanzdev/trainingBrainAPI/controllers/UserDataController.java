@@ -19,7 +19,7 @@ import java.util.Map;
 
 @RequestMapping("/user")
 @RestController
-@Tag(name = "User", description = "Controlador de datos de usuario")
+@Tag(name = "User Data", description = "Controlador de datos de usuario")
 public class UserDataController {
 
     @Autowired
@@ -82,7 +82,7 @@ public class UserDataController {
 
             User user = userDataService.getUserByAccountID(id);
             if (user == null)
-                return ResponseEntity.status(404).body(Map.of("error", "User not found"));
+                return ResponseEntity.status(404).body(Map.of("error", "User not found or not verified"));
 
             if (account.getId().equals(user.getAccount().getId()) || account.isProfessional())
                 return ResponseEntity.ok(user.toMap());
