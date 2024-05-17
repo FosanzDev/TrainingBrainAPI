@@ -23,7 +23,7 @@ public class grpc_AuthController extends AuthServiceGrpc.AuthServiceImplBase {
         String password = request.getPassword();
 
         // Verify the account
-        boolean validAccount = authService.verifyAccount(username, password, false);
+        boolean validAccount = authService.validAccount(username, password, false);
 
         if (validAccount) {
             authService.forceLogout(username);
@@ -50,7 +50,7 @@ public class grpc_AuthController extends AuthServiceGrpc.AuthServiceImplBase {
         String authToken = request.getAuthToken();
 
         // Verify the auth code
-        boolean validAccount = authService.verifyAccount(username, password, true);
+        boolean validAccount = authService.validAccount(username, password, true);
         boolean validAuthCode = authService.validateAuthCode(authToken, username);
         if (validAccount && validAuthCode) {
             authService.invalidateAuthCode(authToken);

@@ -6,6 +6,7 @@ import com.fosanzdev.trainingBrainAPI.models.auth.AuthCode;
 import com.fosanzdev.trainingBrainAPI.models.auth.RefreshToken;
 import com.fosanzdev.trainingBrainAPI.repositories.auth.*;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.IAuthService;
+import com.fosanzdev.trainingBrainAPI.services.interfaces.IUserDataService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,9 @@ public class AuthService implements IAuthService {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private IUserDataService userDataService;
 
 
     @Transactional
@@ -60,21 +64,21 @@ public class AuthService implements IAuthService {
 
     @Transactional
     @Override
-    public boolean verifyAccount(String username, String password, boolean setValidated) {
+    public boolean validAccount(String username, String password, boolean alsoVerify) {
         Account account = accountRepository.findByUsername(username);
-        if (account == null) {
-            //Account not found
-            return false;
+        if (account == null) return false;
+        boolean valid = account.getPassword().equals(password.hashCode() + "");
+
+        if (alsoVerify && valid){
+            if (account.isVerified()) return true;
+            account.setVerified(true);
+            if (account.isProfessional())
+                System.out.println("Unimplemented professional account creation");
+            else
+                userDataService.createUserIfNotExists(account.getId());
         }
 
-        if (!account.getPassword().equals(password.hashCode() + "")) {
-            //Incorrect password
-            return false;
-        }
-
-        account.setVerified(setValidated);
-        accountRepository.save(account);
-        return true;
+        return valid;
     }
 
     @Transactional
@@ -101,18 +105,17 @@ public class AuthService implements IAuthService {
 
     /**
      * Internal call to delete all access and refresh tokens for an account
+     *
      * @param username
-     * @return
      */
     @Transactional
     @Override
-    public boolean forceLogout(String username) {
+    public void forceLogout(String username) {
         Account account = accountRepository.findByUsername(username);
-        if (account == null) return false;
+        if (account == null) return;
 
         invalidateAllAccessTokens(account);
         invalidateAllRefreshTokens(account);
-        return true;
     }
 
     /**

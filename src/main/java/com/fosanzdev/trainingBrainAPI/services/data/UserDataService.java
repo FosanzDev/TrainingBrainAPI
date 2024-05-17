@@ -35,4 +35,13 @@ public class UserDataService implements IUserDataService {
     public void updateUser(User user) {
         userRepository.save(user);
     }
+
+    @Override
+    public void createUserIfNotExists(String accountID) {
+        if (userRepository.findById(accountID).orElse(null) == null){
+            User user = new User();
+            user.setId(accountID);
+            userRepository.save(user);
+        }
+    }
 }

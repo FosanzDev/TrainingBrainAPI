@@ -57,7 +57,7 @@ public class AuthController {
         String username = body.get("username");
         String password = body.get("password");
 
-        boolean validAccount = authService.verifyAccount(username, password, false);
+        boolean validAccount = authService.validAccount(username, password, false);
 
         if (validAccount) {
             authService.forceLogout(username);
@@ -101,7 +101,7 @@ public class AuthController {
         String authToken = body.get("authToken");
 
         //Verify the auth code
-        boolean validAccount = authService.verifyAccount(username, password, true);
+        boolean validAccount = authService.validAccount(username, password, true);
         boolean validAuthCode = authService.validateAuthCode(authToken, username);
         if (validAccount && validAuthCode) {
             authService.invalidateAuthCode(authToken);

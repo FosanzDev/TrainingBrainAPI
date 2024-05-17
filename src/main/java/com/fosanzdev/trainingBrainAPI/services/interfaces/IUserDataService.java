@@ -7,4 +7,5 @@ public interface IUserDataService {
     public User getUserByAccountID(String accountID);
     public User getUserByAccessToken(String accessToken);
     public void updateUser(User user);
+    public void createUserIfNotExists(String accountID);
 }
