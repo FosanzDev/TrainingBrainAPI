@@ -7,6 +7,6 @@ public interface IProDataService {
 
     Professional getProfessionalByAccountId(String accountID);
     Professional getProfessionalByAccessToken(String accessToken);
-    void updateProfessional(Professional user);
+    void updateProfessional(Professional user, Professional updatedProfessional);
     void createProfessionalIfNotExists(String accountID);
 }

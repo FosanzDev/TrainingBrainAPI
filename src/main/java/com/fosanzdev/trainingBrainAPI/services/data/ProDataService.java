@@ -41,8 +41,20 @@ public class ProDataService implements IProDataService {
     }
 
     @Override
-    public void updateProfessional(Professional user) {
-        professionalRepository.save(user);
+    public void updateProfessional(Professional proToUpdate, Professional updatedProfessional) {
+        if (updatedProfessional.getPublic_bio() != null)
+            proToUpdate.setPublic_bio(updatedProfessional.getPublic_bio());
+
+        if (updatedProfessional.getWorkTitle() != null)
+            proToUpdate.setWorkTitle(updatedProfessional.getWorkTitle());
+
+        if (updatedProfessional.getWorkDetails() != null)
+            proToUpdate.setWorkDetails(updatedProfessional.getWorkDetails());
+
+        if (updatedProfessional.getProfessionalSkills() != null)
+            proToUpdate.setProfessionalSkills(updatedProfessional.getProfessionalSkills());
+
+        professionalRepository.save(proToUpdate);
     }
 
     @Transactional

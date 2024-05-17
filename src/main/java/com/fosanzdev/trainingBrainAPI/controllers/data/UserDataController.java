@@ -1,4 +1,4 @@
-package com.fosanzdev.trainingBrainAPI.controllers;
+package com.fosanzdev.trainingBrainAPI.controllers.data;
 
 import com.fosanzdev.trainingBrainAPI.models.auth.Account;
 import com.fosanzdev.trainingBrainAPI.models.details.User;
@@ -101,11 +101,8 @@ public class UserDataController {
             @RequestBody User user) {
         try{
             String token = bearer.split(" ")[1];
-            Account account = accountService.getAccountByAccessToken(token);
-            if (account == null)
-                return ResponseEntity.status(404).body(Map.of("error", "Account not found"));
 
-            User userToUpdate = userDataService.getUserByAccountID(account.getId());
+            User userToUpdate = userDataService.getUserByAccessToken(token);
             if (userToUpdate == null)
                 return ResponseEntity.status(404).body(Map.of("error", "User not found"));
 
