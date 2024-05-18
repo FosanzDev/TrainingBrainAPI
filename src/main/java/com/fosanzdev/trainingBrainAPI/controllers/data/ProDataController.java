@@ -1,9 +1,9 @@
 package com.fosanzdev.trainingBrainAPI.controllers.data;
 
 import com.fosanzdev.trainingBrainAPI.models.details.Professional;
-import com.fosanzdev.trainingBrainAPI.services.interfaces.IAccountService;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.IProDataService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,6 +24,15 @@ public class ProDataController {
     private IProDataService proDataService;
 
     @Operation(summary = "Obtiene la información del usuario profesional actual")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Información obtenida correctamente",
+                content = @Content(mediaType = "application/json",
+                        schema = @Schema(anyOf = Professional.class))
+            ),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"error\":\"Unauthorized\"}")))
+    })
     @GetMapping("/me")
     ResponseEntity<Map<String, Object>> me(
             @RequestHeader("Authorization") String bearer
@@ -42,6 +51,15 @@ public class ProDataController {
     }
 
     @Operation(summary = "Obtiene la información de un usuario profesional por su ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Información obtenida correctamente",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(anyOf = Professional.class))
+            ),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"error\":\"Unauthorized\"}")))
+    })
     @GetMapping("/{id}")
     ResponseEntity<Map<String, Object>> getProfessional(
             @PathVariable String id
@@ -67,7 +85,11 @@ public class ProDataController {
     })
     @PostMapping("/update")
     ResponseEntity<Map<String, Object>> updateProfessional(
+            @Parameter(description = "Token de autorización", required = true, example="Bearer <token>")
             @RequestHeader("Authorization") String bearer,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Información actualizada del usuario profesional", required = true,
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(exampleClasses = Professional.class)))
             @RequestBody Professional updatedProfessional
     ) {
         try {

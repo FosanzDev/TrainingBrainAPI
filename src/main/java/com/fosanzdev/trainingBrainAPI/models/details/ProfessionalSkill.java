@@ -29,12 +29,12 @@ public class ProfessionalSkill {
     @JoinColumn(name = "fk_skill", referencedColumnName = "id")
     private Skill skill;
 
-    private String level;
+    private int level;
 
-    public Map<String, String> toMap(){
+    public Map<String, Object> toMap(){
         return Map.of(
             "id", id.toString(),
-            "professional", professional.toMap().toString(),
+            "professional", professional.toMap(),
             "skill", skill.toMap().toString(),
             "level", level
         );
