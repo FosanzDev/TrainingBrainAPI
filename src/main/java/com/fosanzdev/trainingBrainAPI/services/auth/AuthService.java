@@ -38,7 +38,7 @@ public class AuthService implements IAuthService {
 
     @Transactional
     @Override
-    public AuthCode register(String name, String username, String password, boolean professional) {
+    public AuthCode register(String name, String email, String username, String password, boolean professional) {
         Account account = accountRepository.findByUsername(username);
 
         if (account != null) {
@@ -56,6 +56,7 @@ public class AuthService implements IAuthService {
         //Create new account
         account = new Account();
         account.setName(name);
+        account.setEmail(email);
         account.setUsername(username);
         account.setPassword(password.hashCode() + "");
         account.setVerified(false);

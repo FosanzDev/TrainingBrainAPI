@@ -7,7 +7,7 @@ import com.fosanzdev.trainingBrainAPI.models.auth.RefreshToken;
 public interface IAuthService {
 
     // Basic user management
-    AuthCode register(String name, String username, String password, boolean professional);
+    AuthCode register(String name, String email, String username, String password, boolean professional);
     boolean validAccount(String username, String password, boolean alsoVerify);
     boolean logout(String username, String refreshToken);
     void forceLogout(String username);

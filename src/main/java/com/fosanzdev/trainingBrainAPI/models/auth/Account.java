@@ -25,6 +25,7 @@ public class Account {
 
     private String username;
     private String name;
+    private String email;
     private String password;
     private boolean professional;
     private boolean verified;
@@ -39,6 +40,7 @@ public class Account {
         Map<String, Object> map = new HashMap<>(Map.of(
                 "id", id,
                 "name", name,
+                "email", email,
                 "username", username,
                 "isProfessional", professional,
                 "isVerified", verified

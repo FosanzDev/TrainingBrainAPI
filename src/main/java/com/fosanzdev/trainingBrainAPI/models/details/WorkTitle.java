@@ -21,7 +21,7 @@ public class WorkTitle {
 
     private String title;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.REFRESH})
     @JoinColumn(name = "fk_branch", referencedColumnName = "id")
     private Branch branch;
 

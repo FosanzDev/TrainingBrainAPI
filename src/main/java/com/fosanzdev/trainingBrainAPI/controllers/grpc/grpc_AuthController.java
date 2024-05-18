@@ -1,23 +1,38 @@
 package com.fosanzdev.trainingBrainAPI.controllers.grpc;
 
 import com.fosanzdev.trainingBrainAPI.models.auth.AccessToken;
+import com.fosanzdev.trainingBrainAPI.models.auth.Account;
 import com.fosanzdev.trainingBrainAPI.models.auth.AuthCode;
 import com.fosanzdev.trainingBrainAPI.models.auth.RefreshToken;
+import com.fosanzdev.trainingBrainAPI.services.MailService;
+import com.fosanzdev.trainingBrainAPI.services.interfaces.IAccountService;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.IAuthService;
 import com.fosanzdev.trainingBrainGrpcInterface.auth.*;
+import com.google.protobuf.Empty;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 @GrpcService
 public class grpc_AuthController extends AuthServiceGrpc.AuthServiceImplBase {
 
+    @Value("${spring.mail.username}")
+    private String emailUsername;
+
+    @Value("${spring.mail.password}")
+    private String emailPassword;
+
+
     @Autowired
     private IAuthService authService;
 
+    @Autowired
+    private IAccountService accountService;
+
     @Override
-    public void login(LoginRequest request, StreamObserver<LoginResponse> responseObserver) {
+    public void login(LoginRequest request, StreamObserver<Empty> responseObserver) {
         // Get the request parameters
         String username = request.getUsername();
         String password = request.getPassword();
@@ -26,13 +41,21 @@ public class grpc_AuthController extends AuthServiceGrpc.AuthServiceImplBase {
         boolean validAccount = authService.validAccount(username, password, false);
 
         if (validAccount) {
+            Account account = accountService.getAccountByUsername(username);
             authService.forceLogout(username);
             AuthCode code = authService.createAuthCode(username);
 
+            //Run in new thread to avoid blocking the main thread
+            new Thread(() -> {
+                try {
+                    MailService service = new MailService(emailUsername, emailPassword);
+                    service.sendMail(account.getEmail(), "Código de verificación para TrainingBrain", "Tu código de verificación es: " + code.getCode());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
             // Send the auth code to the client
-            LoginResponse response = LoginResponse.newBuilder()
-                    .setAuthToken(code.getCode())
-                    .build();
+            Empty response = Empty.newBuilder().build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } else {
@@ -50,9 +73,11 @@ public class grpc_AuthController extends AuthServiceGrpc.AuthServiceImplBase {
         String authToken = request.getAuthToken();
 
         // Verify the auth code
-        boolean validAccount = authService.validAccount(username, password, true);
+        boolean validAccount = false;
         boolean validAuthCode = authService.validateAuthCode(authToken, username);
-        if (validAccount && validAuthCode) {
+        if (validAuthCode) validAccount = authService.validAccount(username, password, true);
+
+        if (validAuthCode && validAccount) {
             authService.invalidateAuthCode(authToken);
             RefreshToken refreshToken = authService.createRefreshToken(username);
             AccessToken accessToken = authService.createAccessToken(username);
@@ -96,22 +121,43 @@ public class grpc_AuthController extends AuthServiceGrpc.AuthServiceImplBase {
     }
 
     @Override
-    public void register(RegisterRequest request, StreamObserver<RegisterResponse> responseStreamObserver) {
+    public void register(RegisterRequest request, StreamObserver<Empty> responseStreamObserver) {
         // Get the request parameters
         String username = request.getUsername();
         String name = request.getName();
         String password = request.getPassword();
+        String email = request.getEmail();
         boolean professional = request.getProfessional();
 
+        if (
+            username.isEmpty() ||
+            name.isEmpty() ||
+            password.isEmpty() ||
+            email.isEmpty()
+        ) {
+            Status status = Status.INVALID_ARGUMENT.withDescription("Invalid request parameters");
+            responseStreamObserver.onError(status.asRuntimeException());
+            return;
+        }
+
         // Register the user
-        AuthCode authCode = authService.register(name, username, password, professional);
+        AuthCode authCode = authService.register(name, email, username, password, professional);
 
         // If authCode is not null, the account was created successfully
         if (authCode != null) {
-            // Send the auth code to the client
-            RegisterResponse response = RegisterResponse.newBuilder()
-                    .setAuthToken(authCode.getCode())
-                    .build();
+
+            //Run in new thread to avoid blocking the main thread
+            new Thread(() -> {
+                try {
+                    MailService service = new MailService(emailUsername, emailPassword);
+                    service.sendMail(email, "Código de verificación para TrainingBrain", "Tu código de verificación es: " + authCode.getCode());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
+
+            // Send the OK response
+            Empty response = Empty.newBuilder().build();
             responseStreamObserver.onNext(response);
             responseStreamObserver.onCompleted();
         } else {
