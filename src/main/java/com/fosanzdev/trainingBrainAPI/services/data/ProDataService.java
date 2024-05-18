@@ -48,12 +48,6 @@ public class ProDataService implements IProDataService {
         if (updatedProfessional.getWorkTitle() != null)
             proToUpdate.setWorkTitle(updatedProfessional.getWorkTitle());
 
-        if (updatedProfessional.getWorkDetails() != null)
-            proToUpdate.setWorkDetails(updatedProfessional.getWorkDetails());
-
-        if (updatedProfessional.getProfessionalSkills() != null)
-            proToUpdate.setProfessionalSkills(updatedProfessional.getProfessionalSkills());
-
         professionalRepository.save(proToUpdate);
     }
 

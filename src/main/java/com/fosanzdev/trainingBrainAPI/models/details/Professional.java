@@ -31,10 +31,10 @@ public class Professional {
     @JoinColumn(name = "fk_work_title", referencedColumnName = "id")
     private WorkTitle workTitle;
 
-    @OneToMany(mappedBy = "professional")
+    @OneToMany(mappedBy = "professional", cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private List<WorkDetail> workDetails;
 
-    @OneToMany(mappedBy = "professional", cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "professional", cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private List<ProfessionalSkill> professionalSkills;
 
     public Map<String, Object> toMap(){

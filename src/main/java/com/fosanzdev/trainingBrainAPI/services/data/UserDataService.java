@@ -56,6 +56,8 @@ public class UserDataService implements IUserDataService {
 
         if (updatedUser.getDateOfBirth() != null)
             userToUpdate.setDateOfBirth(updatedUser.getDateOfBirth());
+
+        userRepository.save(userToUpdate);
     }
 
     @Transactional

@@ -44,5 +44,7 @@ public class AccountService implements IAccountService {
 
         if (updatedAccount.getName() != null)
             accountToUpdate.setName(updatedAccount.getName());
+
+        accountRepository.save(accountToUpdate);
     }
 }

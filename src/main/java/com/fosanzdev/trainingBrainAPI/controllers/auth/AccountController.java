@@ -47,7 +47,6 @@ public class AccountController {
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
@@ -110,7 +109,7 @@ public class AccountController {
                 return ResponseEntity.badRequest().build();
             }
 
-            return ResponseEntity.ok(account.toMap());
+            return ResponseEntity.ok().build();
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
