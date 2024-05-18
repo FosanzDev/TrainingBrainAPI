@@ -32,6 +32,7 @@ public class WorkTitle {
 
     public Map<String, Object> toMap(){
         return Map.of(
+                "id", id,
             "title", title,
             "branch", branch.toMap()
         );

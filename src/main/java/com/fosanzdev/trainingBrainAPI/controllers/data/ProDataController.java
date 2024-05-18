@@ -123,6 +123,29 @@ public class ProDataController {
         }
     }
 
+    @PostMapping("/setWorkTitle")
+    ResponseEntity<Map<String, Object>> setWorkTitle(
+            @Parameter(description = "Token de autorización", required = true, example="Bearer <token>")
+            @RequestHeader("Authorization") String bearer,
+            @RequestBody Long workTitleId
+    ){
+        try {
+            String token = bearer.split(" ")[1];
+            Professional professional = proDataService.getProfessionalByAccessToken(token);
+            if (professional == null)
+                return ResponseEntity.status(404).body(Map.of("error", "Professional not found"));
+
+            if (proDataService.setWorkTitle(professional, workTitleId))
+                return ResponseEntity.ok().build();
+            else
+                return ResponseEntity.status(404).body(Map.of("error", "Work title not found"));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @GetMapping("/branches")
     ResponseEntity<Map<String, Object>> getBranchList(){
         List<Branch> branches = branchRepository.findAll();
@@ -132,6 +155,14 @@ public class ProDataController {
     @GetMapping("/worktitles")
     ResponseEntity<Map<String, Object>> getWorkTitleList(){
         List<WorkTitle> workTitles = workTitleRepository.findAll();
+        return ResponseEntity.ok(Map.of("workTitles", workTitles));
+    }
+
+    @GetMapping("/worktitles/bybranch/{branchId}")
+    ResponseEntity<Map<String, Object>> getWorkTitleListByBranch(
+            @PathVariable Long branchId
+    ){
+        List<WorkTitle> workTitles = workTitleRepository.findByBranch(branchId);
         return ResponseEntity.ok(Map.of("workTitles", workTitles));
     }
 }

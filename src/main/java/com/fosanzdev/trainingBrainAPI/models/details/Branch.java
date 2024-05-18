@@ -19,8 +19,9 @@ public class Branch {
     private Long id;
     private String name;
 
-    public Map<String, String> toMap(){
+    public Map<String, Object> toMap(){
         return Map.of(
+                "id", id,
             "name", name
         );
     }

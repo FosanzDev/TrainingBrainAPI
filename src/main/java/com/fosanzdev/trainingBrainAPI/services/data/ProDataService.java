@@ -2,8 +2,10 @@ package com.fosanzdev.trainingBrainAPI.services.data;
 
 import com.fosanzdev.trainingBrainAPI.models.auth.Account;
 import com.fosanzdev.trainingBrainAPI.models.details.Professional;
+import com.fosanzdev.trainingBrainAPI.models.details.WorkTitle;
 import com.fosanzdev.trainingBrainAPI.repositories.auth.AccountRepository;
 import com.fosanzdev.trainingBrainAPI.repositories.data.ProfessionalRepository;
+import com.fosanzdev.trainingBrainAPI.repositories.data.WorkTitleRepository;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.IAccountService;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.IProDataService;
 import jakarta.transaction.Transactional;
@@ -16,12 +18,11 @@ public class ProDataService implements IProDataService {
     @Autowired
     private ProfessionalRepository professionalRepository;
 
-    //TODO: Use IAccountService instead of AccountRepository
-    @Autowired
-    private AccountRepository accountRepository;
-
     @Autowired
     private IAccountService accountService;
+
+    @Autowired
+    private WorkTitleRepository workTitleRepository;
 
     @Transactional
     @Override
@@ -45,10 +46,19 @@ public class ProDataService implements IProDataService {
         if (updatedProfessional.getPublic_bio() != null)
             proToUpdate.setPublic_bio(updatedProfessional.getPublic_bio());
 
-        if (updatedProfessional.getWorkTitle() != null)
-            proToUpdate.setWorkTitle(updatedProfessional.getWorkTitle());
-
         professionalRepository.save(proToUpdate);
+    }
+
+    @Override
+    public boolean setWorkTitle(Professional professional, Long workTitleId) {
+        WorkTitle workTitle = workTitleRepository.findById(workTitleId).orElse(null);
+        if (workTitle != null){
+            professional.setWorkTitle(workTitle);
+            professionalRepository.save(professional);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Transactional
