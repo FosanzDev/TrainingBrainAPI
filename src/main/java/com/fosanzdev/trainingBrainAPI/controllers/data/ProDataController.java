@@ -1,6 +1,10 @@
 package com.fosanzdev.trainingBrainAPI.controllers.data;
 
+import com.fosanzdev.trainingBrainAPI.models.details.Branch;
 import com.fosanzdev.trainingBrainAPI.models.details.Professional;
+import com.fosanzdev.trainingBrainAPI.models.details.WorkTitle;
+import com.fosanzdev.trainingBrainAPI.repositories.data.BranchRepository;
+import com.fosanzdev.trainingBrainAPI.repositories.data.WorkTitleRepository;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.IProDataService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RequestMapping("/pro")
@@ -22,6 +27,12 @@ public class ProDataController {
 
     @Autowired
     private IProDataService proDataService;
+
+    @Autowired
+    private BranchRepository branchRepository;
+
+    @Autowired
+    private WorkTitleRepository workTitleRepository;
 
     @Operation(summary = "Obtiene la información del usuario profesional actual")
     @ApiResponses(value = {
@@ -110,5 +121,17 @@ public class ProDataController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @GetMapping("/branches")
+    ResponseEntity<Map<String, Object>> getBranchList(){
+        List<Branch> branches = branchRepository.findAll();
+        return ResponseEntity.ok(Map.of("branches", branches));
+    }
+
+    @GetMapping("/worktitles")
+    ResponseEntity<Map<String, Object>> getWorkTitleList(){
+        List<WorkTitle> workTitles = workTitleRepository.findAll();
+        return ResponseEntity.ok(Map.of("workTitles", workTitles));
     }
 }
