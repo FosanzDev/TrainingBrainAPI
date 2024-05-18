@@ -10,6 +10,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+
 @Service
 public class UserDataService implements IUserDataService {
 
@@ -42,8 +44,18 @@ public class UserDataService implements IUserDataService {
     }
 
     @Override
-    public void updateUser(User user) {
-        userRepository.save(user);
+    public void updateUser(User userToUpdate, User updatedUser) throws ParseException {
+        if (updatedUser.getPublicBio() != null)
+            userToUpdate.setPublicBio(updatedUser.getPublicBio());
+
+        if (updatedUser.getPrivateBio() != null)
+            userToUpdate.setPrivateBio(updatedUser.getPrivateBio());
+
+        if (updatedUser.getHistory() != null)
+            userToUpdate.setHistory(updatedUser.getHistory());
+
+        if (updatedUser.getDateOfBirth() != null)
+            userToUpdate.setDateOfBirth(updatedUser.getDateOfBirth());
     }
 
     @Transactional

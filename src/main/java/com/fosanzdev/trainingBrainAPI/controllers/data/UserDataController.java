@@ -42,7 +42,7 @@ public class UserDataController {
             @Parameter(description = "Token de autorización", required = true, example = "Bearer <token>")
             @RequestHeader("Authorization") String bearer
     ) {
-        try{
+        try {
             String token = bearer.split(" ")[1];
             User user = userDataService.getUserByAccessToken(token);
             if (user != null) {
@@ -74,7 +74,7 @@ public class UserDataController {
             @RequestHeader("Authorization") String bearer,
             @PathVariable String id
     ) {
-        try{
+        try {
             String token = bearer.split(" ")[1];
             Account account = accountService.getAccountByAccessToken(token);
             if (account == null)
@@ -96,31 +96,22 @@ public class UserDataController {
 
     @PostMapping("/update")
     ResponseEntity<Map<String, String>> updateUser(
-            @Parameter(description = "Token de autorización", required = true, example="Bearer <token>")
+            @Parameter(description = "Token de autorización", required = true, example = "Bearer <token>")
             @RequestHeader("Authorization") String bearer,
             @RequestBody User user) {
-        try{
+        try {
             String token = bearer.split(" ")[1];
 
             User userToUpdate = userDataService.getUserByAccessToken(token);
             if (userToUpdate == null)
                 return ResponseEntity.status(404).body(Map.of("error", "User not found"));
 
+            try {
+                userDataService.updateUser(userToUpdate, user);
+            } catch (Exception e) {
+                return ResponseEntity.status(400).body(Map.of("error", "Invalid date format"));
+            }
 
-            if (user.getPublicBio() != null)
-                userToUpdate.setPublicBio(user.getPublicBio());
-            if (user.getPrivateBio() != null)
-                userToUpdate.setPrivateBio(user.getPrivateBio());
-            if (user.getHistory() != null)
-                userToUpdate.setHistory(user.getHistory());
-            if (user.getDateOfBirth() != null)
-                try{
-                    userToUpdate.setDateOfBirth(user.getDateOfBirth());
-                } catch (Exception e) {
-                    return ResponseEntity.status(400).body(Map.of("error", "Invalid date format"));
-                }
-
-            userDataService.updateUser(userToUpdate);
             return ResponseEntity.ok(userToUpdate.toMap());
 
         } catch (Exception e) {
