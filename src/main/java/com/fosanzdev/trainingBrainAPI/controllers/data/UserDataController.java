@@ -112,7 +112,7 @@ public class UserDataController {
                 return ResponseEntity.status(400).body(Map.of("error", "Invalid date format"));
             }
 
-            return ResponseEntity.ok(userToUpdate.toMap());
+            return ResponseEntity.ok().build();
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();

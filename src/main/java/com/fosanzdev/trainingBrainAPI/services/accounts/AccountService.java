@@ -30,4 +30,19 @@ public class AccountService implements IAccountService {
     public Account getAccountByAccessToken(String accessToken) {
         return accessTokenRepository.find(accessToken).getAccount();
     }
+
+    @Override
+    public void updateAccount(Account accountToUpdate, Account updatedAccount) {
+        if (updatedAccount.getUsername() != null)
+            accountToUpdate.setUsername(updatedAccount.getUsername());
+
+        if (updatedAccount.getPassword() != null)
+            accountToUpdate.setPassword(updatedAccount.getPassword());
+
+        if (updatedAccount.getEmail() != null)
+            accountToUpdate.setEmail(updatedAccount.getEmail());
+
+        if (updatedAccount.getName() != null)
+            accountToUpdate.setName(updatedAccount.getName());
+    }
 }

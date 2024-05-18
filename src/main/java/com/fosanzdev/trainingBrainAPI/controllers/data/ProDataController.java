@@ -26,8 +26,8 @@ public class ProDataController {
     @Operation(summary = "Obtiene la información del usuario profesional actual")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Información obtenida correctamente",
-                content = @Content(mediaType = "application/json",
-                        schema = @Schema(anyOf = Professional.class))
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(anyOf = Professional.class))
             ),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content(mediaType = "application/json",
@@ -36,8 +36,8 @@ public class ProDataController {
     @GetMapping("/me")
     ResponseEntity<Map<String, Object>> me(
             @RequestHeader("Authorization") String bearer
-    ){
-        try{
+    ) {
+        try {
             String token = bearer.split(" ")[1];
             Professional professional = proDataService.getProfessionalByAccessToken(token);
             if (professional != null) {
@@ -64,7 +64,7 @@ public class ProDataController {
     ResponseEntity<Map<String, Object>> getProfessional(
             @PathVariable String id
     ) {
-        try{
+        try {
             Professional professional = proDataService.getProfessionalByAccountId(id);
             if (professional != null) {
                 return ResponseEntity.ok(professional.toMap());
@@ -85,7 +85,7 @@ public class ProDataController {
     })
     @PostMapping("/update")
     ResponseEntity<Map<String, Object>> updateProfessional(
-            @Parameter(description = "Token de autorización", required = true, example="Bearer <token>")
+            @Parameter(description = "Token de autorización", required = true, example = "Bearer <token>")
             @RequestHeader("Authorization") String bearer,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Información actualizada del usuario profesional", required = true,
                     content = @Content(mediaType = "application/json",
@@ -94,16 +94,21 @@ public class ProDataController {
     ) {
         try {
             String token = bearer.split(" ")[1];
+
             Professional proToUpdate = proDataService.getProfessionalByAccessToken(token);
-            if (proToUpdate != null) {
+            if (proToUpdate == null)
+                return ResponseEntity.status(404).body(Map.of("error", "Professional not found"));
+
+            try{
                 proDataService.updateProfessional(proToUpdate, updatedProfessional);
-            } else {
-                return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().build();
             }
+
+            return ResponseEntity.ok().build();
+
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok().build();
     }
 }

@@ -1,5 +1,6 @@
 package com.fosanzdev.trainingBrainAPI.models.auth;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fosanzdev.trainingBrainAPI.models.details.Professional;
 import com.fosanzdev.trainingBrainAPI.models.details.User;
 import com.fosanzdev.trainingBrainAPI.models.mood.AccountMood;
@@ -30,27 +31,23 @@ public class Account {
     private boolean professional;
     private boolean verified;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "account")
     private Professional professionalDetails;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "account")
     private User userDetails;
 
     public Map<String, Object> toMap(){
-        Map<String, Object> map = new HashMap<>(Map.of(
+        return  Map.of(
                 "id", id,
                 "name", name,
                 "email", email,
                 "username", username,
                 "isProfessional", professional,
                 "isVerified", verified
-        ));
-        if (professionalDetails != null)
-            map.put("professionalDetails", professionalDetails.toMap());
-        if (userDetails != null)
-            map.put("userDetails", userDetails.toMap());
-
-        return map;
+        );
     }
 
     public Map<String, Object> toBasicMap(){

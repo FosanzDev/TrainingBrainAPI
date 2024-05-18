@@ -91,4 +91,29 @@ public class AccountController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @PostMapping("/update")
+    ResponseEntity<Map<String, Object>> updateAccount(
+            @Parameter(description = "Token de autorización", required = true, example="Bearer <token>")
+            @RequestHeader("Authorization") String bearer,
+            @RequestBody Account account) {
+        try{
+            String token = bearer.split(" ")[1];
+
+            Account accountToUpdate = accountService.getAccountByAccessToken(token);
+            if (accountToUpdate == null)
+                return ResponseEntity.status(404).body(Map.of("error", "Account not found"));
+
+            try{
+                accountService.updateAccount(accountToUpdate, account);
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().build();
+            }
+
+            return ResponseEntity.ok(account.toMap());
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
