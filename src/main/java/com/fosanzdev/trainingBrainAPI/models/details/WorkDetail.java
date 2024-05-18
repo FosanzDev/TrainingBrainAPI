@@ -20,8 +20,8 @@ public class WorkDetail {
     private Long id;
 
     private String description;
-    private String start_date;
-    private String end_date;
+    private String startDate;
+    private String endDate;
     private String enterprise;
 
     @ManyToOne(cascade = {CascadeType.PERSIST})
@@ -37,8 +37,8 @@ public class WorkDetail {
         return Map.of(
             "id", id.toString(),
             "description", description,
-            "start_date", start_date,
-            "end_date", end_date,
+            "start_date", startDate,
+            "end_date", endDate,
             "enterprise", enterprise,
             "workTitle", workTitle.toMap().toString()
         );
