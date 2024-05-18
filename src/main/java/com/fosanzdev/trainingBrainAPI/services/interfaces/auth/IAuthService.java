@@ -1,4 +1,4 @@
-package com.fosanzdev.trainingBrainAPI.services.interfaces;
+package com.fosanzdev.trainingBrainAPI.services.interfaces.auth;
 
 import com.fosanzdev.trainingBrainAPI.models.auth.AccessToken;
 import com.fosanzdev.trainingBrainAPI.models.auth.AuthCode;

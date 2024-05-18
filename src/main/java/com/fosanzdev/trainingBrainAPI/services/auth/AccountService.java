@@ -1,9 +1,9 @@
-package com.fosanzdev.trainingBrainAPI.services.accounts;
+package com.fosanzdev.trainingBrainAPI.services.auth;
 
 import com.fosanzdev.trainingBrainAPI.models.auth.Account;
 import com.fosanzdev.trainingBrainAPI.repositories.auth.AccessTokenRepository;
 import com.fosanzdev.trainingBrainAPI.repositories.auth.AccountRepository;
-import com.fosanzdev.trainingBrainAPI.services.interfaces.IAccountService;
+import com.fosanzdev.trainingBrainAPI.services.interfaces.auth.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

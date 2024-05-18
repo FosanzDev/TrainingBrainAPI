@@ -1,4 +1,4 @@
-package com.fosanzdev.trainingBrainAPI.services.interfaces;
+package com.fosanzdev.trainingBrainAPI.services.interfaces.data;
 
 import com.fosanzdev.trainingBrainAPI.models.details.Professional;
 import com.fosanzdev.trainingBrainAPI.models.details.User;

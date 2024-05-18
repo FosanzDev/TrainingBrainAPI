@@ -5,7 +5,7 @@ import com.fosanzdev.trainingBrainAPI.models.details.Professional;
 import com.fosanzdev.trainingBrainAPI.models.details.WorkTitle;
 import com.fosanzdev.trainingBrainAPI.repositories.data.BranchRepository;
 import com.fosanzdev.trainingBrainAPI.repositories.data.WorkTitleRepository;
-import com.fosanzdev.trainingBrainAPI.services.interfaces.IProDataService;
+import com.fosanzdev.trainingBrainAPI.services.interfaces.data.IProDataService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

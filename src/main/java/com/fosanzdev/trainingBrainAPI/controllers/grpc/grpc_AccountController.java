@@ -1,7 +1,7 @@
 package com.fosanzdev.trainingBrainAPI.controllers.grpc;
 
 import com.fosanzdev.trainingBrainAPI.models.auth.Account;
-import com.fosanzdev.trainingBrainAPI.services.interfaces.IAccountService;
+import com.fosanzdev.trainingBrainAPI.services.interfaces.auth.IAccountService;
 import com.fosanzdev.trainingBrainGrpcInterface.auth.*;
 import com.google.protobuf.Empty;
 import io.grpc.Status;

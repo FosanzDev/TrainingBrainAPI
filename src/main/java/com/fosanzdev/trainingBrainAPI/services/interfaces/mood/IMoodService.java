@@ -1,4 +1,4 @@
-package com.fosanzdev.trainingBrainAPI.services.interfaces;
+package com.fosanzdev.trainingBrainAPI.services.interfaces.mood;
 
 import com.fosanzdev.trainingBrainAPI.models.auth.Account;
 import com.fosanzdev.trainingBrainAPI.models.mood.AccountMood;

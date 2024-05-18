@@ -1,7 +1,7 @@
 package com.fosanzdev.trainingBrainAPI.controllers.auth;
 
 import com.fosanzdev.trainingBrainAPI.models.auth.Account;
-import com.fosanzdev.trainingBrainAPI.services.interfaces.IAccountService;
+import com.fosanzdev.trainingBrainAPI.services.interfaces.auth.IAccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
