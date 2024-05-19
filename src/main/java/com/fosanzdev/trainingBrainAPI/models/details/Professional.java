@@ -20,7 +20,7 @@ public class Professional {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    private String public_bio;
+    private String publicBio;
 
     @JsonIgnore
     @OneToOne(cascade = {CascadeType.PERSIST})
@@ -40,12 +40,12 @@ public class Professional {
     public Map<String, Object> toMap(){
         Map<String, Object> map = new HashMap<>();
 
-        map.put("public_bio", public_bio);
+        map.put("publicBio", publicBio);
 
         if (workTitle == null)
-            map.put("work_title", null);
+            map.put("workTitle", null);
         else
-            map.put("work_title", workTitle.toMap());
+            map.put("workTitle", workTitle.toMap());
 
         ArrayList<Object> workDetailsList = new ArrayList<>();
         for (WorkDetail workDetail : workDetails)

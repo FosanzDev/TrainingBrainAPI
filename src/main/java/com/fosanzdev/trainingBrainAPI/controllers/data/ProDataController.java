@@ -38,7 +38,16 @@ public class ProDataController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Información obtenida correctamente",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(anyOf = Professional.class))
+                            schema = @Schema(example = """
+                                    {
+                                        "id": "364f2933-c91e-4641-...",
+                                        "name": "Minombre",
+                                        "publicBio": "Mi biografía",
+                                        "workTitle": {"...": "..."} ,
+                                        "workDetails": ["..."],
+                                        "professionalSkills": ["..."]
+                                    }
+                                    """))
             ),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content(mediaType = "application/json",
@@ -65,7 +74,16 @@ public class ProDataController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Información obtenida correctamente",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(anyOf = Professional.class))
+                            schema = @Schema(example = """
+                                    {
+                                        "id": "364f2933-c91e-4641-...",
+                                        "name": "Minombre",
+                                        "publicBio": "Mi biografía",
+                                        "workTitle": {"...", "..."},
+                                        "workDetails": ["..."],
+                                        "professionalSkills": ["..."]
+                                    }
+                                    """))
             ),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content(mediaType = "application/json",
@@ -89,7 +107,8 @@ public class ProDataController {
 
     @Operation(summary = "Actualiza la información del usuario profesional actual")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Información actualizada correctamente"),
+            @ApiResponse(responseCode = "200", description = "Información actualizada correctamente",
+                    content = @Content(mediaType = "none")),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = "{\"error\":\"Unauthorized\"}")))
@@ -100,7 +119,11 @@ public class ProDataController {
             @RequestHeader("Authorization") String bearer,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Información actualizada del usuario profesional", required = true,
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(exampleClasses = Professional.class)))
+                            schema = @Schema(example = """
+                                    {
+                                        "publicBio": "Mi biografía"
+                                    }
+                                    """)))
             @RequestBody Professional updatedProfessional
     ) {
         try {
@@ -110,7 +133,7 @@ public class ProDataController {
             if (proToUpdate == null)
                 return ResponseEntity.status(404).body(Map.of("error", "Professional not found"));
 
-            try{
+            try {
                 proDataService.updateProfessional(proToUpdate, updatedProfessional);
             } catch (Exception e) {
                 return ResponseEntity.badRequest().build();
@@ -123,12 +146,21 @@ public class ProDataController {
         }
     }
 
-    @PostMapping("/setWorkTitle")
+    @Operation(summary = "Establece el título de trabajo del usuario profesional actual")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Título de trabajo establecido correctamente",
+                    content = @Content(mediaType = "none")),
+            @ApiResponse(responseCode = "404", description = "Título de trabajo no encontrado",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"error\":\"Work title not found\"}")))
+    })
+    @PostMapping("/setworktitle/{workTitleId}")
     ResponseEntity<Map<String, Object>> setWorkTitle(
-            @Parameter(description = "Token de autorización", required = true, example="Bearer <token>")
+            @Parameter(description = "Token de autorización", required = true, example = "Bearer <token>")
             @RequestHeader("Authorization") String bearer,
-            @RequestBody Long workTitleId
-    ){
+            @Parameter(description = "ID del título de trabajo", required = true, example = "1290837198231987")
+            @PathVariable Long workTitleId
+    ) {
         try {
             String token = bearer.split(" ")[1];
             Professional professional = proDataService.getProfessionalByAccessToken(token);
@@ -146,22 +178,87 @@ public class ProDataController {
         }
     }
 
+    @Operation(summary = "Obtiene la lista de ramas de trabajo")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de ramas obtenida correctamente",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = """
+                                    {
+                                        "branches": [
+                                            {
+                                                "id": 1,
+                                                "name": "Psicología"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "name": "Psiquiatría"
+                                            }
+                                        ]
+                                    }
+                                    """))
+            )
+    })
     @GetMapping("/branches")
-    ResponseEntity<Map<String, Object>> getBranchList(){
+    ResponseEntity<Map<String, Object>> getBranchList() {
         List<Branch> branches = branchRepository.findAll();
         return ResponseEntity.ok(Map.of("branches", branches));
     }
 
+    @Operation(summary = "Obtiene la lista de títulos de trabajo")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de títulos de trabajo obtenida correctamente",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = """
+                                    {
+                                        "workTitles": [
+                                            {
+                                                "id": 4346364834534233,
+                                                "name": "Psicólogo",
+                                                "branch": {"...":"..."}
+                                            },
+                                            {
+                                                "id": 1234087213948012,
+                                                "name": "Psicopedagogo",
+                                                "branch": {"...":"..."}
+                                            }
+                                        ]
+                                    }
+                                    """)))
+    })
     @GetMapping("/worktitles")
-    ResponseEntity<Map<String, Object>> getWorkTitleList(){
+    ResponseEntity<Map<String, Object>> getWorkTitleList() {
         List<WorkTitle> workTitles = workTitleRepository.findAll();
         return ResponseEntity.ok(Map.of("workTitles", workTitles));
     }
 
+
+    @Operation(summary = "Obtiene la lista de títulos de trabajo por rama")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de títulos de trabajo obtenida correctamente",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = """
+                                    {
+                                        "workTitles": [
+                                            {
+                                                "id": 4346364834534233,
+                                                "name": "Psicólogo",
+                                                "branch": {"...":"..."}
+                                            },
+                                            {
+                                                "id": 1234087213948012,
+                                                "name": "Psicopedagogo",
+                                                "branch": {"...":"..."}
+                                            }
+                                        ]
+                                    }
+                                    """))
+            )
+    })
     @GetMapping("/worktitles/bybranch/{branchId}")
     ResponseEntity<Map<String, Object>> getWorkTitleListByBranch(
+            @Parameter(description = "ID de la rama", required = true, example = "1")
             @PathVariable Long branchId
-    ){
+    ) {
         List<WorkTitle> workTitles = workTitleRepository.findByBranch(branchId);
         return ResponseEntity.ok(Map.of("workTitles", workTitles));
     }

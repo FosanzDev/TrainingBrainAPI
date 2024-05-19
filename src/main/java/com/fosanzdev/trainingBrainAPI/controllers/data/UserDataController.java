@@ -32,7 +32,15 @@ public class UserDataController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Información del usuario",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(example = "{\"username\":\"usuario\",\"isVerified\":\"true/false\",\"id\":\"364f2933-c91e-4641-...\",\"name\":\"Minombre\",  \"isProfessional\":\"true/false\"}"))),
+                            schema = @Schema(example = """
+                                    {
+                                        "id":"364f2933-c91e-4641-...",
+                                        "publicBio":"Bio pública",
+                                        "privateBio":"Bio privada",
+                                        "history":"Historial",
+                                        "dateOfBirth":"01/01/2000"
+                                    }
+                                    """))),
             @ApiResponse(responseCode = "401", description = "Usuario no autorizado o no encontrado",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = "{\"error\":\"Unauthorized\"}")))
@@ -60,18 +68,27 @@ public class UserDataController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Información COMPLETA del usuario (Solo para cuentas profesionales o propias)",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(example = "{\"id\":\"364f2933-c91e-4641-...\",\"publicBio\":\"Bio pública\",\"privateBio\":\"Bio privada\",\"history\":\"Historial\",\"dateOfBirth\":\"2000-01-01\"}"))),
+                            schema = @Schema(example = """
+                                    {
+                                        "id":"364f2933-c91e-4641-...",
+                                        "publicBio":"Bio pública",
+                                        "privateBio":"Bio privada",
+                                        "history":"Historial",
+                                        "dateOfBirth":"01/01/2000"
+                                    }
+                                    """))),
             @ApiResponse(responseCode = "206", description = "Información PÚBLICA del usuario (Solo para cuentas normales)",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(example = "{\"username\":\"usuario\",\"id\":\"364f2933-c91e-4641-...\"}"))),
+                            schema = @Schema(example = "{\"publicBio\":\"Biografía pública\",\"id\":\"364f2933-c91e-4641-...\"}"))),
             @ApiResponse(responseCode = "404", description = "Usuario no encontrado",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = "{\"error\":\"User not found\"}")))
     })
     @GetMapping("/{id}")
     ResponseEntity<Map<String, String>> getUser(
-            @Parameter(description = "ID de la cuenta", required = true)
+            @Parameter(description = "Token de autorización", required = true, example = "Bearer <token>")
             @RequestHeader("Authorization") String bearer,
+            @Parameter(description = "ID del usuario", required = true, example = "364f2933-c91e-4641-...")
             @PathVariable String id
     ) {
         try {
@@ -94,10 +111,31 @@ public class UserDataController {
         }
     }
 
+    @Operation(summary = "Actualiza la información del usuario actual")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Información actualizada",
+                    content = @Content(mediaType = "none")),
+            @ApiResponse(responseCode = "400", description = "Formato de fecha inválido",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"error\":\"Invalid date format\"}"))),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"error\":\"User not found\"}")))
+    })
     @PostMapping("/update")
     ResponseEntity<Map<String, String>> updateUser(
             @Parameter(description = "Token de autorización", required = true, example = "Bearer <token>")
             @RequestHeader("Authorization") String bearer,
+            @Parameter(description = "Información del usuario a actualizar", required = true,
+            content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = """
+                                    {
+                                        "publicBio":"Bio pública",
+                                        "privateBio":"Bio privada",
+                                        "history":"Historial",
+                                        "dateOfBirth":"01/01/2000"
+                                    }
+                                    """)))
             @RequestBody User user) {
         try {
             String token = bearer.split(" ")[1];
