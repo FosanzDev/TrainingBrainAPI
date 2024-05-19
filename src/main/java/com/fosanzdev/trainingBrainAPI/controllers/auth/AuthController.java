@@ -44,15 +44,11 @@ public class AuthController {
 
     @Operation(summary = "Genera el proceso de inicio de sesión")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Codigo de autorización generado correctamente",
-                content = @Content(mediaType = "application/json",
-                    schema = @Schema(example = """
-                            {"authToken": "2ksh31ls-wsiduoia-..."}
-                            """))),
+            @ApiResponse(responseCode = "200", description = "Codigo de autorización enviado correctamente",
+            content = @Content(mediaType = "none")),
             @ApiResponse(responseCode = "400", description = "Datos de inicio de sesión inválidos",
             content = @Content(mediaType = "none"))
     }
-
     )
     @PostMapping("/login")
     ResponseEntity<Map<String, String>> login(@io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -108,12 +104,12 @@ public class AuthController {
     @PostMapping("/verify")
     ResponseEntity<Map<String, String>> verify(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Datos de inicio de sesión",
+                    description = "Datos de inicio de sesión y código recibido por correo",
                     required = true,
                     content = @Content(
                             schema = @Schema(
                                     example = """
-                            {"username": "user", "password": "pass", "authToken": "2ksh31ls-wsiduoia-..."}
+                            {"username": "user", "password": "pass", "authToken": "2ksh31"}
                             """
                             )
                     )
@@ -192,10 +188,7 @@ public class AuthController {
     @Operation(summary = "Registra un nuevo usuario en el sistema")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Usuario registrado correctamente",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(example = """
-                            {"authToken": "2ksh31ls-wsiduoia-..."}
-                            """))),
+                    content = @Content(mediaType = "none")),
             @ApiResponse(responseCode = "409", description = "Usuario ya registrado",
                     content = @Content(mediaType = "none"))
     })
@@ -206,7 +199,7 @@ public class AuthController {
             content = @Content(
                     schema = @Schema(
                             example = """
-                            {"username": "user", "password": "pass", "name": "name", "professional": "true/false"}
+                            {"username": "user", "password": "pass", "name": "name", "professional": "true/false", "email": "email"}
                             """
                     )
             )

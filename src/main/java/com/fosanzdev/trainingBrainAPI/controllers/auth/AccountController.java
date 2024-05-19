@@ -27,7 +27,7 @@ public class AccountController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Información de la cuenta",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(example = "{\"username\":\"usuario\",\"isVerified\":\"true/false\",\"id\":\"364f2933-c91e-4641-...\",\"name\":\"Minombre\",  \"isProfessional\":\"true/false\"}"))),
+                            schema = @Schema(example = "{\"username\":\"usuario\",\"isVerified\":\"true/false\",\"id\":\"364f2933-c91e-4641-...\",\"name\":\"Minombre\",  \"isProfessional\":\"true/false\", \"email\":\"mi@correo.com\"}"))),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = "{\"error\":\"Unauthorized\"}")))
@@ -55,10 +55,10 @@ public class AccountController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Información COMPLETA de la cuenta (Solo para cuentas profesionales)",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(example = "{\"username\":\"usuario\",\"isVerified\":\"true/false\",\"id\":\"364f2933-c91e-4641-...\",\"name\":\"Minombre\",  \"isProfessional\":\"true/false\"}"))),
+                            schema = @Schema(example = "{\"username\":\"usuario\",\"isVerified\":\"true/false\",\"id\":\"364f2933-c91e-4641-...\",\"name\":\"Minombre\",  \"isProfessional\":\"true/false\", \"email\":\"mi@correo.com\"}"))),
             @ApiResponse(responseCode = "206", description = "Información BÁSICA de la cuenta (Solo para cuentas no profesionales)",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(example = "{\"username\":\"usuario\",\"id\":\"364f2933-c91e-4641-...\"}"))),
+                            schema = @Schema(example = "{\"username\":\"usuario\",\"id\":\"364f2933-c91e-4641-...\", \"name\":\"Minombre\"}"))),
     })
     @GetMapping("/id/{id}")
     ResponseEntity<Map<String, Object>> getById(
@@ -91,10 +91,24 @@ public class AccountController {
         }
     }
 
+    @Operation(summary = "Actualiza la información de la cuenta actual")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Información actualizada",
+                    content = @Content(mediaType = "none")),
+            @ApiResponse(responseCode = "400", description = "Account malformed",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"error\":\"Account malformed\"}"))),
+            @ApiResponse(responseCode = "404", description = "Account not found",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"error\":\"Account not found\"}")))
+    })
     @PostMapping("/update")
     ResponseEntity<Map<String, Object>> updateAccount(
             @Parameter(description = "Token de autorización", required = true, example="Bearer <token>")
             @RequestHeader("Authorization") String bearer,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Información actualizada de la cuenta", required = true,
+            content= @Content(mediaType = "application/json",
+                    schema = @Schema(example = "{\"username\":\"usuario\",\"name\":\"Minombre\", \"email\":\"mi@correo.com\", \"password\":\"micontraseña\"}")))
             @RequestBody Account account) {
         try{
             String token = bearer.split(" ")[1];
@@ -106,13 +120,13 @@ public class AccountController {
             try{
                 accountService.updateAccount(accountToUpdate, account);
             } catch (Exception e) {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest().body(Map.of("error", "Account malformed"));
             }
 
             return ResponseEntity.ok().build();
 
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(Map.of("error", "Account malformed"));
         }
     }
 }
