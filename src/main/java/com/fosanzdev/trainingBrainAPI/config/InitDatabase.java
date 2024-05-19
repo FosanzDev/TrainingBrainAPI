@@ -15,6 +15,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class InitDatabase {
+    /*
+     * This class is used to initialize the database with default data
+     */
 
     @Bean
     CommandLineRunner initMoods(MoodRepository moodRepository) {
@@ -62,19 +65,19 @@ public class InitDatabase {
                 branchRepository.save(new Branch(7L, "Geriatric Psychiatry"));
                 branchRepository.save(new Branch(8L, "Addiction Psychiatry"));
                 branchRepository.save(new Branch(9L, "Neuropsychiatry"));
-                branchRepository.save(new Branch(10L,"Social Work"));
-                branchRepository.save(new Branch(11L,"Mental Health Counseling"));
-                branchRepository.save(new Branch(12L,"Psychotherapy"));
-                branchRepository.save(new Branch(13L,"Occupational Therapy"));
+                branchRepository.save(new Branch(10L, "Social Work"));
+                branchRepository.save(new Branch(11L, "Mental Health Counseling"));
+                branchRepository.save(new Branch(12L, "Psychotherapy"));
+                branchRepository.save(new Branch(13L, "Occupational Therapy"));
             }
         };
     }
 
     @Transactional
     @Bean
-    CommandLineRunner initWorkTitles(WorkTitleRepository workTitleRepository, BranchRepository branchRepository){
+    CommandLineRunner initWorkTitles(WorkTitleRepository workTitleRepository, BranchRepository branchRepository) {
         return args -> {
-            if (workTitleRepository.count() == 0){
+            if (workTitleRepository.count() == 0) {
                 // Psychology
                 workTitleRepository.save(new WorkTitle("Psychologist", branchRepository.findById(1L).orElse(null)));
                 workTitleRepository.save(new WorkTitle("Auxiliary Psychologist", branchRepository.findById(1L).orElse(null)));

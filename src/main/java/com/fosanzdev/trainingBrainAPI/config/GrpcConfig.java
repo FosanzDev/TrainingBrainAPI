@@ -8,6 +8,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class GrpcConfig {
+    /*
+     * This class is used to configure the global interceptor for the gRPC server.
+     * The interceptor is later used to capture authentication tokens from the
+     * request headers and validate them.
+     */
 
     @Bean
     public GlobalServerInterceptorConfigurer globalInterceptorConfigurer() {
