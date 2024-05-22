@@ -1,6 +1,7 @@
 package com.fosanzdev.trainingBrainAPI.models.details;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fosanzdev.trainingBrainAPI.models.appointments.ProfessionalSchedule;
 import com.fosanzdev.trainingBrainAPI.models.auth.Account;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
