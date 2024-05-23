@@ -6,6 +6,7 @@ import com.fosanzdev.trainingBrainAPI.models.details.WorkTitle;
 
 public interface IProDataService {
 
+    Professional getProfessionalById(String professionalId);
     Professional getProfessionalByAccountId(String accountID);
     Professional getProfessionalByAccessToken(String accessToken);
     void updateProfessional(Professional user, Professional updatedProfessional);

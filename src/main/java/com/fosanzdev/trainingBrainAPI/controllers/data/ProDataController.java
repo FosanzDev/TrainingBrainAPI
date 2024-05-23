@@ -91,10 +91,11 @@ public class ProDataController {
     })
     @GetMapping("/{id}")
     ResponseEntity<Map<String, Object>> getProfessional(
+            @Parameter(description = "ID del profesional", required = true, example = "364f2933-c91e-4641-...")
             @PathVariable String id
     ) {
         try {
-            Professional professional = proDataService.getProfessionalByAccountId(id);
+            Professional professional = proDataService.getProfessionalById(id);
             if (professional != null) {
                 return ResponseEntity.ok(professional.toMap());
             } else {

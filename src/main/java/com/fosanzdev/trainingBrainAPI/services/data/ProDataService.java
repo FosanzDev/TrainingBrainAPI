@@ -23,6 +23,11 @@ public class ProDataService implements IProDataService {
     @Autowired
     private WorkTitleRepository workTitleRepository;
 
+    @Override
+    public Professional getProfessionalById(String professionalId) {
+        return professionalRepository.findById(professionalId).orElse(null);
+    }
+
     @Transactional
     @Override
     public Professional getProfessionalByAccountId(String accountID) {
