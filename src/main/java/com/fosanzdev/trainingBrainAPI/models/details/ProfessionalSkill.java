@@ -33,9 +33,8 @@ public class ProfessionalSkill {
 
     public Map<String, Object> toMap(){
         return Map.of(
-            "id", id.toString(),
-            "professional", professional.toMap(),
-            "skill", skill.toMap().toString(),
+            "id", id,
+            "skill", skill.toMap(),
             "level", level
         );
     }

@@ -33,14 +33,14 @@ public class WorkDetail {
     @JoinColumn(name = "fk_professional", referencedColumnName = "id")
     private Professional professional;
 
-    public Map<String, String> toMap(){
+    public Map<String, Object> toMap(){
         return Map.of(
-            "id", id.toString(),
+            "id", id,
             "description", description,
             "start_date", startDate,
             "end_date", endDate,
             "enterprise", enterprise,
-            "workTitle", workTitle.toMap().toString()
+            "workTitle", workTitle.toMap()
         );
     }
 }

@@ -41,6 +41,8 @@ public class Professional {
     public Map<String, Object> toMap(){
         Map<String, Object> map = new HashMap<>();
 
+        map.put("id", id);
+
         map.put("publicBio", publicBio);
 
         if (workTitle == null)
