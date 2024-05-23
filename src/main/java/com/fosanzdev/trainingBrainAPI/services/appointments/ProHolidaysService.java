@@ -56,8 +56,15 @@ public class ProHolidaysService implements IProHolidaysService {
         return false;
     }
 
+    @Transactional
     @Override
-    public boolean deleteHoliday(String holidayId) {
-        return false;
+    public boolean deleteHoliday(Professional professional, String holidayId) {
+        ProfessionalHoliday holiday = professionalHolidaysRepository.findById(holidayId).orElse(null);
+        if (holiday == null) return false;
+
+        if (!holiday.getProfessional().getId().equals(professional.getId())) return false;
+
+        professionalHolidaysRepository.delete(holiday);
+        return true;
     }
 }

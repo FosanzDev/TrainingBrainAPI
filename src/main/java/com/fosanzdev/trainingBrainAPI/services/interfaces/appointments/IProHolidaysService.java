@@ -8,6 +8,6 @@ import java.util.List;
 public interface IProHolidaysService {
     List<ProfessionalHoliday> findByProfessionalId(String professionalId);
     boolean addHoliday(Professional professional, ProfessionalHoliday holiday);
-    boolean deleteHoliday(String holidayId);
+    boolean deleteHoliday(Professional professional, String holidayId);
 
 }
