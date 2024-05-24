@@ -22,7 +22,8 @@ public class Appointment {
         PENDING,
         ACCEPTED,
         CANCELLED_BY_PROFESSIONAL,
-        CANCELLED_BY_USER
+        CANCELLED_BY_USER,
+        COMPLETED
     }
 
 
