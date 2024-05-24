@@ -161,8 +161,8 @@ public class HolidayController {
                         "holidays": [
                             {
                                 "holidayType": "VACATION / SICK_LEAVE / OTHER",
-                                "startDateTime": "2022-07-01T00:00:00Z",
-                                "endDateTime": "2022-07-15T23:59:59Z",
+                                "startDateTime": "2024-07-01T00:00:00Z",
+                                "endDateTime": "2024-07-15T23:59:59Z",
                                 "description": "Vacaciones de verano"
                             }
                         ]

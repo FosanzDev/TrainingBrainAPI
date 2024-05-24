@@ -114,6 +114,10 @@ public class AppointmentsService implements IAppointmentsService {
     public void bookAppointment(Appointment appointment) throws AppointmentException {
 
         try {
+            //Check if the appointment start time does not exceed 2 weeks from the current time
+            if (appointment.getStartDateTime().isAfter(ZonedDateTime.now().plusWeeks(2).toInstant())) {
+                throw new AppointmentException("Appointment start time exceeds 2 weeks from the current time");
+            }
             isConflictive(appointment);
         } catch (AppointmentException e) {
             throw new AppointmentException(e.toString());
