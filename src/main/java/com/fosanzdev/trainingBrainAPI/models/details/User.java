@@ -26,8 +26,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @Column(length = 500)
     private String publicBio;
+
+    @Column(length = 500)
     private String privateBio;
+
+    @Column(length = 5000)
     private String history;
 
     @Getter

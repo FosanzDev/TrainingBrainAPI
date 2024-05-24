@@ -27,6 +27,8 @@ public class ProfessionalHoliday {
     private String id;
 
     private HolidayType holidayType;
+
+    @Column(length = 1000)
     private String description;
     private Instant startDateTime;
     private Instant endDateTime;

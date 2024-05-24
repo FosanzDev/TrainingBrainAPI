@@ -21,6 +21,7 @@ public class Professional {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @Column(length = 5000)
     private String publicBio;
 
     @JsonIgnore

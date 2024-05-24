@@ -18,11 +18,19 @@ public class Diagnosis {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @Column(length = 100)
     private String header;
+
+    @Column(length = 400)
     private String shortDescription;
+
+    @Column(length = 1600)
     private String description;
 
+    @Column(length = 1600)
     private String recommendation;
+
+    @Column(length = 1600)
     private String treatment;
 
     @OneToOne(mappedBy = "diagnosis", cascade = {CascadeType.REFRESH})

@@ -35,8 +35,13 @@ public class Appointment {
     private Instant endDateTime;
     private Instant submissionTime;
 
+    @Column(length = 1000)
     private String submissionNotes;
+
+    @Column(length = 1000)
     private String cancellationReason;
+
+    @Column(length = 1000)
     private String confirmationNotes;
 
     @ManyToOne(cascade = {CascadeType.PERSIST})
