@@ -4,6 +4,7 @@ import com.fosanzdev.trainingBrainAPI.models.appointments.Appointment;
 import com.fosanzdev.trainingBrainAPI.models.appointments.ProfessionalHoliday;
 import com.fosanzdev.trainingBrainAPI.models.appointments.ProfessionalSchedule;
 import com.fosanzdev.trainingBrainAPI.models.details.Professional;
+import com.fosanzdev.trainingBrainAPI.models.details.User;
 import com.fosanzdev.trainingBrainAPI.repositories.appointments.AppointmentRepository;
 import com.fosanzdev.trainingBrainAPI.repositories.appointments.ProfessionalHolidaysRepository;
 import com.fosanzdev.trainingBrainAPI.repositories.appointments.ProfessionalScheduleRepository;
@@ -17,6 +18,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class AppointmentsService implements IAppointmentsService {
@@ -32,7 +34,7 @@ public class AppointmentsService implements IAppointmentsService {
 
     @Transactional
     @Override
-    public boolean bookAppointment(Appointment appointment) throws AppointmentException{
+    public boolean isConflictive(Appointment appointment) throws AppointmentException {
         Professional professional = appointment.getProfessional();
 
         List<ProfessionalHoliday> holidays = professionalHolidaysRepository.findByProfessionalId(professional.getId());
@@ -104,18 +106,129 @@ public class AppointmentsService implements IAppointmentsService {
             throw new AppointmentException("Appointment conflicts with another accepted appointment");
         }
 
-        // If all checks pass, save the appointment
+        return false;
+    }
+
+    @Transactional
+    @Override
+    public void bookAppointment(Appointment appointment) throws AppointmentException {
+
+        try {
+            isConflictive(appointment);
+        } catch (AppointmentException e) {
+            throw new AppointmentException(e.toString());
+        }
+
         appointmentRepository.save(appointment);
-        return true;
+    }
+
+    @Transactional
+    @Override
+    public void rejectAllConflictingAppointments(Appointment appointment) {
+        List<Appointment> conflictingAppointments = appointmentRepository.findPendingAppointmentByProfessionalId(appointment.getProfessional().getId());
+
+        for (Appointment conflictingAppointment : conflictingAppointments) {
+            try {
+                isConflictive(conflictingAppointment);
+            } catch (AppointmentException e) {
+                conflictingAppointment.setAppointmentStatus(Appointment.AppointmentStatus.CANCELLED_BY_PROFESSIONAL);
+                conflictingAppointment.setCancellationReason("Conflicts with another appointment");
+                appointmentRepository.save(conflictingAppointment);
+            }
+        }
+    }
+
+
+    @Transactional
+    @Override
+    public void acceptAppointment(String appointmentId, String professionalComment) throws AppointmentException {
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
+        if (appointment == null) throw new AppointmentException("Appointment not found");
+
+        if (appointment.getAppointmentStatus() != Appointment.AppointmentStatus.PENDING)
+            throw new AppointmentException("Appointment is not pending");
+
+        if (isConflictive(appointment)) {
+            throw new AppointmentException("Appointment is conflictive");
+        }
+
+        rejectAllConflictingAppointments(appointment);
+        appointment.setAppointmentStatus(Appointment.AppointmentStatus.ACCEPTED);
+        appointment.setConfirmationNotes(professionalComment);
+        appointmentRepository.save(appointment);
     }
 
     @Override
-    public boolean acceptAppointment(String appointmentId, String professionalComment) {
-        return false;
+    public void rejectAppointment(User user, String appointmentId, String professionalComment) throws AppointmentException {
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
+        if (appointment == null) throw new AppointmentException("Appointment not found");
+
+        if (appointment.getAppointmentStatus() == Appointment.AppointmentStatus.CANCELLED_BY_USER ||
+                appointment.getAppointmentStatus() == Appointment.AppointmentStatus.CANCELLED_BY_PROFESSIONAL)
+            throw new AppointmentException("Appointment is already rejected");
+
+        if (!Objects.equals(appointment.getUser().getId(), user.getId()))
+            throw new AppointmentException("User does not have permission to reject this appointment");
+
+        appointment.setAppointmentStatus(Appointment.AppointmentStatus.CANCELLED_BY_USER);
+        appointment.setCancellationReason(professionalComment);
+        appointmentRepository.save(appointment);
     }
 
     @Override
-    public boolean rejectAppointment(String appointmentId, String professionalComment) {
-        return false;
+    public void rejectAppointment(Professional professional, String appointmentId, String professionalComment) throws AppointmentException {
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
+        if (appointment == null) throw new AppointmentException("Appointment not found");
+
+        if (appointment.getAppointmentStatus() == Appointment.AppointmentStatus.CANCELLED_BY_PROFESSIONAL ||
+                appointment.getAppointmentStatus() == Appointment.AppointmentStatus.CANCELLED_BY_USER)
+            throw new AppointmentException("Appointment is already rejected");
+
+        if (!Objects.equals(appointment.getProfessional().getId(), professional.getId()))
+            throw new AppointmentException("Professional does not have permission to reject this appointment");
+
+        appointment.setAppointmentStatus(Appointment.AppointmentStatus.CANCELLED_BY_PROFESSIONAL);
+        appointment.setCancellationReason(professionalComment);
+        appointmentRepository.save(appointment);
+    }
+
+    @Override
+    public List<Appointment> getAppointmentsByStatus(User user, String status) {
+        return switch (status) {
+            case "pending" -> appointmentRepository.findPendingAppointmentByUserId(user.getId());
+            case "accepted" -> appointmentRepository.findAcceptedAppointmentByUserId(user.getId());
+            case "cancelled" -> appointmentRepository.findRejectedAppointmentByUserId(user.getId());
+            case "completed" -> appointmentRepository.findCompletedAppointmentByUserId(user.getId());
+            case "all" -> appointmentRepository.findByUserId(user.getId());
+            default -> null;
+        };
+    }
+
+    @Override
+    public List<Appointment> getAppointmentsByStatus(Professional professional, String status) {
+        return switch (status) {
+            case "pending" -> appointmentRepository.findPendingAppointmentByProfessionalId(professional.getId());
+            case "accepted" -> appointmentRepository.findAcceptedAppointmentByProfessionalId(professional.getId());
+            case "cancelled" -> appointmentRepository.findRejectedAppointmentByProfessionalId(professional.getId());
+            case "completed" -> appointmentRepository.findCompletedAppointmentByProfessionalId(professional.getId());
+            case "all" -> appointmentRepository.findByProfessionalId(professional.getId());
+            default -> null;
+        };
+    }
+
+    @Override
+    public Appointment getAppointmentById(User user, String appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
+        if (appointment == null) return null;
+        if (!Objects.equals(appointment.getUser().getId(), user.getId())) return null;
+        return appointment;
+    }
+
+    @Override
+    public Appointment getAppointmentById(Professional professional, String appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
+        if (appointment == null) return null;
+        if (!Objects.equals(appointment.getProfessional().getId(), professional.getId())) return null;
+        return appointment;
     }
 }

@@ -17,8 +17,11 @@ public interface AppointmentRepository extends JpaRepository<Appointment, String
     @Query("SELECT a FROM Appointment a WHERE a.professional.id = ?1 AND a.endDateTime > CURRENT_TIMESTAMP AND a.appointmentStatus = 1") // 1=Accepted
     List<Appointment> findAcceptedAppointmentByProfessionalId(String professionalId);
 
-    @Query("SELECT a FROM Appointment a WHERE a.professional.id = ?1 AND a.endDateTime > CURRENT_TIMESTAMP AND a.appointmentStatus = 2") // 2=Rejected
+    @Query("SELECT a FROM Appointment a WHERE a.professional.id = ?1 AND a.endDateTime > CURRENT_TIMESTAMP AND a.appointmentStatus = 2 OR a.appointmentStatus = 3") // 2=Rejected by professional, 3=Rejected by user
     List<Appointment> findRejectedAppointmentByProfessionalId(String professionalId);
+
+    @Query("SELECT a FROM Appointment a WHERE a.professional.id = ?1 AND a.endDateTime > CURRENT_TIMESTAMP AND a.appointmentStatus = 4") // 4=Completed
+    List<Appointment> findCompletedAppointmentByProfessionalId(String professionalId);
 
     @Query("SELECT a FROM Appointment a WHERE a.user.id = ?1 AND a.endDateTime > CURRENT_TIMESTAMP")
     List<Appointment> findByUserId(String userId);
@@ -29,6 +32,10 @@ public interface AppointmentRepository extends JpaRepository<Appointment, String
     @Query("SELECT a FROM Appointment a WHERE a.user.id = ?1 AND a.endDateTime > CURRENT_TIMESTAMP AND a.appointmentStatus = 1") // 1=Accepted
     List<Appointment> findAcceptedAppointmentByUserId(String userId);
 
-    @Query("SELECT a FROM Appointment a WHERE a.user.id = ?1 AND a.endDateTime > CURRENT_TIMESTAMP AND a.appointmentStatus = 2") // 2=Rejected
+    @Query("SELECT a FROM Appointment a WHERE a.user.id = ?1 AND a.endDateTime > CURRENT_TIMESTAMP AND a.appointmentStatus = 2 OR a.appointmentStatus = 3") // 2=Rejected by professional, 3=Rejected by user
     List<Appointment> findRejectedAppointmentByUserId(String userId);
+
+    @Query("SELECT a FROM Appointment a WHERE a.user.id = ?1 AND a.endDateTime > CURRENT_TIMESTAMP AND a.appointmentStatus = 4") // 4=Completed
+    List<Appointment> findCompletedAppointmentByUserId(String userId);
+
 }

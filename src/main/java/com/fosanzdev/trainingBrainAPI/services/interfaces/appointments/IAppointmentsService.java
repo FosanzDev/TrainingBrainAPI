@@ -5,11 +5,18 @@ import com.fosanzdev.trainingBrainAPI.models.details.Professional;
 import com.fosanzdev.trainingBrainAPI.models.details.User;
 import com.fosanzdev.trainingBrainAPI.services.appointments.AppointmentException;
 
-import java.time.Instant;
+import java.util.List;
 
 public interface IAppointmentsService {
 
-    public boolean bookAppointment (Appointment appointment) throws AppointmentException;
-    public boolean acceptAppointment (String appointmentId, String professionalComment);
-    public boolean rejectAppointment (String appointmentId, String professionalComment);
+    boolean isConflictive (Appointment appointment) throws AppointmentException;
+    void rejectAllConflictingAppointments(Appointment appointment);
+    void bookAppointment (Appointment appointment) throws AppointmentException;
+    void acceptAppointment (String appointmentId, String professionalComment) throws AppointmentException;
+    void rejectAppointment (User user, String appointmentId, String professionalComment) throws AppointmentException;
+    void rejectAppointment(Professional professional, String appointmentId, String professionalComment) throws AppointmentException;
+    List<Appointment> getAppointmentsByStatus(User user, String status);
+    List<Appointment> getAppointmentsByStatus(Professional professional, String status);
+    Appointment getAppointmentById(User user, String appointmentId);
+    Appointment getAppointmentById(Professional professional, String appointmentId);
 }

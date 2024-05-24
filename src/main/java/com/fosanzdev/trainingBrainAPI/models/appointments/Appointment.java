@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -17,10 +18,11 @@ import java.util.Map;
 @Table(name = "appointments")
 public class Appointment {
 
-    private enum AppointmentStatus {
+    public enum AppointmentStatus {
         PENDING,
-        CONFIRMED,
-        CANCELLED
+        ACCEPTED,
+        CANCELLED_BY_PROFESSIONAL,
+        CANCELLED_BY_USER
     }
 
 
@@ -58,5 +60,20 @@ public class Appointment {
         appointment.setSubmissionNotes((String) jsonMap.get("submissionNotes"));
         appointment.setAppointmentStatus(AppointmentStatus.PENDING);
         return appointment;
+    }
+
+    public Map<String, Object> toMap(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", this.getId());
+        map.put("startDateTime", this.getStartDateTime() != null ? this.getStartDateTime().toString() : null);
+        map.put("endDateTime", this.getEndDateTime() != null ? this.getEndDateTime().toString() : null);
+        map.put("submissionTime", this.getSubmissionTime() != null ? this.getSubmissionTime().toString() : null);
+        map.put("submissionNotes", this.getSubmissionNotes());
+        map.put("cancellationReason", this.getCancellationReason());
+        map.put("confirmationNotes", this.getConfirmationNotes());
+        map.put("professional", this.getProfessional() != null ? this.getProfessional().getId() : null);
+        map.put("user", this.getUser() != null ? this.getUser().getId() : null);
+        map.put("appointmentStatus", this.getAppointmentStatus() != null ? this.getAppointmentStatus().toString() : null);
+        return map;
     }
 }
