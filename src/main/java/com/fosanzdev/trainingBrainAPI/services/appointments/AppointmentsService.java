@@ -1,11 +1,13 @@
 package com.fosanzdev.trainingBrainAPI.services.appointments;
 
 import com.fosanzdev.trainingBrainAPI.models.appointments.Appointment;
+import com.fosanzdev.trainingBrainAPI.models.appointments.Diagnosis;
 import com.fosanzdev.trainingBrainAPI.models.appointments.ProfessionalHoliday;
 import com.fosanzdev.trainingBrainAPI.models.appointments.ProfessionalSchedule;
 import com.fosanzdev.trainingBrainAPI.models.details.Professional;
 import com.fosanzdev.trainingBrainAPI.models.details.User;
 import com.fosanzdev.trainingBrainAPI.repositories.appointments.AppointmentRepository;
+import com.fosanzdev.trainingBrainAPI.repositories.appointments.DiagnosisRepository;
 import com.fosanzdev.trainingBrainAPI.repositories.appointments.ProfessionalHolidaysRepository;
 import com.fosanzdev.trainingBrainAPI.repositories.appointments.ProfessionalScheduleRepository;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.appointments.IAppointmentsService;
@@ -31,6 +33,9 @@ public class AppointmentsService implements IAppointmentsService {
 
     @Autowired
     private ProfessionalScheduleRepository professionalScheduleRepository;
+
+    @Autowired
+    private DiagnosisRepository diagnosisRepository;
 
     @Transactional
     @Override
@@ -234,5 +239,34 @@ public class AppointmentsService implements IAppointmentsService {
         if (appointment == null) return null;
         if (!Objects.equals(appointment.getProfessional().getId(), professional.getId())) return null;
         return appointment;
+    }
+
+    @Override
+    public boolean markAsCompleted(Professional professional, String appointmentId, Diagnosis diagnosis) throws AppointmentException {
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
+        if (appointment == null) throw new AppointmentException("Appointment not found");
+
+        if (appointment.getAppointmentStatus() != Appointment.AppointmentStatus.ACCEPTED)
+            throw new AppointmentException("Appointment is not accepted");
+
+        if (!Objects.equals(appointment.getProfessional().getId(), professional.getId()))
+            throw new AppointmentException("Professional does not have permission to mark this appointment as completed");
+
+
+        if (
+                diagnosis == null ||
+                        diagnosis.getHeader() == null || diagnosis.getHeader().isBlank() || diagnosis.getHeader().length() > 255 ||
+                        diagnosis.getShortDescription() == null || diagnosis.getShortDescription().isBlank() || diagnosis.getShortDescription().length() > 255
+        ) {
+            throw new AppointmentException("Invalid diagnosis. Basic fields are required and must not exceed 255 characters");
+        }
+
+        appointment.setAppointmentStatus(Appointment.AppointmentStatus.COMPLETED);
+        appointment.setDiagnosis(diagnosis);
+        appointmentRepository.save(appointment);
+
+        diagnosis.setAppointment(appointment);
+        diagnosisRepository.save(diagnosis);
+        return true;
     }
 }

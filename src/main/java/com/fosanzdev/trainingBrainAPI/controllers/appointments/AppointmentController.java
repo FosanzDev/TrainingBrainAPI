@@ -1,6 +1,7 @@
 package com.fosanzdev.trainingBrainAPI.controllers.appointments;
 
 import com.fosanzdev.trainingBrainAPI.models.appointments.Appointment;
+import com.fosanzdev.trainingBrainAPI.models.appointments.Diagnosis;
 import com.fosanzdev.trainingBrainAPI.models.details.Professional;
 import com.fosanzdev.trainingBrainAPI.models.details.User;
 import com.fosanzdev.trainingBrainAPI.services.appointments.AppointmentException;
@@ -55,7 +56,7 @@ public class AppointmentController {
                                 "endDateTime": "2021-09-01T11:00:00Z",
                                 "submissionNotes": "Nota para el profesional"
                             }
-                            
+                                                        
                             """)))
             @RequestBody Map<String, Object> body,
 
@@ -205,7 +206,7 @@ public class AppointmentController {
             Professional professional = proDataService.getProfessionalByAccessToken(token);
             User user = userDataService.getUserByAccessToken(token);
 
-            if (professional == null){
+            if (professional == null) {
                 //User is cancelling the appointment
                 if (user == null) return ResponseEntity.status(401).body(Map.of("message", "Invalid token"));
                 appointmentsService.rejectAppointment(user, appointmentId, (String) body.get("comment"));
@@ -271,6 +272,31 @@ public class AppointmentController {
         if (appointment == null) return ResponseEntity.status(404).body(Map.of("error", "Invalid appointment id"));
 
         return ResponseEntity.ok().body(Map.of("appointment", appointment.toMap()));
+    }
+
+    @PostMapping("/complete/{appointmentId}")
+    ResponseEntity<Map<String, Object>> markAsCompleted(
+            @PathVariable String appointmentId,
+            @RequestHeader("Authorization") String bearer,
+            @RequestBody Map<String, Object> body
+    ) {
+        try {
+            String token = bearer.split(" ")[1];
+            Professional professional = proDataService.getProfessionalByAccessToken(token);
+            if (professional == null) return ResponseEntity.status(401).body(Map.of("message", "Invalid token"));
+
+            Diagnosis diagnosis = Diagnosis.fromMap(body);
+            try {
+                appointmentsService.markAsCompleted(professional, appointmentId, diagnosis);
+            } catch (AppointmentException e) {
+                return ResponseEntity.status(400).body(Map.of("error", e));
+            }
+
+            return ResponseEntity.ok(Map.of("message", "Appointment completed"));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(Map.of("error", e));
+        }
     }
 }
 
