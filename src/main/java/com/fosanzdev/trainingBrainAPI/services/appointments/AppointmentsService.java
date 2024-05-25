@@ -39,7 +39,7 @@ public class AppointmentsService implements IAppointmentsService {
 
     @Transactional
     @Override
-    public boolean isConflictive(Appointment appointment) throws AppointmentException {
+    public boolean isConflictive(Appointment appointment, boolean checkForOverlaps) throws AppointmentException {
         Professional professional = appointment.getProfessional();
 
         List<ProfessionalHoliday> holidays = professionalHolidaysRepository.findByProfessionalId(professional.getId());
@@ -68,21 +68,25 @@ public class AppointmentsService implements IAppointmentsService {
             throw new AppointmentException("Appointment conflicts with a holiday");
         }
 
-        // Check if the user does not have any other accepted or pending appointment with the same professional or does not conflict with other appointments
-        if (acceptedAppointments.stream().anyMatch(
-                acceptedAppointment -> acceptedAppointment.getUser().equals(appointment.getUser()) &&
-                        !appointment.getStartDateTime().isAfter(acceptedAppointment.getEndDateTime()) &&
-                        !appointment.getEndDateTime().isBefore(acceptedAppointment.getStartDateTime())
-        )) {
-            throw new AppointmentException("User has another accepted appointment with the same professional");
-        }
+        if (checkForOverlaps) {
 
-        if (pendingAppointments.stream().anyMatch(
-                pendingAppointment -> pendingAppointment.getUser().equals(appointment.getUser()) &&
-                        !appointment.getStartDateTime().isAfter(pendingAppointment.getEndDateTime()) &&
-                        !appointment.getEndDateTime().isBefore(pendingAppointment.getStartDateTime())
-        )) {
-            throw new AppointmentException("User has another pending appointment with the same professional");
+            // Check if the user does not have any other accepted or pending appointment with the same professional or does not conflict with other appointments
+            if (acceptedAppointments.stream().anyMatch(
+                    acceptedAppointment -> acceptedAppointment.getUser().equals(appointment.getUser()) &&
+                            !appointment.getStartDateTime().isAfter(acceptedAppointment.getEndDateTime()) &&
+                            !appointment.getEndDateTime().isBefore(acceptedAppointment.getStartDateTime())
+            )) {
+                throw new AppointmentException("User has another accepted appointment with the same professional");
+            }
+
+            if (pendingAppointments.stream().anyMatch(
+                    pendingAppointment -> pendingAppointment.getUser().equals(appointment.getUser()) &&
+                            !appointment.getStartDateTime().isAfter(pendingAppointment.getEndDateTime()) &&
+                            !appointment.getEndDateTime().isBefore(pendingAppointment.getStartDateTime())
+            )) {
+                throw new AppointmentException("User has another pending appointment with the same professional");
+            }
+
         }
 
         // Check if the appointment is within the schedule
@@ -123,7 +127,7 @@ public class AppointmentsService implements IAppointmentsService {
             if (appointment.getStartDateTime().isAfter(ZonedDateTime.now().plusWeeks(2).toInstant())) {
                 throw new AppointmentException("Appointment start time exceeds 2 weeks from the current time");
             }
-            isConflictive(appointment);
+            isConflictive(appointment, true);
         } catch (AppointmentException e) {
             throw new AppointmentException(e.toString());
         }
@@ -137,8 +141,9 @@ public class AppointmentsService implements IAppointmentsService {
         List<Appointment> conflictingAppointments = appointmentRepository.findPendingAppointmentByProfessionalId(appointment.getProfessional().getId());
 
         for (Appointment conflictingAppointment : conflictingAppointments) {
+            if (Objects.equals(appointment.getId(), conflictingAppointment.getId())) continue;
             try {
-                isConflictive(conflictingAppointment);
+                isConflictive(conflictingAppointment, true);
             } catch (AppointmentException e) {
                 conflictingAppointment.setAppointmentStatus(Appointment.AppointmentStatus.CANCELLED_BY_PROFESSIONAL);
                 conflictingAppointment.setCancellationReason("Conflicts with another appointment");
@@ -157,8 +162,10 @@ public class AppointmentsService implements IAppointmentsService {
         if (appointment.getAppointmentStatus() != Appointment.AppointmentStatus.PENDING)
             throw new AppointmentException("Appointment is not pending");
 
-        if (isConflictive(appointment)) {
-            throw new AppointmentException("Appointment is conflictive");
+        try {
+            isConflictive(appointment, false);
+        } catch (AppointmentException e) {
+            throw new AppointmentException("Is conflictive!");
         }
 
         rejectAllConflictingAppointments(appointment);
@@ -241,6 +248,7 @@ public class AppointmentsService implements IAppointmentsService {
         return appointment;
     }
 
+    @Transactional
     @Override
     public boolean markAsCompleted(Professional professional, String appointmentId, Diagnosis diagnosis) throws AppointmentException {
         Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
@@ -255,8 +263,8 @@ public class AppointmentsService implements IAppointmentsService {
 
         if (
                 diagnosis == null ||
-                        diagnosis.getHeader() == null || diagnosis.getHeader().isBlank() || diagnosis.getHeader().length() > 255 ||
-                        diagnosis.getShortDescription() == null || diagnosis.getShortDescription().isBlank() || diagnosis.getShortDescription().length() > 255
+                        diagnosis.getHeader() == null || diagnosis.getHeader().isBlank() ||
+                        diagnosis.getShortDescription() == null || diagnosis.getShortDescription().isBlank()
         ) {
             throw new AppointmentException("Invalid diagnosis. Basic fields are required and must not exceed 255 characters");
         }

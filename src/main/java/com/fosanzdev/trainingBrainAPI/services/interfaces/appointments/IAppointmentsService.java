@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface IAppointmentsService {
 
-    boolean isConflictive (Appointment appointment) throws AppointmentException;
+    void isConflictive (Appointment appointment, boolean checkForOverlaps) throws AppointmentException;
     void rejectAllConflictingAppointments(Appointment appointment);
     void bookAppointment (Appointment appointment) throws AppointmentException;
     void acceptAppointment (String appointmentId, String professionalComment) throws AppointmentException;

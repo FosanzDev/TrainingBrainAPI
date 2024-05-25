@@ -289,13 +289,13 @@ public class AppointmentController {
             try {
                 appointmentsService.markAsCompleted(professional, appointmentId, diagnosis);
             } catch (AppointmentException e) {
-                return ResponseEntity.status(400).body(Map.of("error", e));
+                return ResponseEntity.status(400).body(Map.of("error", e.toString()));
             }
 
             return ResponseEntity.ok(Map.of("message", "Appointment completed"));
 
         } catch (Exception e) {
-            return ResponseEntity.status(400).body(Map.of("error", e));
+            return ResponseEntity.status(400).body(Map.of("error", "Bad request"));
         }
     }
 }
