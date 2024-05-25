@@ -240,6 +240,13 @@ public class AppointmentController {
                                     "professional": "<professional_id>",
                                     "user": "<user_id>",
                                     "appointmentStatus": "PENDING/ACCEPTED/CANCELLED_BY_PROFESSIONAL/CANCELLED_BY_USER/COMPLETED",
+                                    "diagnosis": {
+                                        "header": "Diagnóstico",
+                                        "shortDescription": "Descripción corta",
+                                        "description": "Descripción",
+                                        "recommendation": "Recomendación",
+                                        "treatment": "Tratamiento"
+                                    }
                                 }
                             }
                             """))),
@@ -274,6 +281,15 @@ public class AppointmentController {
         return ResponseEntity.ok().body(Map.of("appointment", appointment.toMap()));
     }
 
+    @Operation(summary = "Marcar cita como completada", description = "Marcar una cita como completada")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cita completada", content = @Content(mediaType = "application/json",
+                    schema = @Schema(example = "{message: 'Appointment completed'}"))),
+            @ApiResponse(responseCode = "400", description = "Error al completar la cita",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{error: 'Error message'}"))),
+            @ApiResponse(responseCode = "401", description = "Token inválido", content = @Content(mediaType = "none"))
+    })
     @PostMapping("/complete/{appointmentId}")
     ResponseEntity<Map<String, Object>> markAsCompleted(
             @PathVariable String appointmentId,
