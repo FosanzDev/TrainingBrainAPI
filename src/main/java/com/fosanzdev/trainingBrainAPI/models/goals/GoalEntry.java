@@ -20,6 +20,11 @@ public class GoalEntry {
 
     private Instant submissionDateTime;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.REMOVE})
     private Goal goal;
+
+    public GoalEntry(Goal goal){
+        this.goal = goal;
+        this.submissionDateTime = Instant.now();
+    }
 }
