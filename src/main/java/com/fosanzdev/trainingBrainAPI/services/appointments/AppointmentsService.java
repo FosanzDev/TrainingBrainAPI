@@ -39,7 +39,7 @@ public class AppointmentsService implements IAppointmentsService {
 
     @Transactional
     @Override
-    public boolean isConflictive(Appointment appointment, boolean checkForOverlaps) throws AppointmentException {
+    public void isConflictive(Appointment appointment, boolean checkForOverlaps) throws AppointmentException {
         Professional professional = appointment.getProfessional();
 
         List<ProfessionalHoliday> holidays = professionalHolidaysRepository.findByProfessionalId(professional.getId());
@@ -114,8 +114,6 @@ public class AppointmentsService implements IAppointmentsService {
         )) {
             throw new AppointmentException("Appointment conflicts with another accepted appointment");
         }
-
-        return false;
     }
 
     @Transactional
