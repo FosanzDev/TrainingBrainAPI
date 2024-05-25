@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.fosanzdev</groupId>
     <artifactId>trainingBrainAPI</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>trainingBrainAPI</name>
     <description>Training brain API</description>
     <properties>
