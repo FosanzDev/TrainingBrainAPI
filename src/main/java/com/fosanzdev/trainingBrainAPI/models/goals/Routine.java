@@ -1,11 +1,13 @@
 package com.fosanzdev.trainingBrainAPI.models.goals;
 
+import com.fosanzdev.trainingBrainAPI.models.details.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.Map;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,7 +17,6 @@ import java.time.Instant;
 public class Routine {
 
     public enum RoutineType {
-        HOURS,
         DAYS,
         WEEKS,
         MONTHS
@@ -33,5 +34,33 @@ public class Routine {
     private int every;
     private RoutineType routineType;
 
-    private Instant startDateTime;
+    private Instant startTime;
+    private Instant endTime;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_user", referencedColumnName = "id")
+    private User user;
+
+    public static Routine fromMap(Map<String, Object> jsonData){
+        Routine routine = new Routine();
+        routine.setTitle((String) jsonData.get("title"));
+        routine.setDescription((String) jsonData.get("description"));
+        routine.setEvery((int) jsonData.get("every"));
+        routine.setRoutineType(RoutineType.valueOf((String) jsonData.get("routineType")));
+        routine.setStartTime(Instant.parse((String) jsonData.get("startTime")));
+        routine.setEndTime(Instant.parse((String) jsonData.get("endTime")));
+        return routine;
+    }
+
+    public Map<String, Object> toMap(){
+        return Map.of(
+                "id", id,
+                "title", title,
+                "description", description,
+                "every", every,
+                "routineType", routineType,
+                "startTime", startTime,
+                "endTime", endTime
+        );
+    }
 }

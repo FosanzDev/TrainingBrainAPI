@@ -44,10 +44,6 @@ public class GoalService implements IGoalService {
 
         if (goal.getStartDateTime().atZone(ZoneOffset.UTC).isBefore(earliestStart) ||
                 goal.getStartDateTime().atZone(ZoneOffset.UTC).isAfter(latestStart)) {
-            System.out.println("Invalid start date");
-            System.out.println("Start date: " + goal.getStartDateTime());
-            System.out.println("Earliest start: " + earliestStart);
-            System.out.println("Latest start: " + latestStart);
             return false;
         }
 
