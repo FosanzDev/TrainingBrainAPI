@@ -2,8 +2,8 @@ package com.fosanzdev.trainingBrainAPI.controllers.appointments;
 
 import com.fosanzdev.trainingBrainAPI.models.appointments.Appointment;
 import com.fosanzdev.trainingBrainAPI.models.appointments.Diagnosis;
-import com.fosanzdev.trainingBrainAPI.models.details.Professional;
-import com.fosanzdev.trainingBrainAPI.models.details.User;
+import com.fosanzdev.trainingBrainAPI.models.data.Professional;
+import com.fosanzdev.trainingBrainAPI.models.data.User;
 import com.fosanzdev.trainingBrainAPI.services.appointments.AppointmentException;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.appointments.IAppointmentsService;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.data.IProDataService;
@@ -56,7 +56,6 @@ public class AppointmentController {
                                 "endDateTime": "2021-09-01T11:00:00Z",
                                 "submissionNotes": "Nota para el profesional"
                             }
-                                                        
                             """)))
             @RequestBody Map<String, Object> body,
 
@@ -122,7 +121,7 @@ public class AppointmentController {
         if (user == null && professional == null)
             return ResponseEntity.status(401).body(Map.of("message", "Invalid token"));
 
-        List<Appointment> appointments = null;
+        List<Appointment> appointments;
 
         if (professional != null)
             appointments = appointmentsService.getAppointmentsByStatus(professional, status);

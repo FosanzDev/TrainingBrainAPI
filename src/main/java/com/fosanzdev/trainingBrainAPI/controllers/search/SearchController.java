@@ -1,9 +1,8 @@
 package com.fosanzdev.trainingBrainAPI.controllers.search;
 
-import com.fosanzdev.trainingBrainAPI.models.details.Professional;
+import com.fosanzdev.trainingBrainAPI.models.data.Professional;
 import com.fosanzdev.trainingBrainAPI.repositories.data.ProfessionalRepository;
 import com.fosanzdev.trainingBrainAPI.repositories.data.ProfessionalSpecification;
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,9 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -69,7 +66,7 @@ public class SearchController {
             @Parameter(description = "ID del filtro", required = true, example = "364f2933-c91e-4641-...")
             @PathVariable Long filterId,
 
-            @Parameter(description = "Subfiltro de búsqueda. Todas son opcionales", required = false,
+            @Parameter(description = "Subfiltro de búsqueda. Todas son opcionales",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
                                     {

@@ -1,6 +1,6 @@
 package com.fosanzdev.trainingBrainAPI.services.goals;
 
-import com.fosanzdev.trainingBrainAPI.models.details.User;
+import com.fosanzdev.trainingBrainAPI.models.data.User;
 import com.fosanzdev.trainingBrainAPI.models.goals.Goal;
 import com.fosanzdev.trainingBrainAPI.models.goals.GoalEntry;
 import com.fosanzdev.trainingBrainAPI.repositories.goals.GoalEntryRepository;

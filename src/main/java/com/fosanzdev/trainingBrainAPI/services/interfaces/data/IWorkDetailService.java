@@ -1,9 +1,8 @@
 package com.fosanzdev.trainingBrainAPI.services.interfaces.data;
 
-import com.fosanzdev.trainingBrainAPI.models.details.Professional;
-import com.fosanzdev.trainingBrainAPI.models.details.WorkDetail;
+import com.fosanzdev.trainingBrainAPI.models.data.Professional;
+import com.fosanzdev.trainingBrainAPI.models.data.WorkDetail;
 
-import java.util.List;
 import java.util.Map;
 
 public interface IWorkDetailService {

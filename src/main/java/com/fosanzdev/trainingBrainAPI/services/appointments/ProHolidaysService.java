@@ -1,7 +1,7 @@
 package com.fosanzdev.trainingBrainAPI.services.appointments;
 
 import com.fosanzdev.trainingBrainAPI.models.appointments.ProfessionalHoliday;
-import com.fosanzdev.trainingBrainAPI.models.details.Professional;
+import com.fosanzdev.trainingBrainAPI.models.data.Professional;
 import com.fosanzdev.trainingBrainAPI.repositories.appointments.ProfessionalHolidaysRepository;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.appointments.IProHolidaysService;
 import jakarta.transaction.Transactional;

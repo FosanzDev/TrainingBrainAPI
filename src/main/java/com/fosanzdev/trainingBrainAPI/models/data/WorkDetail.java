@@ -1,4 +1,4 @@
-package com.fosanzdev.trainingBrainAPI.models.details;
+package com.fosanzdev.trainingBrainAPI.models.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

@@ -1,11 +1,10 @@
-package com.fosanzdev.trainingBrainAPI.models.details;
+package com.fosanzdev.trainingBrainAPI.models.data;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.Map;
 
 @NoArgsConstructor

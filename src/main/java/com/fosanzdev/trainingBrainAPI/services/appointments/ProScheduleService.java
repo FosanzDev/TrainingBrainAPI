@@ -1,10 +1,9 @@
 package com.fosanzdev.trainingBrainAPI.services.appointments;
 
 import com.fosanzdev.trainingBrainAPI.models.appointments.ProfessionalSchedule;
-import com.fosanzdev.trainingBrainAPI.models.details.Professional;
+import com.fosanzdev.trainingBrainAPI.models.data.Professional;
 import com.fosanzdev.trainingBrainAPI.repositories.appointments.ProfessionalScheduleRepository;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.appointments.IProScheduleService;
-import com.fosanzdev.trainingBrainAPI.services.interfaces.data.IProDataService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

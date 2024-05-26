@@ -1,6 +1,6 @@
 package com.fosanzdev.trainingBrainAPI.repositories.data;
 
-import com.fosanzdev.trainingBrainAPI.models.details.WorkTitle;
+import com.fosanzdev.trainingBrainAPI.models.data.WorkTitle;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

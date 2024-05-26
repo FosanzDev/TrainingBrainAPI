@@ -1,7 +1,7 @@
 package com.fosanzdev.trainingBrainAPI.services.interfaces.appointments;
 
 import com.fosanzdev.trainingBrainAPI.models.appointments.ProfessionalSchedule;
-import com.fosanzdev.trainingBrainAPI.models.details.Professional;
+import com.fosanzdev.trainingBrainAPI.models.data.Professional;
 
 import java.util.List;
 

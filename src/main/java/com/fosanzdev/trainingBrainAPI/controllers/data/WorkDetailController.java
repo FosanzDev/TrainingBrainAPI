@@ -1,7 +1,7 @@
 package com.fosanzdev.trainingBrainAPI.controllers.data;
 
-import com.fosanzdev.trainingBrainAPI.models.details.Professional;
-import com.fosanzdev.trainingBrainAPI.models.details.WorkDetail;
+import com.fosanzdev.trainingBrainAPI.models.data.Professional;
+import com.fosanzdev.trainingBrainAPI.models.data.WorkDetail;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.data.IProDataService;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.data.IWorkDetailService;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,8 +1,8 @@
 package com.fosanzdev.trainingBrainAPI.controllers.data;
 
-import com.fosanzdev.trainingBrainAPI.models.details.Branch;
-import com.fosanzdev.trainingBrainAPI.models.details.Professional;
-import com.fosanzdev.trainingBrainAPI.models.details.WorkTitle;
+import com.fosanzdev.trainingBrainAPI.models.data.Branch;
+import com.fosanzdev.trainingBrainAPI.models.data.Professional;
+import com.fosanzdev.trainingBrainAPI.models.data.WorkTitle;
 import com.fosanzdev.trainingBrainAPI.repositories.data.BranchRepository;
 import com.fosanzdev.trainingBrainAPI.repositories.data.WorkTitleRepository;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.data.IProDataService;
@@ -55,6 +55,7 @@ public class ProDataController {
     })
     @GetMapping("/me")
     ResponseEntity<Map<String, Object>> me(
+            @Parameter(description = "Token de autorización", required = true, example="Bearer <token>")
             @RequestHeader("Authorization") String bearer
     ) {
         try {
@@ -174,7 +175,6 @@ public class ProDataController {
                 return ResponseEntity.status(404).body(Map.of("error", "Work title not found"));
 
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }

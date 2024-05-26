@@ -1,19 +1,17 @@
 package com.fosanzdev.trainingBrainAPI.services.data;
 
-import com.fosanzdev.trainingBrainAPI.models.details.Professional;
-import com.fosanzdev.trainingBrainAPI.models.details.WorkDetail;
+import com.fosanzdev.trainingBrainAPI.models.data.Professional;
+import com.fosanzdev.trainingBrainAPI.models.data.WorkDetail;
 import com.fosanzdev.trainingBrainAPI.repositories.data.WorkDetailRepository;
 import com.fosanzdev.trainingBrainAPI.repositories.data.WorkTitleRepository;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.data.IWorkDetailService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 

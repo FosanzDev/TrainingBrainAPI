@@ -1,8 +1,6 @@
 package com.fosanzdev.trainingBrainAPI.services.interfaces.data;
 
-import com.fosanzdev.trainingBrainAPI.models.details.Professional;
-import com.fosanzdev.trainingBrainAPI.models.details.User;
-import com.fosanzdev.trainingBrainAPI.models.details.WorkTitle;
+import com.fosanzdev.trainingBrainAPI.models.data.Professional;
 
 public interface IProDataService {
 

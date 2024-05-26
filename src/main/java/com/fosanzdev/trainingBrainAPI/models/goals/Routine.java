@@ -1,6 +1,6 @@
 package com.fosanzdev.trainingBrainAPI.models.goals;
 
-import com.fosanzdev.trainingBrainAPI.models.details.User;
+import com.fosanzdev.trainingBrainAPI.models.data.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,8 +1,7 @@
 package com.fosanzdev.trainingBrainAPI.services.interfaces.goals;
 
-import com.fosanzdev.trainingBrainAPI.models.details.User;
+import com.fosanzdev.trainingBrainAPI.models.data.User;
 import com.fosanzdev.trainingBrainAPI.models.goals.Goal;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 

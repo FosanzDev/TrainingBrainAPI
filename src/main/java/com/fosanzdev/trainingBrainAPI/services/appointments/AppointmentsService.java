@@ -4,8 +4,8 @@ import com.fosanzdev.trainingBrainAPI.models.appointments.Appointment;
 import com.fosanzdev.trainingBrainAPI.models.appointments.Diagnosis;
 import com.fosanzdev.trainingBrainAPI.models.appointments.ProfessionalHoliday;
 import com.fosanzdev.trainingBrainAPI.models.appointments.ProfessionalSchedule;
-import com.fosanzdev.trainingBrainAPI.models.details.Professional;
-import com.fosanzdev.trainingBrainAPI.models.details.User;
+import com.fosanzdev.trainingBrainAPI.models.data.Professional;
+import com.fosanzdev.trainingBrainAPI.models.data.User;
 import com.fosanzdev.trainingBrainAPI.repositories.appointments.AppointmentRepository;
 import com.fosanzdev.trainingBrainAPI.repositories.appointments.DiagnosisRepository;
 import com.fosanzdev.trainingBrainAPI.repositories.appointments.ProfessionalHolidaysRepository;
@@ -248,7 +248,7 @@ public class AppointmentsService implements IAppointmentsService {
 
     @Transactional
     @Override
-    public boolean markAsCompleted(Professional professional, String appointmentId, Diagnosis diagnosis) throws AppointmentException {
+    public void markAsCompleted(Professional professional, String appointmentId, Diagnosis diagnosis) throws AppointmentException {
         Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
         if (appointment == null) throw new AppointmentException("Appointment not found");
 
@@ -273,6 +273,5 @@ public class AppointmentsService implements IAppointmentsService {
 
         diagnosis.setAppointment(appointment);
         diagnosisRepository.save(diagnosis);
-        return true;
     }
 }

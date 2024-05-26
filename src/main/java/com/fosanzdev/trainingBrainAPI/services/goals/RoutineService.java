@@ -1,8 +1,7 @@
 package com.fosanzdev.trainingBrainAPI.services.goals;
 
-import com.fosanzdev.trainingBrainAPI.models.details.User;
+import com.fosanzdev.trainingBrainAPI.models.data.User;
 import com.fosanzdev.trainingBrainAPI.models.goals.Routine;
-import com.fosanzdev.trainingBrainAPI.repositories.data.UserRepository;
 import com.fosanzdev.trainingBrainAPI.repositories.goals.RoutineRepository;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.goals.IRoutineService;
 import org.springframework.beans.factory.annotation.Autowired;

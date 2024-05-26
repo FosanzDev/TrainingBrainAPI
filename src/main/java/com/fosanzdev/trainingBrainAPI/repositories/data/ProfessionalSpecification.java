@@ -1,8 +1,8 @@
 package com.fosanzdev.trainingBrainAPI.repositories.data;
 
-import com.fosanzdev.trainingBrainAPI.models.details.Professional;
-import com.fosanzdev.trainingBrainAPI.models.details.ProfessionalSkill;
-import com.fosanzdev.trainingBrainAPI.models.details.Skill;
+import com.fosanzdev.trainingBrainAPI.models.data.Professional;
+import com.fosanzdev.trainingBrainAPI.models.data.ProfessionalSkill;
+import com.fosanzdev.trainingBrainAPI.models.data.Skill;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 

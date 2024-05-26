@@ -1,4 +1,4 @@
-package com.fosanzdev.trainingBrainAPI.models.details;
+package com.fosanzdev.trainingBrainAPI.models.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fosanzdev.trainingBrainAPI.models.auth.Account;
@@ -72,7 +72,7 @@ public class User {
         return Map.of(
                 "id", id,
                 "public_bio", publicBio,
-                "date_of_birth", dateOfBirth.toString()
+                "date_of_birth", dateOfBirth
         );
     }
 }

@@ -1,8 +1,8 @@
 package com.fosanzdev.trainingBrainAPI.services.data;
 
-import com.fosanzdev.trainingBrainAPI.models.details.Professional;
-import com.fosanzdev.trainingBrainAPI.models.details.ProfessionalSkill;
-import com.fosanzdev.trainingBrainAPI.models.details.Skill;
+import com.fosanzdev.trainingBrainAPI.models.data.Professional;
+import com.fosanzdev.trainingBrainAPI.models.data.ProfessionalSkill;
+import com.fosanzdev.trainingBrainAPI.models.data.Skill;
 import com.fosanzdev.trainingBrainAPI.repositories.data.ProfessionalSkillRepository;
 import com.fosanzdev.trainingBrainAPI.repositories.data.SkillRepository;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.data.ISkillService;
@@ -33,11 +33,11 @@ public class SkillService implements ISkillService {
 
     @Transactional
     @Override
-    public boolean addNewSkill(Professional professional, Skill skillId, int level) {
+    public void addNewSkill(Professional professional, Skill skillId, int level) {
         try{
             for (ProfessionalSkill proSkills : professional.getProfessionalSkills()) {
                 if (proSkills.getSkill().getId().equals(skillId.getId())) {
-                    return false;
+                    return;
                 }
             }
             ProfessionalSkill professionalSkill = new ProfessionalSkill();
@@ -45,10 +45,8 @@ public class SkillService implements ISkillService {
             professionalSkill.setSkill(skillId);
             professionalSkill.setLevel(level);
             professionalSkillRepository.save(professionalSkill);
-            return true;
 
         } catch (Exception e) {
-            return false;
         }
     }
 

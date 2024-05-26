@@ -1,8 +1,8 @@
 package com.fosanzdev.trainingBrainAPI.controllers.data;
 
-import com.fosanzdev.trainingBrainAPI.models.details.Professional;
-import com.fosanzdev.trainingBrainAPI.models.details.ProfessionalSkill;
-import com.fosanzdev.trainingBrainAPI.models.details.Skill;
+import com.fosanzdev.trainingBrainAPI.models.data.Professional;
+import com.fosanzdev.trainingBrainAPI.models.data.ProfessionalSkill;
+import com.fosanzdev.trainingBrainAPI.models.data.Skill;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.data.IProDataService;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.data.ISkillService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -142,7 +142,6 @@ public class SkillController {
             skillService.addNewSkill(professional, skill, level);
             return ResponseEntity.ok(Map.of("success", true));
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }

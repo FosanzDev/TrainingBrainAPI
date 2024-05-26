@@ -1,6 +1,6 @@
 package com.fosanzdev.trainingBrainAPI.models.appointments;
 
-import com.fosanzdev.trainingBrainAPI.models.details.Professional;
+import com.fosanzdev.trainingBrainAPI.models.data.Professional;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -62,7 +62,6 @@ public class ProfessionalSchedule {
             if (checkForConflicts(professionalSchedules)) return professionalSchedules;
             else return null;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }

@@ -1,6 +1,6 @@
 package com.fosanzdev.trainingBrainAPI.models.appointments;
 
-import com.fosanzdev.trainingBrainAPI.models.details.Professional;
+import com.fosanzdev.trainingBrainAPI.models.data.Professional;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

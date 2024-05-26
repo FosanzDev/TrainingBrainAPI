@@ -1,7 +1,7 @@
 package com.fosanzdev.trainingBrainAPI.services.data;
 
 import com.fosanzdev.trainingBrainAPI.models.auth.Account;
-import com.fosanzdev.trainingBrainAPI.models.details.User;
+import com.fosanzdev.trainingBrainAPI.models.data.User;
 import com.fosanzdev.trainingBrainAPI.repositories.auth.AccountRepository;
 import com.fosanzdev.trainingBrainAPI.repositories.data.UserRepository;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.auth.IAccountService;
@@ -17,11 +17,6 @@ public class UserDataService implements IUserDataService {
 
     @Autowired
     private UserRepository userRepository;
-
-
-    //TODO: Use IAccountService instead of AccountRepository
-    @Autowired
-    private AccountRepository accountRepository;
 
     @Autowired
     private IAccountService accountService;

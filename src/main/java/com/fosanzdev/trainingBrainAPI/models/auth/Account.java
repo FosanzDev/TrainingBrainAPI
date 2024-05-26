@@ -1,16 +1,13 @@
 package com.fosanzdev.trainingBrainAPI.models.auth;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fosanzdev.trainingBrainAPI.models.details.Professional;
-import com.fosanzdev.trainingBrainAPI.models.details.User;
-import com.fosanzdev.trainingBrainAPI.models.mood.AccountMood;
+import com.fosanzdev.trainingBrainAPI.models.data.Professional;
+import com.fosanzdev.trainingBrainAPI.models.data.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @NoArgsConstructor

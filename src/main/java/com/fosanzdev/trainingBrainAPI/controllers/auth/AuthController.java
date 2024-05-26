@@ -83,9 +83,7 @@ public class AuthController {
                 }
             }).start();
 
-            Map<String, String> response = new HashMap<>();
-            response.put("authToken", code.getCode());
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.badRequest().build();
         }

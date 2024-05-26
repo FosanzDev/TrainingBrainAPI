@@ -1,8 +1,8 @@
 package com.fosanzdev.trainingBrainAPI.services.data;
 
 import com.fosanzdev.trainingBrainAPI.models.auth.Account;
-import com.fosanzdev.trainingBrainAPI.models.details.Professional;
-import com.fosanzdev.trainingBrainAPI.models.details.WorkTitle;
+import com.fosanzdev.trainingBrainAPI.models.data.Professional;
+import com.fosanzdev.trainingBrainAPI.models.data.WorkTitle;
 import com.fosanzdev.trainingBrainAPI.repositories.data.ProfessionalRepository;
 import com.fosanzdev.trainingBrainAPI.repositories.data.WorkTitleRepository;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.auth.IAccountService;

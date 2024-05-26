@@ -1,7 +1,7 @@
 package com.fosanzdev.trainingBrainAPI.controllers.appointments;
 
 import com.fosanzdev.trainingBrainAPI.models.appointments.ProfessionalHoliday;
-import com.fosanzdev.trainingBrainAPI.models.details.Professional;
+import com.fosanzdev.trainingBrainAPI.models.data.Professional;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.appointments.IProHolidaysService;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.appointments.IProScheduleService;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.data.IProDataService;
@@ -27,9 +27,6 @@ public class HolidayController {
 
     @Autowired
     private IProHolidaysService proHolidaysService;
-
-    @Autowired
-    private IProScheduleService proScheduleService;
 
     @Autowired
     private IProDataService proDataService;
@@ -58,7 +55,7 @@ public class HolidayController {
                             "startDateTime": "2022-07-01T00:00:00Z",
                             "endDateTime": "2022-07-15T23:59:59Z"
                         }
-                            """)))
+                        """)))
             @RequestBody Map<String, Object> holidayData
     ) {
         try{

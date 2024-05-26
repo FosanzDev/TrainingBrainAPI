@@ -1,8 +1,8 @@
 package com.fosanzdev.trainingBrainAPI.config;
 
-import com.fosanzdev.trainingBrainAPI.models.details.Branch;
-import com.fosanzdev.trainingBrainAPI.models.details.Skill;
-import com.fosanzdev.trainingBrainAPI.models.details.WorkTitle;
+import com.fosanzdev.trainingBrainAPI.models.data.Branch;
+import com.fosanzdev.trainingBrainAPI.models.data.Skill;
+import com.fosanzdev.trainingBrainAPI.models.data.WorkTitle;
 import com.fosanzdev.trainingBrainAPI.models.mood.Mood;
 import com.fosanzdev.trainingBrainAPI.repositories.data.BranchRepository;
 import com.fosanzdev.trainingBrainAPI.repositories.data.SkillRepository;

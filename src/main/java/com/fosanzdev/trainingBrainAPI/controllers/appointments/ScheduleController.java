@@ -1,7 +1,7 @@
 package com.fosanzdev.trainingBrainAPI.controllers.appointments;
 
 import com.fosanzdev.trainingBrainAPI.models.appointments.ProfessionalSchedule;
-import com.fosanzdev.trainingBrainAPI.models.details.Professional;
+import com.fosanzdev.trainingBrainAPI.models.data.Professional;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.appointments.IProScheduleService;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.data.IProDataService;
 import io.swagger.v3.oas.annotations.Operation;

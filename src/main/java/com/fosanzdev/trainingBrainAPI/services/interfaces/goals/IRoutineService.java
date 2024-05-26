@@ -1,6 +1,6 @@
 package com.fosanzdev.trainingBrainAPI.services.interfaces.goals;
 
-import com.fosanzdev.trainingBrainAPI.models.details.User;
+import com.fosanzdev.trainingBrainAPI.models.data.User;
 import com.fosanzdev.trainingBrainAPI.models.goals.Routine;
 
 import java.util.List;
