@@ -74,7 +74,7 @@ public class RoutineController {
             List<Routine> routines = routineService.getTodayRoutines(user);
             if (routines == null) return ResponseEntity.status(500).body(Map.of("message", "Error getting routines"));
 
-            return ResponseEntity.status(200).body(Map.of("routines", routines));
+            return ResponseEntity.status(200).body(Map.of("routines", routines.stream().map(Routine::toMap)));
         } catch (Exception e) {
             e.printStackTrace(System.out);
             return ResponseEntity.status(500).body(Map.of("message", "Error getting routines"));
@@ -113,7 +113,7 @@ public class RoutineController {
             List<Routine> routines = routineService.getAllRoutines(user);
             if (routines == null) return ResponseEntity.status(500).body(Map.of("message", "Error getting routines"));
 
-            return ResponseEntity.status(200).body(Map.of("routines", routines));
+            return ResponseEntity.status(200).body(Map.of("routines", routines.stream().map(Routine::toMap)));
         } catch (Exception e) {
             e.printStackTrace(System.out);
             return ResponseEntity.status(500).body(Map.of("message", "Error getting routines"));

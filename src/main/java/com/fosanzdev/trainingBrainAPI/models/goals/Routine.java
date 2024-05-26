@@ -36,6 +36,7 @@ public class Routine {
 
     private Instant startTime;
     private Instant endTime;
+    private Instant submissionDate;
 
     @ManyToOne
     @JoinColumn(name = "fk_user", referencedColumnName = "id")
@@ -48,7 +49,9 @@ public class Routine {
             routine.setDescription((String) jsonData.get("description"));
             routine.setEvery((int) jsonData.get("every"));
             routine.setRoutineType(RoutineType.valueOf((String) jsonData.get("routineType")));
-            routine.setStartTime(Instant.parse((String) jsonData.get("startDateTime")));
+            routine.setStartTime(Instant.parse((String) jsonData.get("startTime")));
+            routine.setEndTime(Instant.parse((String) jsonData.get("endTime")));
+            routine.setSubmissionDate(Instant.now());
             return routine;
         } catch (Exception e){
             return null;
@@ -63,7 +66,8 @@ public class Routine {
                 "every", every,
                 "routineType", routineType,
                 "startTime", startTime,
-                "endTime", endTime
+                "endTime", endTime,
+                "submissionDate", submissionDate
         );
     }
 }
