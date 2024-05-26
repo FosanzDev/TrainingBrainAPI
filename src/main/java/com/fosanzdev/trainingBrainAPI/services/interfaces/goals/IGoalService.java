@@ -13,5 +13,5 @@ public interface IGoalService {
     Goal getGoal(User user, String id);
     List<Goal> getAllGoals(User user);
     boolean deleteGoal(User user, String id);
-    boolean pendingToday(String id);
+    boolean pendingToday(Goal goal);
 }

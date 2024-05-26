@@ -42,14 +42,17 @@ public class Routine {
     private User user;
 
     public static Routine fromMap(Map<String, Object> jsonData){
-        Routine routine = new Routine();
-        routine.setTitle((String) jsonData.get("title"));
-        routine.setDescription((String) jsonData.get("description"));
-        routine.setEvery((int) jsonData.get("every"));
-        routine.setRoutineType(RoutineType.valueOf((String) jsonData.get("routineType")));
-        routine.setStartTime(Instant.parse((String) jsonData.get("startTime")));
-        routine.setEndTime(Instant.parse((String) jsonData.get("endTime")));
-        return routine;
+        try {
+            Routine routine = new Routine();
+            routine.setTitle((String) jsonData.get("title"));
+            routine.setDescription((String) jsonData.get("description"));
+            routine.setEvery((int) jsonData.get("every"));
+            routine.setRoutineType(RoutineType.valueOf((String) jsonData.get("routineType")));
+            routine.setStartTime(Instant.parse((String) jsonData.get("startDateTime")));
+            return routine;
+        } catch (Exception e){
+            return null;
+        }
     }
 
     public Map<String, Object> toMap(){

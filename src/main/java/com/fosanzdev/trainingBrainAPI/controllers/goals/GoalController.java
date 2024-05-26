@@ -196,7 +196,7 @@ public class GoalController {
             List<Map<String, Object>> goalsMap = new ArrayList<>();
             for (Goal goal : goals) {
                 Map<String, Object> goalMap = new HashMap<>(goal.toMap());
-                if (goalService.pendingToday(goal.getId())) {
+                if (goalService.pendingToday(goal)) {
                     goalMap.put("pendingToday", true);
                     goalsMap.add(goalMap);
                 }
@@ -205,8 +205,7 @@ public class GoalController {
 
             return ResponseEntity.ok().body(Map.of("goals", goalsMap));
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.internalServerError().build();
         }
     }
 
@@ -259,12 +258,11 @@ public class GoalController {
             if (goal == null) return ResponseEntity.badRequest().body(Map.of("message", "No goal found"));
 
             Map<String, Object> goalMap = new HashMap<>(goal.toMap());
-            goalMap.put("pendingToday", goalService.pendingToday(goal.getId()));
+            goalMap.put("pendingToday", goalService.pendingToday(goal));
 
             return ResponseEntity.ok().body(goalMap);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.internalServerError().build();
         }
     }
 
@@ -320,14 +318,13 @@ public class GoalController {
             List<Map<String, Object>> goalsMap = new ArrayList<>();
             for (Goal goal : goals) {
                 Map<String, Object> goalMap = new HashMap<>(goal.toMap());
-                goalMap.put("pendingToday", goalService.pendingToday(goal.getId()));
+                goalMap.put("pendingToday", goalService.pendingToday(goal));
                 goalsMap.add(goalMap);
             }
 
             return ResponseEntity.ok().body(Map.of("goals", goalsMap));
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.internalServerError().build();
         }
     }
 
@@ -371,8 +368,7 @@ public class GoalController {
 
             return ResponseEntity.ok().body(Map.of("message", "Goal deleted"));
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.internalServerError().build();
         }
     }
 

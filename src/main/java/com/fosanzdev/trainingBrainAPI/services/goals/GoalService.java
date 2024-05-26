@@ -3,13 +3,11 @@ package com.fosanzdev.trainingBrainAPI.services.goals;
 import com.fosanzdev.trainingBrainAPI.models.details.User;
 import com.fosanzdev.trainingBrainAPI.models.goals.Goal;
 import com.fosanzdev.trainingBrainAPI.models.goals.GoalEntry;
-import com.fosanzdev.trainingBrainAPI.repositories.data.UserRepository;
 import com.fosanzdev.trainingBrainAPI.repositories.goals.GoalEntryRepository;
 import com.fosanzdev.trainingBrainAPI.repositories.goals.GoalRepository;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.goals.IGoalService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -20,9 +18,6 @@ import java.util.List;
 
 @Service
 public class GoalService implements IGoalService {
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private GoalRepository goalRepository;
@@ -59,7 +54,7 @@ public class GoalService implements IGoalService {
             return false;
         }
 
-        if (pendingToday(goal.getId())) {
+        if (pendingToday(goal)) {
             goalEntryRepository.save(new GoalEntry(goal));
             if (goalEntryRepository.findAllByGoalId(goal.getId()).size() >= goal.getRepetitions()) {
                 goal.setCompleted(true);
@@ -96,14 +91,14 @@ public class GoalService implements IGoalService {
     }
 
     @Override
-    public boolean pendingToday(String id) {
-        List<GoalEntry> entries = goalEntryRepository.findAllByGoalId(id);
+    public boolean pendingToday(Goal goal) {
+        List<GoalEntry> entries = goalEntryRepository.findAllByGoalId(goal.getId());
         if (entries.isEmpty()) {
             return true;
         }
 
         Instant lastEntryTime = entries.get(0).getSubmissionDateTime();
-        Instant nextDueTime = lastEntryTime.plus(goalRepository.findById(id).get().getHoursBetween(), ChronoUnit.HOURS);
+        Instant nextDueTime = lastEntryTime.plus(goalRepository.findById(goal.getId()).get().getHoursBetween(), ChronoUnit.HOURS);
         return Instant.now().isAfter(nextDueTime);
     }
 }
