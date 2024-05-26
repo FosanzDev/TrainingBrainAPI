@@ -36,29 +36,23 @@ public class GoalController {
             @ApiResponse(responseCode = "200", description = "Meta agregada",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
-                                                                        
                                     {
                                         "message": "Goal added"
                                     }
-                                                                        
                                     """))),
             @ApiResponse(responseCode = "400", description = "Meta inválida",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
-                                                                        
                                     {
                                         "message": "Invalid goal"
                                     }
-                                                                        
                                     """))),
             @ApiResponse(responseCode = "401", description = "Token inválido",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
-                                                                        
                                     {
                                         "message": "Invalid token"
                                     }
-                                                                        
                                     """)))
     })
     @PostMapping("/add")
@@ -72,7 +66,6 @@ public class GoalController {
                     no puede superar ni las 12 horas antes de la fecha y hora actual ni los 7 días más tarde.
                     """, required = true,
                     schema = @Schema(example = """
-                                                                        
                                     {
                                         "title": "Meta 1",
                                         "description": "Descripción de la meta",
@@ -80,7 +73,6 @@ public class GoalController {
                                         "repetitions": 3,
                                         "startDateTime": "2021-09-01T00:00:00Z"
                                     }
-                                                                        
                                     """))
             @RequestBody Map<String, Object> body
     ) {
@@ -90,7 +82,7 @@ public class GoalController {
             if (user == null) return ResponseEntity.status(401).body(Map.of("message", "Invalid token"));
 
             Goal goal = Goal.fromMap(body);
-            if (goal == null) return ResponseEntity.status(404).body(Map.of("message", "Goal not found"));
+            if (goal == null) return ResponseEntity.status(400).body(Map.of("message", "Goal malformed"));
 
             if (goalService.addGoal(goal, user)) {
                 return ResponseEntity.ok(Map.of("message", "Goal added"));
@@ -108,29 +100,23 @@ public class GoalController {
             @ApiResponse(responseCode = "200", description = "Meta marcada como completada",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
-                                                                        
                                     {
                                         "message": "Goal marked as done"
                                     }
-                                                                        
                                     """))),
             @ApiResponse(responseCode = "400", description = "Meta ya completada o ya hecha hoy",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
-                                                                        
                                     {
                                         "message": "Goal already completed or done today"
                                     }
-                                                                        
                                     """))),
             @ApiResponse(responseCode = "401", description = "Token inválido",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
-                                                                        
                                     {
                                         "message": "Invalid token"
                                     }
-                                                                        
                                     """)))
     })
     @PostMapping("/done/{id}")
@@ -155,7 +141,7 @@ public class GoalController {
 
             return ResponseEntity.ok().body(Map.of("message", "Goal marked as done"));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.internalServerError().build();
         }
     }
 
@@ -164,7 +150,6 @@ public class GoalController {
             @ApiResponse(responseCode = "200", description = "Metas obtenidas",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
-                                                                        
                                     {
                                         "goals": [
                                             {
@@ -179,25 +164,20 @@ public class GoalController {
                                             }
                                         ]
                                     }
-                                                                        
                                     """))),
             @ApiResponse(responseCode = "400", description = "No se encontraron metas",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
-                                                                        
                                     {
                                         "message": "No goals found"
                                     }
-                                                                        
                                     """))),
             @ApiResponse(responseCode = "401", description = "Token inválido",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
-                                                                        
                                     {
                                         "message": "Invalid token"
                                     }
-                                                                        
                                     """)))
     })
     @GetMapping("/today")
@@ -236,7 +216,6 @@ public class GoalController {
             @ApiResponse(responseCode = "200", description = "Meta obtenida",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
-                                                                        
                                     {
                                         "id": "1fsd-2fsd-3fsd",
                                         "title": "Meta 1",
@@ -247,25 +226,20 @@ public class GoalController {
                                         "startDateTime": "2021-09-01T00:00:00Z",
                                         "pendingToday": true
                                     }
-                                                                        
                                     """))),
             @ApiResponse(responseCode = "400", description = "No se encontró la meta",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
-                                                                        
                                     {
                                         "message": "No goal found"
                                     }
-                                                                        
                                     """))),
             @ApiResponse(responseCode = "401", description = "Token inválido",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
-                                                                        
                                     {
                                         "message": "Invalid token"
                                     }
-                                                                        
                                     """)))
     })
     @GetMapping("/get/{id}")
@@ -299,7 +273,6 @@ public class GoalController {
             @ApiResponse(responseCode = "200", description = "Metas obtenidas",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
-                                                                        
                                     {
                                         "goals": [
                                             {
@@ -314,25 +287,20 @@ public class GoalController {
                                             }
                                         ]
                                     }
-                                                                        
                                     """))),
             @ApiResponse(responseCode = "400", description = "No se encontraron metas",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
-                                                                        
                                     {
                                         "message": "No goals found"
                                     }
-                                                                        
                                     """))),
             @ApiResponse(responseCode = "401", description = "Token inválido",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
-                                                                        
                                     {
                                         "message": "Invalid token"
                                     }
-                                                                        
                                     """)))
     })
     @GetMapping("/all")
@@ -369,29 +337,23 @@ public class GoalController {
             @ApiResponse(responseCode = "200", description = "Meta eliminada",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
-                                                                        
                                     {
                                         "message": "Goal deleted"
                                     }
-                                                                        
                                     """))),
             @ApiResponse(responseCode = "400", description = "No se encontró la meta",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
-                                                                        
                                     {
                                         "message": "No goal found"
                                     }
-                                                                        
                                     """))),
             @ApiResponse(responseCode = "401", description = "Token inválido",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
-                                                                        
                                     {
                                         "message": "Invalid token"
                                     }
-                                                                        
                                     """)))
     })
     @DeleteMapping("/delete/{id}")
