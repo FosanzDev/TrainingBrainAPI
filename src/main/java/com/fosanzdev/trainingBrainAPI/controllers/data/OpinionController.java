@@ -1,4 +1,4 @@
-package com.fosanzdev.trainingBrainAPI.controllers.appointments;
+package com.fosanzdev.trainingBrainAPI.controllers.data;
 
 import com.fosanzdev.trainingBrainAPI.models.data.Opinion;
 import com.fosanzdev.trainingBrainAPI.models.data.Professional;
@@ -159,7 +159,7 @@ public class OpinionController {
         }
     }
 
-    @Operation(summary = "Mis opiniones", description = "Obtiene las opiniones del usuario")
+    @Operation(summary = "Mis opiniones", description = "Obtiene las opiniones del usuario o profesional")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Opiniones obtenidas",
                     content = @Content(mediaType = "application/json",
