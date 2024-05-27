@@ -2,10 +2,8 @@ package com.fosanzdev.trainingBrainAPI.controllers.posts;
 
 import com.fosanzdev.trainingBrainAPI.models.auth.Account;
 import com.fosanzdev.trainingBrainAPI.models.posts.Post;
-import com.fosanzdev.trainingBrainAPI.services.auth.AccountService;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.IPostService;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.auth.IAccountService;
-import com.fosanzdev.trainingBrainAPI.services.posts.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -26,14 +24,12 @@ import java.util.Map;
 @Tag(name = "Post", description = "Controlador de publicaciones")
 public class PostController {
 
-    private final IAccountService accountService;
+    @Autowired
+    private IAccountService accountService;
 
-    private final IPostService postService;
+    @Autowired
+    private IPostService postService;
 
-    public PostController(IAccountService accountService, IPostService postService) {
-        this.accountService = accountService;
-        this.postService = postService;
-    }
 
     @Operation(summary = "Nueva publicación", description = "Crea una nueva publicación")
     @ApiResponses(value = {
