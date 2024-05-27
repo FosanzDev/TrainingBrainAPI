@@ -174,7 +174,29 @@ public class PostController {
     }
 
     @Operation(summary = "Obtiene las publicaciones de una cuenta", description = "Obtiene las publicaciones de una cuenta por su identificador")
-
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Publicaciones obtenidas",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = """
+                                    {
+                                        "posts": [
+                                            {
+                                                "id": "id de la publicación",
+                                                "title": "Título de la publicación",
+                                                "content": "Contenido de la publicación",
+                                                "creationDateTime": "Fecha de creación de la publicación",
+                                                "author": {
+                                                    "id": "id de la cuenta",
+                                                    "username": "Nombre de usuario",
+                                                    "name": "Nombre",
+                                                    "isProfessional": "true si es profesional, false si no",
+                                                    "relatedId": "id de la cuenta user o professional asociada"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                    """)))
+    })
     @GetMapping("/from/{accountId}")
     ResponseEntity<Map<String, Object>> getPostsByAccount(
             @Parameter(description = "Identificador de la cuenta", required = true)
