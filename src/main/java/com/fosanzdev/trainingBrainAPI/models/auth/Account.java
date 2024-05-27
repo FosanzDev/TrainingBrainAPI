@@ -36,10 +36,10 @@ public class Account {
     @OneToOne(mappedBy = "account")
     private User userDetails;
 
-    public Map<String, Object> toMap(){
+    public Map<String, Object> toMap() {
         String relatedId = professional ? professionalDetails.getId() : userDetails.getId();
 
-        return  Map.of(
+        return Map.of(
                 "id", id,
                 "name", name,
                 "email", email,
@@ -50,11 +50,13 @@ public class Account {
         );
     }
 
-    public Map<String, Object> toBasicMap(){
+    public Map<String, Object> toBasicMap() {
         return Map.of(
-            "id", id,
-            "name", name,
-            "username", username
+                "id", id,
+                "name", name,
+                "username", username,
+                "isProfessional", professional,
+                professional ? "professionalId" : "userId", professional ? professionalDetails.getId() : userDetails.getId()
         );
     }
 }
