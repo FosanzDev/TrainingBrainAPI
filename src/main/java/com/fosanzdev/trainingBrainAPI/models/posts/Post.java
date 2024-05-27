@@ -32,7 +32,7 @@ public class Post {
     @JoinColumn(name = "fk_author", referencedColumnName = "id")
     private Account author;
 
-    public Post fromMap(Map<String, Object> jsonMap){
+    public static Post fromMap(Map<String, Object> jsonMap){
         try{
             Post post = new Post();
             post.setTitle((String) jsonMap.get("title"));
