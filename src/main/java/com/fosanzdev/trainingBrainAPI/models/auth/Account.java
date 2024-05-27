@@ -37,12 +37,15 @@ public class Account {
     private User userDetails;
 
     public Map<String, Object> toMap(){
+        String relatedId = professional ? professionalDetails.getId() : userDetails.getId();
+
         return  Map.of(
                 "id", id,
                 "name", name,
                 "email", email,
                 "username", username,
                 "isProfessional", professional,
+                professional ? "professionalId" : "userId", relatedId,
                 "isVerified", verified
         );
     }

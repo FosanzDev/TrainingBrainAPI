@@ -60,7 +60,7 @@ public class AccountController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = "{\"username\":\"usuario\",\"id\":\"364f2933-c91e-4641-...\", \"name\":\"Minombre\"}"))),
     })
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     ResponseEntity<Map<String, Object>> getById(
             @Parameter(description = "Token de autorización", required = true, example="Bearer <token>")
             @RequestHeader("Authorization") String bearer,
