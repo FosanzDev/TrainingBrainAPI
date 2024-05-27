@@ -180,15 +180,15 @@ public class PostController {
             @Parameter(description = "Identificador de la cuenta", required = true)
             @PathVariable String accountId,
 
-            @Parameter(description = "Número de página", required = true)
-            @RequestParam int page,
+            @Parameter(description = "Número de página")
+            @RequestParam(required = false) Integer page,
 
-            @Parameter(description = "Número de elementos por página. Máximo de 20", required = true)
-            @RequestParam int size
+            @Parameter(description = "Número de elementos por página. Máximo de 20")
+            @RequestParam(required = false) Integer size
     ) {
         try {
-            if (size <= 0 || size > 20) return ResponseEntity.badRequest().body(Map.of("error", "Invalid page size"));
-            if (page < 0) return ResponseEntity.badRequest().body(Map.of("error", "Invalid page number"));
+            if (size == null || size <= 0 || size > 20) size = 20;
+            if (page == null || page < 0) page = 0;
 
             Pageable pageable = PageRequest.ofSize(size).withPage(page);
             Account account = accountService.getAccountById(accountId);
@@ -226,19 +226,20 @@ public class PostController {
     })
     @GetMapping("/recent")
     ResponseEntity<Map<String, Object>> getRecentPosts(
-            @Parameter(description = "Número de página", required = true)
-            @RequestParam int page,
+            @Parameter(description = "Número de página")
+            @RequestParam(required = false) Integer page,
 
-            @Parameter(description = "Número de elementos por página. Máximo de 20", required = true)
-            @RequestParam int size
+            @Parameter(description = "Número de elementos por página. Máximo de 20")
+            @RequestParam(required = false) Integer size
     ) {
         try {
-            if (size <= 0 || size > 20) return ResponseEntity.badRequest().body(Map.of("error", "Invalid page size"));
-            if (page < 0) return ResponseEntity.badRequest().body(Map.of("error", "Invalid page number"));
+            if (size == null || size <= 0 || size > 20) size = 20;
+            if (page == null || page < 0) page = 0;
 
             Pageable pageable = PageRequest.ofSize(size).withPage(page);
             return ResponseEntity.ok(Map.of("posts", postService.getRecentPosts(pageable).stream().map(Post::toMap)));
         } catch (Exception e) {
+            e.printStackTrace(System.out);
             return ResponseEntity.internalServerError().body(Map.of("error", "Internal server error"));
         }
     }
