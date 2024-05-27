@@ -266,6 +266,21 @@ public class PostController {
         }
     }
 
+    @Operation(summary = "Elimina una publicación", description = "Elimina una publicación por su identificador")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Publicación eliminada",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"message\":\"Post deleted\"}"))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"error\":\"Unauthorized\"}"))),
+            @ApiResponse(responseCode = "404", description = "Publicación no encontrada",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"error\":\"Post does not exist or is not yours\"}"))),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "{\"error\":\"Internal server error\"}")))
+    })
     @DeleteMapping("/delete/{postId}")
     ResponseEntity<Map<String, Object>> deletePost(
             @Parameter(description = "Token de autorización", required = true, example = "Bearer <token>")
