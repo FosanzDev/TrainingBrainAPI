@@ -82,11 +82,11 @@ public class ProfessionalSchedule {
                 ));
     }
 
-    private static boolean checkHourFormat(String hour) {
+    public static boolean checkHourFormat(String hour) {
         return hour.matches("^([01]?[0-9]|2[0-3]):[0-5][0-9]$");
     }
 
-    private static boolean checkForConflicts(List<ProfessionalSchedule> professionalSchedules) {
+    public static boolean checkForConflicts(List<ProfessionalSchedule> professionalSchedules) {
         Map<Integer, List<ProfessionalSchedule>> schedulesByDay = professionalSchedules.stream()
                 .collect(Collectors.groupingBy(ProfessionalSchedule::getDayOfWeek));
 
