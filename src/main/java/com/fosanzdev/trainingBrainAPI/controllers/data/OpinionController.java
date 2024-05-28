@@ -31,9 +31,6 @@ public class OpinionController {
     private IUserDataService userDataService;
 
     @Autowired
-    private IProDataService professionalRepository;
-
-    @Autowired
     private IProDataService proDataService;
 
     @Operation(summary = "Nueva opinión", description = "Crea una nueva opinión sobre un profesional")
@@ -86,7 +83,7 @@ public class OpinionController {
             @PathVariable String professionalId
     ) {
         try {
-            Professional professional = professionalRepository.getProfessionalById(professionalId);
+            Professional professional = proDataService.getProfessionalById(professionalId);
             if (professional == null)
                 return ResponseEntity.status(404).body(Map.of("message", "Professional not found"));
 
@@ -267,7 +264,7 @@ public class OpinionController {
             @PathVariable String professionalId
     ) {
         try {
-            Professional professional = professionalRepository.getProfessionalById(professionalId);
+            Professional professional = proDataService.getProfessionalById(professionalId);
             if (professional == null)
                 return ResponseEntity.status(404).body(Map.of("message", "Professional not found"));
 

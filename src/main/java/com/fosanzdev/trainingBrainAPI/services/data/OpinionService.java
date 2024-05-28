@@ -56,6 +56,12 @@ public class OpinionService implements IOpinionService {
         return opinionRepository.getByProfessionalId(professional.getId());
     }
 
+    /**
+     * Literally the same as getMyOpinions(Professional professional)
+     * Done like this to match interface and readability
+     * @param professional Professional to get opinions from
+     * @return List of opinions
+     */
     @Override
     public List<Opinion> getOpinionsByProfessional(Professional professional) {
         return opinionRepository.getByProfessionalId(professional.getId());
