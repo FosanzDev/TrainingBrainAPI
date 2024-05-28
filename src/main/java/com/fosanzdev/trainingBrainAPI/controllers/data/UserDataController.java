@@ -101,15 +101,15 @@ public class UserDataController {
     ) {
         try {
             String token = bearer.split(" ")[1];
-            Account account = accountService.getAccountByAccessToken(token);
-            if (account == null)
+            User currentUser = userDataService.getUserByAccessToken(token);
+            if (currentUser == null)
                 return ResponseEntity.status(404).body(Map.of("error", "Account not found"));
 
             User user = userDataService.getUserByAccountID(id);
             if (user == null)
                 return ResponseEntity.status(404).body(Map.of("error", "User not found or not verified"));
 
-            if (account.getId().equals(user.getAccount().getId()) || account.isProfessional())
+            if (currentUser.getId().equals(user.getId()) || currentUser.getAccount().isProfessional())
                 return ResponseEntity.ok(user.toMap());
 
             else

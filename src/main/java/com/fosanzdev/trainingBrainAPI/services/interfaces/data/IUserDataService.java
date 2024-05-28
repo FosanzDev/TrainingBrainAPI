@@ -6,6 +6,7 @@ import java.text.ParseException;
 
 public interface IUserDataService {
 
+    User getUserById(String userID);
     User getUserByAccountID(String accountID);
     User getUserByAccessToken(String accessToken);
     void updateUser(User userToUpdate, User updatedUser) throws ParseException;

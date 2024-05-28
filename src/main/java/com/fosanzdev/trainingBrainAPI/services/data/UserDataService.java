@@ -21,6 +21,11 @@ public class UserDataService implements IUserDataService {
     @Autowired
     private IAccountService accountService;
 
+    @Override
+    public User getUserById(String userID) {
+        return userRepository.findById(userID).orElse(null);
+    }
+
     @Transactional
     @Override
     public User getUserByAccountID(String accountID) {
