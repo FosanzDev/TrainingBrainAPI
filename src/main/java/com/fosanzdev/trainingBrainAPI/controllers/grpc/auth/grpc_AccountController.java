@@ -16,7 +16,7 @@ public class grpc_AccountController extends AccountServiceGrpc.AccountServiceImp
     private IAccountService accountService;
 
     @Override
-    public void me(Empty request, StreamObserver<MeResponse> responseStreamObserver) {
+    public void me(Empty request, StreamObserver<CompleteAccountInfo> responseStreamObserver) {
         String bearer = AuthInterceptor.getAuthorization();
         String token = bearer.split(" ")[1];
         if (token == null) {
@@ -30,11 +30,13 @@ public class grpc_AccountController extends AccountServiceGrpc.AccountServiceImp
                 return;
             }
 
-            MeResponse response = MeResponse.newBuilder()
+            CompleteAccountInfo response = CompleteAccountInfo.newBuilder()
                     .setUsername(account.getUsername())
                     .setName(account.getName())
+                    .setEmail(account.getEmail())
                     .setIsProfessional(account.isProfessional())
                     .setIsVerified(account.isVerified())
+                    .setRelatedId(account.isProfessional() ? account.getProfessionalDetails().getId() : account.getUserDetails().getId())
                     .setId(account.getId())
                     .build();
 
@@ -74,6 +76,8 @@ public class grpc_AccountController extends AccountServiceGrpc.AccountServiceImp
                         .setName(account.getName())
                         .setIsProfessional(account.isProfessional())
                         .setIsVerified(account.isVerified())
+                        .setEmail(accountById.getEmail())
+                        .setRelatedId(account.isProfessional() ? account.getProfessionalDetails().getId() : account.getUserDetails().getId())
                         .setId(account.getId())
                         .build();
 
@@ -84,16 +88,17 @@ public class grpc_AccountController extends AccountServiceGrpc.AccountServiceImp
                 responseStreamObserver.onNext(response);
                 responseStreamObserver.onCompleted();
             } else {
-                CompleteAccountInfo accountInfo = CompleteAccountInfo.newBuilder()
+                BasicAccountInfo accountInfo = BasicAccountInfo.newBuilder()
                         .setUsername(account.getUsername())
                         .setName(account.getName())
                         .setIsProfessional(account.isProfessional())
-                        .setIsVerified(account.isVerified())
+                        .setRelatedId(account.isProfessional() ? account.getProfessionalDetails().getId() : account.getUserDetails().getId())
                         .setId(account.getId())
                         .build();
 
+
                 AccountInfoResponse response = AccountInfoResponse.newBuilder()
-                        .setCompleteAccountInfo(accountInfo)
+                        .setBasicAccountInfo(accountInfo)
                         .build();
 
                 responseStreamObserver.onNext(response);
