@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.fosanzdev</groupId>
     <artifactId>trainingBrainAPI</artifactId>
-    <version>1.2.5</version>
+    <version>1.2.6</version>
     <name>trainingBrainAPI</name>
     <description>Training brain API</description>
     <properties>
@@ -47,7 +47,7 @@
         <dependency>
             <groupId>com.github.FosanzDev</groupId>
             <artifactId>trainingBrainGrpcInterface</artifactId>
-            <version>664ab260a3</version>
+            <version>fb6ecf7f63</version>
         </dependency>
         <dependency>
             <groupId>com.sun.mail</groupId>
