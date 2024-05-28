@@ -106,4 +106,33 @@ public class grpc_AccountController extends AccountServiceGrpc.AccountServiceImp
             }
         }
     }
+
+    @Override
+    public void updateAccountInfo(UpdateAccountRequest request, StreamObserver<Empty> response){
+        String bearer = AuthInterceptor.getAuthorization();
+        String token = bearer.split(" ")[1];
+
+        Account accountToUpdate = accountService.getAccountByAccessToken(token);
+        if (accountToUpdate == null) {
+            Status status = Status.UNAUTHENTICATED.withDescription("Unauthorized");
+            response.onError(status.asRuntimeException());
+            return;
+        }
+
+        try{
+            Account account = new Account();
+            account.setName(request.getName());
+            account.setEmail(request.getEmail());
+            account.setPassword(request.getPassword());
+            account.setUsername(request.getUsername());
+            accountService.updateAccount(accountToUpdate, account);
+        } catch (Exception e) {
+            Status status = Status.INVALID_ARGUMENT.withDescription("Invalid account data");
+            response.onError(status.asRuntimeException());
+            return;
+        }
+
+        response.onNext(Empty.newBuilder().build());
+        response.onCompleted();
+    }
 }
