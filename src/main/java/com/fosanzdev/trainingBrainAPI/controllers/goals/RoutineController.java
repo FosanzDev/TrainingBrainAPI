@@ -31,7 +31,7 @@ public class RoutineController {
 
     @Operation(summary = "Añade una nueva rutina", description = "Añade una nueva rutina al usuario")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Routine added",
+            @ApiResponse(responseCode = "200", description = "Routine added",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
                                     {
@@ -80,7 +80,7 @@ public class RoutineController {
             if (routine == null) return ResponseEntity.status(400).body(Map.of("message", "Routine malformed"));
 
             if (routineService.addRoutine(routine, user)) {
-                return ResponseEntity.status(201).body(Map.of("message", "Routine added"));
+                return ResponseEntity.status(200).body(Map.of("message", "Routine added"));
             } else {
                 return ResponseEntity.status(500).body(Map.of("message", "Error adding routine"));
             }
