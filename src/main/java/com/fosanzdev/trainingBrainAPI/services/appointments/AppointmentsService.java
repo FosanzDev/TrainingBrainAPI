@@ -153,9 +153,12 @@ public class AppointmentsService implements IAppointmentsService {
 
     @Transactional
     @Override
-    public void acceptAppointment(String appointmentId, String professionalComment) throws AppointmentException {
+    public void acceptAppointment(String appointmentId, Professional professional, String professionalComment) throws AppointmentException {
         Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
         if (appointment == null) throw new AppointmentException("Appointment not found");
+
+        if (!Objects.equals(appointment.getProfessional().getId(), professional.getId()))
+            throw new AppointmentException("Professional does not have permission to accept this appointment");
 
         if (appointment.getAppointmentStatus() != Appointment.AppointmentStatus.PENDING)
             throw new AppointmentException("Appointment is not pending");
@@ -163,7 +166,7 @@ public class AppointmentsService implements IAppointmentsService {
         try {
             isConflictive(appointment, false);
         } catch (AppointmentException e) {
-            throw new AppointmentException("Is conflictive!");
+            throw new AppointmentException(e.toString());
         }
 
         rejectAllConflictingAppointments(appointment);

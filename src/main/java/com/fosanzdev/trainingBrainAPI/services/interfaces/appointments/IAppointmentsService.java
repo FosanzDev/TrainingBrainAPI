@@ -13,7 +13,7 @@ public interface IAppointmentsService {
     void isConflictive (Appointment appointment, boolean checkForOverlaps) throws AppointmentException;
     void rejectAllConflictingAppointments(Appointment appointment);
     void bookAppointment (Appointment appointment) throws AppointmentException;
-    void acceptAppointment (String appointmentId, String professionalComment) throws AppointmentException;
+    void acceptAppointment (String appointmentId, Professional professional, String professionalComment) throws AppointmentException;
     void rejectAppointment (User user, String appointmentId, String professionalComment) throws AppointmentException;
     void rejectAppointment(Professional professional, String appointmentId, String professionalComment) throws AppointmentException;
     List<Appointment> getAppointmentsByStatus(User user, String status);

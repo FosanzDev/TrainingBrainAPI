@@ -98,6 +98,13 @@ public class AppointmentController {
                                         "professional": "<professional_id>",
                                         "user": "<user_id>",
                                         "appointmentStatus": "PENDING/ACCEPTED/CANCELLED_BY_PROFESSIONAL/CANCELLED_BY_USER/COMPLETED",
+                                        "diagnosis": {
+                                            "header": "Diagnóstico",
+                                            "shortDescription": "Descripción corta",
+                                            "description": "Descripción",
+                                            "recommendation": "Recomendación",
+                                            "treatment": "Tratamiento"
+                                        }
                                     }
                                 ]
                             }
@@ -165,7 +172,7 @@ public class AppointmentController {
             Professional professional = proDataService.getProfessionalByAccessToken(token);
             if (professional == null) return ResponseEntity.status(401).body(Map.of("message", "Invalid token"));
 
-            appointmentsService.acceptAppointment(appointmentId, (String) body.get("comment"));
+            appointmentsService.acceptAppointment(appointmentId, professional, (String) body.get("comment"));
 
             return ResponseEntity.ok(Map.of("message", "Appointment accepted"));
 
