@@ -16,7 +16,7 @@ import java.util.Map;
 @Table(name = "professional_holidays")
 public class ProfessionalHoliday {
 
-    private enum HolidayType {
+    public enum HolidayType {
         VACATION,
         SICK_LEAVE,
         OTHER
