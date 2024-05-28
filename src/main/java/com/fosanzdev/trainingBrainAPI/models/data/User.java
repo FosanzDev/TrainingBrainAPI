@@ -60,19 +60,20 @@ public class User {
     public Map<String, String> toMap() {
         return Map.of(
                 "id", id,
-                "public_bio", publicBio,
-                "private_bio", privateBio,
+                "name", account.getName(),
+                "publicBio", publicBio,
+                "privateBio", privateBio,
                 "history", history,
-                "date_of_birth", dateOfBirth,
-                "account_id", account.getId()
+                "dateOfBirth", dateOfBirth
         );
     }
 
     public Map<String, String> toPublicMap() {
         return Map.of(
                 "id", id,
-                "public_bio", publicBio,
-                "date_of_birth", dateOfBirth
+                "name", account.getName(),
+                "publicId", publicBio,
+                "dateOfBirth", dateOfBirth
         );
     }
 }

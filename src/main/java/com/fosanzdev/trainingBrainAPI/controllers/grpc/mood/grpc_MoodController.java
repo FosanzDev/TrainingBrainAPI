@@ -1,5 +1,6 @@
-package com.fosanzdev.trainingBrainAPI.controllers.grpc;
+package com.fosanzdev.trainingBrainAPI.controllers.grpc.mood;
 
+import com.fosanzdev.trainingBrainAPI.controllers.grpc.auth.AuthInterceptor;
 import com.fosanzdev.trainingBrainAPI.models.auth.Account;
 import com.fosanzdev.trainingBrainAPI.models.mood.AccountMood;
 import com.fosanzdev.trainingBrainAPI.models.mood.Mood;

@@ -1,4 +1,4 @@
-package com.fosanzdev.trainingBrainAPI.controllers.grpc;
+package com.fosanzdev.trainingBrainAPI.controllers.grpc.auth;
 
 import com.fosanzdev.trainingBrainAPI.models.auth.Account;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.auth.IAccountService;

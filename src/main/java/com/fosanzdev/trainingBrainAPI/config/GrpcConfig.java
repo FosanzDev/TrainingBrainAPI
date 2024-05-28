@@ -1,7 +1,6 @@
 package com.fosanzdev.trainingBrainAPI.config;
 
-import com.fosanzdev.trainingBrainAPI.controllers.grpc.AuthInterceptor;
-import io.grpc.ServerInterceptor;
+import com.fosanzdev.trainingBrainAPI.controllers.grpc.auth.AuthInterceptor;
 import net.devh.boot.grpc.server.interceptor.GlobalServerInterceptorConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

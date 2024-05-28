@@ -42,7 +42,7 @@ public class Professional {
         Map<String, Object> map = new HashMap<>();
 
         map.put("id", id);
-
+        map.put("name", account.getName());
         map.put("publicBio", publicBio);
 
         if (workTitle == null)

@@ -1,4 +1,4 @@
-package com.fosanzdev.trainingBrainAPI.controllers.grpc;
+package com.fosanzdev.trainingBrainAPI.controllers.grpc.auth;
 
 import io.grpc.*;
 import org.springframework.stereotype.Component;

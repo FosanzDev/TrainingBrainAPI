@@ -71,6 +71,7 @@ public class UserDataController {
                             schema = @Schema(example = """
                                     {
                                         "id":"364f2933-c91e-4641-...",
+                                        "name":"Nombre",
                                         "publicBio":"Bio pública",
                                         "privateBio":"Bio privada",
                                         "history":"Historial",
@@ -79,7 +80,14 @@ public class UserDataController {
                                     """))),
             @ApiResponse(responseCode = "206", description = "Información PÚBLICA del usuario (Solo para cuentas normales)",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(example = "{\"publicBio\":\"Biografía pública\",\"id\":\"364f2933-c91e-4641-...\"}"))),
+                            schema = @Schema(example = """
+                                    {
+                                        "id":"364f2933-c91e-4641-...",
+                                        "name":"Nombre",
+                                        "publicBio":"Bio pública",
+                                        "dateOfBirth":"01/01/2000"
+                                    }
+                                    """))),
             @ApiResponse(responseCode = "404", description = "Usuario no encontrado",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = "{\"error\":\"User not found\"}")))
