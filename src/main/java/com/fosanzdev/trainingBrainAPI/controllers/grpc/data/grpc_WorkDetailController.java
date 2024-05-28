@@ -2,7 +2,6 @@ package com.fosanzdev.trainingBrainAPI.controllers.grpc.data;
 
 import com.fosanzdev.trainingBrainAPI.controllers.grpc.auth.AuthInterceptor;
 import com.fosanzdev.trainingBrainAPI.models.data.Professional;
-import com.fosanzdev.trainingBrainAPI.models.data.WorkDetail;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.data.IProDataService;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.data.IWorkDetailService;
 import com.fosanzdev.trainingBrainGrpcInterface.data.*;

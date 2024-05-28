@@ -11,14 +11,13 @@ import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Objects;
+
 @GrpcService
 public class grpc_UserDataController extends UserDataServiceGrpc.UserDataServiceImplBase{
 
     @Autowired
     private IUserDataService userDataService;
-
-    @Autowired
-    private IAccountService accountService;
 
     @Override
     public void getMyData(Empty request, StreamObserver<PrivateUserDataResponse> response){
@@ -64,7 +63,7 @@ public class grpc_UserDataController extends UserDataServiceGrpc.UserDataService
                 String token = bearer.split(" ")[1];
                 User currentUser = userDataService.getUserByAccessToken(token);
                 if (currentUser != null){
-                    if (user.getId() == currentUser.getId()){
+                    if (Objects.equals(user.getId(), currentUser.getId())){
                         PrivateUserDataResponse.Builder privateUserDataResponseBuilder = PrivateUserDataResponse.newBuilder();
                         privateUserDataResponseBuilder.setId(user.getId());
                         privateUserDataResponseBuilder.setPublicBio(user.getPublicBio());

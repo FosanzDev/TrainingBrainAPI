@@ -1,8 +1,6 @@
 package com.fosanzdev.trainingBrainAPI.controllers.data;
 
-import com.fosanzdev.trainingBrainAPI.models.auth.Account;
 import com.fosanzdev.trainingBrainAPI.models.data.User;
-import com.fosanzdev.trainingBrainAPI.services.interfaces.auth.IAccountService;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.data.IUserDataService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -24,9 +22,6 @@ public class UserDataController {
 
     @Autowired
     private IUserDataService userDataService;
-
-    @Autowired
-    private IAccountService accountService;
 
     @Operation(summary = "Obtiene la información del usuario actual")
     @ApiResponses(value = {
