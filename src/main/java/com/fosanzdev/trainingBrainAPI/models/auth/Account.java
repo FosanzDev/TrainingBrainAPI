@@ -55,7 +55,6 @@ public class Account {
         Map<String, Object> map = new HashMap<>();
         map.put("id", id);
         map.put("name", name);
-        map.put("email", email);
         map.put("username", username);
         map.put("isProfessional", professional);
         map.put(professional ? "professionalId" : "userId", professional ? professionalDetails.getId() : userDetails.getId());
