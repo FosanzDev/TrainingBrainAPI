@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -32,10 +33,10 @@ public class ProfessionalSkill {
     private int level;
 
     public Map<String, Object> toMap(){
-        return Map.of(
-            "id", id,
-            "skill", skill.toMap(),
-            "level", level
-        );
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        map.put("skill", skill.toMap());
+        map.put("level", level);
+        return map;
     }
 }

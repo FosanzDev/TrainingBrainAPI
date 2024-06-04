@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -47,12 +48,12 @@ public class Diagnosis {
     }
 
     public Map<String, Object> toMap(){
-        return Map.of(
-                "header", header,
-                "shortDescription", shortDescription,
-                "description", description,
-                "recommendation", recommendation,
-                "treatment", treatment
-        );
+        Map<String, Object> map = new HashMap<>();
+        map.put("header", header);
+        map.put("shortDescription", shortDescription);
+        map.put("description", description);
+        map.put("recommendation", recommendation);
+        map.put("treatment", treatment);
+        return map;
     }
 }

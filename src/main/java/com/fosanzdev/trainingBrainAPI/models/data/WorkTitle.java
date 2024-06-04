@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -30,10 +31,10 @@ public class WorkTitle {
     }
 
     public Map<String, Object> toMap(){
-        return Map.of(
-                "id", id,
-            "title", title,
-            "branch", branch.toMap()
-        );
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        map.put("title", title);
+        map.put("branch", branch.toMap());
+        return map;
     }
 }

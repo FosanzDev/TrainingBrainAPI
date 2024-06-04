@@ -55,6 +55,7 @@ public class UserDataController {
                 return ResponseEntity.status(401).body(error);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }

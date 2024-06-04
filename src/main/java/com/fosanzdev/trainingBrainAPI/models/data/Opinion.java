@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -47,11 +48,11 @@ public class Opinion {
     }
 
     public Map<String, Object> toMap() {
-        return Map.of(
-                "id", id,
-                "title", title,
-                "description", description,
-                "rating", rating
-        );
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        map.put("title", title);
+        map.put("description", description);
+        map.put("rating", rating);
+        return map;
     }
 }

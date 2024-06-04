@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -58,22 +59,26 @@ public class User {
 }
 
     public Map<String, String> toMap() {
-        return Map.of(
-                "id", id,
-                "name", account.getName(),
-                "publicBio", publicBio,
-                "privateBio", privateBio,
-                "history", history,
-                "dateOfBirth", dateOfBirth
-        );
+        Map<String, String> map = new HashMap<>();
+
+        map.put("id", id);
+        map.put("name", account.getName());
+        map.put("publicBio", publicBio);
+        map.put("privateBio", privateBio);
+        map.put("history", history);
+        map.put("dateOfBirth", dateOfBirth);
+
+        return map;
     }
 
     public Map<String, String> toPublicMap() {
-        return Map.of(
-                "id", id,
-                "name", account.getName(),
-                "publicId", publicBio,
-                "dateOfBirth", dateOfBirth
-        );
+        Map<String, String> map = new HashMap<>();
+
+        map.put("id", id);
+        map.put("name", account.getName());
+        map.put("publicBio", publicBio);
+        map.put("dateOfBirth", dateOfBirth);
+
+        return map;
     }
 }

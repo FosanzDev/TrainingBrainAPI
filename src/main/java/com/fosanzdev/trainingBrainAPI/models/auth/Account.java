@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -39,24 +40,25 @@ public class Account {
     public Map<String, Object> toMap() {
         String relatedId = professional ? professionalDetails.getId() : userDetails.getId();
 
-        return Map.of(
-                "id", id,
-                "name", name,
-                "email", email,
-                "username", username,
-                "isProfessional", professional,
-                professional ? "professionalId" : "userId", relatedId,
-                "isVerified", verified
-        );
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        map.put("name", name);
+        map.put("email", email);
+        map.put("username", username);
+        map.put("isProfessional", professional);
+        map.put(professional ? "professionalId" : "userId", relatedId);
+        map.put("isVerified", verified);
+        return map;
     }
 
     public Map<String, Object> toBasicMap() {
-        return Map.of(
-                "id", id,
-                "name", name,
-                "username", username,
-                "isProfessional", professional,
-                professional ? "professionalId" : "userId", professional ? professionalDetails.getId() : userDetails.getId()
-        );
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        map.put("name", name);
+        map.put("email", email);
+        map.put("username", username);
+        map.put("isProfessional", professional);
+        map.put(professional ? "professionalId" : "userId", professional ? professionalDetails.getId() : userDetails.getId());
+        return map;
     }
 }

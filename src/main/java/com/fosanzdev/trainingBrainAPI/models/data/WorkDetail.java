@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -35,13 +36,13 @@ public class WorkDetail {
     private Professional professional;
 
     public Map<String, Object> toMap(){
-        return Map.of(
-            "id", id,
-            "description", description,
-            "start_date", startDate,
-            "end_date", endDate,
-            "enterprise", enterprise,
-            "workTitle", workTitle.toMap()
-        );
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        map.put("description", description);
+        map.put("startDate", startDate);
+        map.put("endDate", endDate);
+        map.put("enterprise", enterprise);
+        map.put("workTitle", workTitle.toMap());
+        return map;
     }
 }

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -19,9 +20,9 @@ public class Branch {
     private String name;
 
     public Map<String, Object> toMap(){
-        return Map.of(
-                "id", id,
-            "name", name
-        );
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        map.put("name", name);
+        return map;
     }
 }

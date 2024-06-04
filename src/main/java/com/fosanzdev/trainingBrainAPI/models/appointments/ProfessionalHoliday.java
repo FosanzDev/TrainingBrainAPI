@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -51,21 +52,21 @@ public class ProfessionalHoliday {
     }
 
     public Map<String, Object> toMap() {
-        return Map.of(
-                "id", id,
-                "holidayType", holidayType.toString(),
-                "description", description,
-                "startDateTime", startDateTime.toString(),
-                "endDateTime", endDateTime.toString()
-        );
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        map.put("holidayType", holidayType.toString());
+        map.put("description", description);
+        map.put("startDateTime", startDateTime.toString());
+        map.put("endDateTime", endDateTime.toString());
+        return map;
     }
 
     public Map<String, Object> toBasicMap() {
-        return Map.of(
-                "holidayType", holidayType.toString(),
-                "startDateTime", startDateTime.toString(),
-                "endDateTime", endDateTime.toString(),
-                "description", description
-        );
+        Map<String, Object> map = new HashMap<>();
+        map.put("holidayType", holidayType.toString());
+        map.put("description", description);
+        map.put("startDateTime", startDateTime.toString());
+        map.put("endDateTime", endDateTime.toString());
+        return map;
     }
 }

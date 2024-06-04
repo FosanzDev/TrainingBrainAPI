@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -27,9 +28,9 @@ public class Skill {
     }
 
     public Map<String, String> toMap(){
-        return Map.of(
-            "name", name,
-            "description", description
-        );
+        Map<String, String> map = new HashMap<>();
+        map.put("name", name);
+        map.put("description", description);
+        return map;
     }
 }
