@@ -40,18 +40,24 @@ public class grpc_ProDataController extends ProDataServiceGrpc.ProDataServiceImp
         }
     }
 
+    private WorkTitle buildWorkTitle(com.fosanzdev.trainingBrainAPI.models.data.WorkTitle workTitle){
+        return WorkTitle.newBuilder()
+                .setId(workTitle.getId() == null ? 0 : workTitle.getId())
+                .setName(workTitle.getTitle() == null ? "" : workTitle.getTitle())
+                .setBranch(Branch.newBuilder()
+                        .setId(workTitle.getBranch().getId())
+                        .setName(workTitle.getBranch().getName())
+                        .build())
+                .build();
+    }
+
     @Override
     public void getWorkTitleList(Empty request, StreamObserver<WorkTitleListResponse> response) {
         try {
             WorkTitleListResponse.Builder responseBuilder = WorkTitleListResponse.newBuilder();
-            workTitleRepository.findAll().forEach(workTitle -> responseBuilder.addWorkTitleList(WorkTitle.newBuilder()
-                    .setId(workTitle.getId())
-                    .setName(workTitle.getTitle())
-                    .setBranch(Branch.newBuilder()
-                            .setId(workTitle.getBranch().getId())
-                            .setName(workTitle.getBranch().getName())
-                            .build())
-                    .build()));
+            workTitleRepository.findAll().forEach(workTitle -> responseBuilder.addWorkTitleList(
+                    buildWorkTitle(workTitle)
+            ));
 
             response.onNext(responseBuilder.build());
             response.onCompleted();
@@ -65,14 +71,9 @@ public class grpc_ProDataController extends ProDataServiceGrpc.ProDataServiceImp
     public void getWorkTitleByBranch(GetWorkTitleByBranchRequest request, StreamObserver<WorkTitleListResponse> response) {
         try {
             WorkTitleListResponse.Builder responseBuilder = WorkTitleListResponse.newBuilder();
-            workTitleRepository.findByBranch(request.getBranchId()).forEach(workTitle -> responseBuilder.addWorkTitleList(WorkTitle.newBuilder()
-                    .setId(workTitle.getId())
-                    .setName(workTitle.getTitle())
-                    .setBranch(Branch.newBuilder()
-                            .setId(workTitle.getBranch().getId())
-                            .setName(workTitle.getBranch().getName())
-                            .build())
-                    .build()));
+            workTitleRepository.findByBranch(request.getBranchId()).forEach(workTitle -> responseBuilder.addWorkTitleList(
+                    buildWorkTitle(workTitle)
+            ));
 
             response.onNext(responseBuilder.build());
             response.onCompleted();
@@ -111,35 +112,21 @@ public class grpc_ProDataController extends ProDataServiceGrpc.ProDataServiceImp
         professional.getWorkDetails().forEach(workDetail -> workDetailListBuilder.addWorkDetails(
                 WorkDetail.newBuilder()
                         .setId(workDetail.getId())
-                        .setWorkTitle(WorkTitle.newBuilder()
-                                .setId(workDetail.getWorkTitle().getId())
-                                .setName(workDetail.getWorkTitle().getTitle())
-                                .setBranch(Branch.newBuilder()
-                                        .setId(workDetail.getWorkTitle().getBranch().getId())
-                                        .setName(workDetail.getWorkTitle().getBranch().getName())
-                                        .build())
-                                .build())
-                        .setCompany(workDetail.getEnterprise())
-                        .setStartDate(workDetail.getStartDate())
-                        .setEndDate(workDetail.getEndDate())
-                        .setDescription(workDetail.getDescription())
+                        .setWorkTitle(buildWorkTitle(workDetail.getWorkTitle()))
+                        .setCompany(workDetail.getEnterprise() == null ? "" : workDetail.getEnterprise())
+                        .setStartDate(workDetail.getStartDate() == null ? "" : workDetail.getStartDate())
+                        .setEndDate(workDetail.getEndDate() == null ? "" : workDetail.getEndDate())
+                        .setDescription(workDetail.getDescription() == null ? "" : workDetail.getDescription())
                         .build()));
         return workDetailListBuilder.build();
     }
 
     public ProDataResponse generateProDataResponse(Professional professional, WorkDetailList workDetailList) {
         return ProDataResponse.newBuilder()
-                .setId(professional.getId())
-                .setName(professional.getAccount().getName())
-                .setPublicBio(professional.getPublicBio())
-                .setWorkTitle(WorkTitle.newBuilder()
-                        .setId(professional.getWorkTitle().getId())
-                        .setName(professional.getWorkTitle().getTitle())
-                        .setBranch(Branch.newBuilder()
-                                .setId(professional.getWorkTitle().getBranch().getId())
-                                .setName(professional.getWorkTitle().getBranch().getName())
-                                .build())
-                        .build())
+                .setId(professional.getId() == null ? "" : professional.getId())
+                .setName(professional.getAccount().getName() == null ? "" : professional.getAccount().getName())
+                .setPublicBio(professional.getPublicBio() == null ? "" : professional.getPublicBio())
+                .setWorkTitle(buildWorkTitle(professional.getWorkTitle()))
                 .setWorkDetails(workDetailList)
                 .build();
     }

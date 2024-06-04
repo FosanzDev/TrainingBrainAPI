@@ -81,18 +81,20 @@ public class grpc_PostController extends PostsServiceGrpc.PostsServiceImplBase {
     }
 
     public PostResponse buildPostResponse(Post post) {
+
+        //Repeated code, but anyway, used to avoid autowiring
         BasicAccountInfo accountInfo = BasicAccountInfo.newBuilder()
                 .setId(post.getAuthor().getId())
-                .setUsername(post.getAuthor().getUsername())
-                .setName(post.getAuthor().getName())
+                .setUsername(post.getAuthor().getUsername() != null ? post.getAuthor().getUsername() : "")
+                .setName(post.getAuthor().getName() != null ? post.getAuthor().getName() : "")
                 .setIsProfessional(post.getAuthor().isProfessional())
                 .setRelatedId(post.getAuthor().isProfessional() ? post.getAuthor().getProfessionalDetails().getId() : post.getAuthor().getUserDetails().getId())
                 .build();
 
         return PostResponse.newBuilder()
                 .setId(post.getId())
-                .setTitle(post.getTitle())
-                .setContent(post.getContent())
+                .setTitle(post.getTitle() != null ? post.getTitle() : "")
+                .setContent(post.getContent() != null ? post.getContent() : "")
                 .setCreationDateTime(post.getCreationDateTime().toString())
                 .setAuthor(accountInfo)
                 .build();

@@ -61,8 +61,8 @@ public class grpc_RoutineController extends RoutineServiceGrpc.RoutineServiceImp
     public RoutineResponse buildRoutine(Routine routine) {
         RoutineResponse.Builder routineResponseBuilder = RoutineResponse.newBuilder();
         routineResponseBuilder.setId(routine.getId());
-        routineResponseBuilder.setTitle(routine.getTitle());
-        routineResponseBuilder.setDescription(routine.getDescription());
+        routineResponseBuilder.setTitle(routine.getTitle() == null ? "" : routine.getTitle());
+        routineResponseBuilder.setDescription(routine.getDescription() == null ? "" : routine.getDescription());
         routineResponseBuilder.setEvery(routine.getEvery());
         routineResponseBuilder.setRoutineType(routine.getRoutineType().name());
         routineResponseBuilder.setStartDateTime(routine.getStartTime().toString());

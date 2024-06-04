@@ -120,10 +120,10 @@ public class grpc_MoodController extends MoodServiceGrpc.MoodServiceImplBase {
     private com.fosanzdev.trainingBrainGrpcInterface.auth.Mood toProto (Mood mood){
         return com.fosanzdev.trainingBrainGrpcInterface.auth.Mood.newBuilder()
                 .setId(mood.getId())
-                .setDescription(mood.getDescription())
-                .setName(mood.getName())
-                .setColor(mood.getColor())
-                .setIcon(mood.getIcon())
+                .setDescription(mood.getDescription() == null ? "" : mood.getDescription())
+                .setName(mood.getName() == null ? "" : mood.getName())
+                .setColor(mood.getColor() == null ? "" : mood.getColor())
+                .setIcon(mood.getIcon() == null ? "" : mood.getIcon())
                 .build();
     }
 

@@ -69,7 +69,8 @@ public class grpc_ScheduleController extends ScheduleServiceGrpc.ScheduleService
 
         // Initialize Schedule builder
         Schedule.Builder scheduleBuilder = Schedule.newBuilder();
-        scheduleBuilder.setProfessionalId(professionalSchedules.get(0).getProfessional().getId());
+        String id = professionalSchedules.get(0).getProfessional().getId();
+        scheduleBuilder.setProfessionalId(id == null ? "" : id);
 
         // Iterate over each day
         for (Map.Entry<Integer, List<ProfessionalSchedule>> entry : schedulesByDay.entrySet()) {

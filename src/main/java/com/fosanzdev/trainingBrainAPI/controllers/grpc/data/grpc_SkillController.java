@@ -32,11 +32,21 @@ public class grpc_SkillController extends SkillServiceGrpc.SkillServiceImplBase 
             com.fosanzdev.trainingBrainGrpcInterface.data.Skill.Builder skillBuilder = com.fosanzdev.trainingBrainGrpcInterface.data.Skill.newBuilder();
             skillBuilder.setId(skill.getId());
             skillBuilder.setName(skill.getName());
+            skillBuilder.setDescription(skill.getDescription());
             skillListBuilder.addSkills(skillBuilder);
         }
 
         response.onNext(skillListBuilder.build());
         response.onCompleted();
+    }
+
+    public com.fosanzdev.trainingBrainGrpcInterface.data.ProfessionalSkill buildProfessionalSkill(ProfessionalSkill professionalSkill){
+        return com.fosanzdev.trainingBrainGrpcInterface.data.ProfessionalSkill.newBuilder()
+                .setId(professionalSkill.getId())
+                .setName(professionalSkill.getSkill().getName() == null ? "" : professionalSkill.getSkill().getName())
+                .setDescription(professionalSkill.getSkill().getDescription() == null ? "" : professionalSkill.getSkill().getDescription())
+                .setLevel(professionalSkill.getLevel())
+                .build();
     }
 
     @Override
@@ -54,12 +64,7 @@ public class grpc_SkillController extends SkillServiceGrpc.SkillServiceImplBase 
             List<ProfessionalSkill> professionalSkillList = proDataService.getProfessionalByAccessToken(token).getProfessionalSkills();
             ProfessionalSkillList.Builder professionalSkillListBuilder = ProfessionalSkillList.newBuilder();
             for (ProfessionalSkill professionalSkill : professionalSkillList) {
-                com.fosanzdev.trainingBrainGrpcInterface.data.ProfessionalSkill.Builder professionalSkillBuilder = com.fosanzdev.trainingBrainGrpcInterface.data.ProfessionalSkill.newBuilder();
-                professionalSkillBuilder.setId(professionalSkill.getId());
-                professionalSkillBuilder.setName(professionalSkill.getSkill().getName());
-                professionalSkillBuilder.setDescription(professionalSkill.getSkill().getDescription());
-                professionalSkillBuilder.setLevel(professionalSkill.getLevel());
-                professionalSkillListBuilder.addProfessionalSkills(professionalSkillBuilder);
+                professionalSkillListBuilder.addProfessionalSkills(buildProfessionalSkill(professionalSkill));
             }
 
             response.onNext(professionalSkillListBuilder.build());

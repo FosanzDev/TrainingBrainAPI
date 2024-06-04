@@ -26,6 +26,15 @@ public class grpc_OpinionController extends OpinionServiceGrpc.OpinionServiceImp
     @Autowired
     private IProDataService proDataService;
 
+    public OpinionResponse buildOpinionResponse(Opinion opinion){
+        return OpinionResponse.newBuilder()
+                .setId(opinion.getId())
+                .setTitle(opinion.getTitle())
+                .setContent(opinion.getDescription())
+                .setRating(opinion.getRating())
+                .build();
+    }
+
     @Override
     public void createOpinion(CreateOpinionRequest request, StreamObserver<Empty> response){
         Professional professional = proDataService.getProfessionalById(request.getProfesionalId());
@@ -100,11 +109,7 @@ public class grpc_OpinionController extends OpinionServiceGrpc.OpinionServiceImp
                 } else {
                     OpinionList.Builder opinionList = OpinionList.newBuilder();
                     opinionService.getMyOpinions(professional).forEach(opinion -> opinionList.addOpinions(
-                            OpinionResponse.newBuilder()
-                                    .setId(opinion.getId())
-                                    .setTitle(opinion.getTitle())
-                                    .setContent(opinion.getDescription())
-                                    .setRating(opinion.getRating())
+                            buildOpinionResponse(opinion)
                     ));
                     response.onNext(opinionList.build());
                     response.onCompleted();
@@ -112,11 +117,7 @@ public class grpc_OpinionController extends OpinionServiceGrpc.OpinionServiceImp
             } else {
                 OpinionList.Builder opinionList = OpinionList.newBuilder();
                 opinionService.getMyOpinions(user).forEach(opinion -> opinionList.addOpinions(
-                        OpinionResponse.newBuilder()
-                                .setId(opinion.getId())
-                                .setTitle(opinion.getTitle())
-                                .setContent(opinion.getDescription())
-                                .setRating(opinion.getRating())
+                        buildOpinionResponse(opinion)
                 ));
             }
         } catch (Exception e){
@@ -138,11 +139,7 @@ public class grpc_OpinionController extends OpinionServiceGrpc.OpinionServiceImp
 
         OpinionList.Builder opinionList = OpinionList.newBuilder();
         opinionService.getOpinionsByProfessional(professional).forEach(opinion -> opinionList.addOpinions(
-                OpinionResponse.newBuilder()
-                        .setId(opinion.getId())
-                        .setTitle(opinion.getTitle())
-                        .setContent(opinion.getDescription())
-                        .setRating(opinion.getRating())
+                buildOpinionResponse(opinion)
         ));
 
         response.onNext(opinionList.build());

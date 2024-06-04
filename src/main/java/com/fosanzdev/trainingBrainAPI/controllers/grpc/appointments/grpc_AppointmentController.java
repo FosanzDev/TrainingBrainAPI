@@ -51,6 +51,8 @@ public class grpc_AppointmentController extends AppointmentServiceGrpc.Appointme
             }
 
             Appointment appointment = new Appointment();
+            request.getStartDateTime();
+            appointment.setStartDateTime(Instant.parse(request.getStartDateTime()));
             appointment.setStartDateTime(Instant.parse(request.getStartDateTime()));
             appointment.setEndDateTime(Instant.parse(request.getEndDateTime()));
             appointment.setSubmissionTime(Instant.now());
@@ -73,27 +75,32 @@ public class grpc_AppointmentController extends AppointmentServiceGrpc.Appointme
         }
     }
 
-    public AppointmentResponse getAppointmentResponse(Appointment appointment){
+    public DiagnosisObject buildDiagnosisObject(Diagnosis diagnosis){
+        DiagnosisObject.Builder diagnosisObjectBuilder = DiagnosisObject.newBuilder();
+        diagnosisObjectBuilder.setHeader(diagnosis.getHeader() == null ? "" : diagnosis.getHeader());
+        diagnosisObjectBuilder.setShortDescription(diagnosis.getShortDescription() == null ? "" : diagnosis.getShortDescription());
+        diagnosisObjectBuilder.setDescription(diagnosis.getDescription() == null ? "" : diagnosis.getDescription());
+        diagnosisObjectBuilder.setRecommendation(diagnosis.getRecommendation() == null ? "" : diagnosis.getRecommendation());
+        diagnosisObjectBuilder.setTreatment(diagnosis.getTreatment() == null ? "" : diagnosis.getTreatment());
+        return diagnosisObjectBuilder.build();
+    }
+
+    public AppointmentResponse buildAppointmentResponse(Appointment appointment){
         AppointmentResponse.Builder appointmentResponseBuilder = AppointmentResponse.newBuilder();
         if (appointment.getDiagnosis() != null) {
-            DiagnosisObject.Builder diagnosisObjectBuilder = DiagnosisObject.newBuilder();
-            diagnosisObjectBuilder.setHeader(appointment.getDiagnosis().getHeader());
-            diagnosisObjectBuilder.setShortDescription(appointment.getDiagnosis().getShortDescription());
-            diagnosisObjectBuilder.setDescription(appointment.getDiagnosis().getDescription());
-            diagnosisObjectBuilder.setRecommendation(appointment.getDiagnosis().getRecommendation());
-            diagnosisObjectBuilder.setTreatment(appointment.getDiagnosis().getTreatment());
-            appointmentResponseBuilder.setDiagnosis(diagnosisObjectBuilder.build());
+            DiagnosisObject diagnosisObject = buildDiagnosisObject(appointment.getDiagnosis());
+            appointmentResponseBuilder.setDiagnosis(diagnosisObject);
         }
 
-        appointmentResponseBuilder.setAppointmentId(appointment.getId());
+        appointmentResponseBuilder.setAppointmentId(appointment.getId() == null ? "" : appointment.getId());
         appointmentResponseBuilder.setStartDateTime(appointment.getStartDateTime().toString());
         appointmentResponseBuilder.setEndDateTime(appointment.getEndDateTime().toString());
-        appointmentResponseBuilder.setSubmissionNotes(appointment.getSubmissionNotes());
-        appointmentResponseBuilder.setCancellationNotes(appointment.getCancellationReason());
-        appointmentResponseBuilder.setConfirmationNotes(appointment.getConfirmationNotes());
-        appointmentResponseBuilder.setProfessionalId(appointment.getProfessional().getId());
-        appointmentResponseBuilder.setUserId(appointment.getUser().getId());
-        appointmentResponseBuilder.setStatus(appointment.getAppointmentStatus().toString());
+        appointmentResponseBuilder.setSubmissionNotes(appointment.getSubmissionNotes() == null ? "" : appointment.getSubmissionNotes());
+        appointmentResponseBuilder.setCancellationNotes(appointment.getCancellationReason() == null ? "" : appointment.getCancellationReason());
+        appointmentResponseBuilder.setConfirmationNotes(appointment.getConfirmationNotes() == null ? "" : appointment.getConfirmationNotes());
+        appointmentResponseBuilder.setProfessionalId(appointment.getProfessional().getId() == null ? "" : appointment.getProfessional().getId());
+        appointmentResponseBuilder.setUserId(appointment.getUser().getId() == null ? "" : appointment.getUser().getId());
+        appointmentResponseBuilder.setStatus(appointment.getAppointmentStatus().toString() == null ? "" : appointment.getAppointmentStatus().toString());
 
         return appointmentResponseBuilder.build();
     }
@@ -127,7 +134,7 @@ public class grpc_AppointmentController extends AppointmentServiceGrpc.Appointme
 
             AppointmentList.Builder appointmentListBuilder = AppointmentList.newBuilder();
             for (Appointment appointment : appointments) {
-                AppointmentResponse appointmentResponseBuilder = getAppointmentResponse(appointment);
+                AppointmentResponse appointmentResponseBuilder = buildAppointmentResponse(appointment);
                 appointmentListBuilder.addAppointments(appointmentResponseBuilder);
             }
 
@@ -192,7 +199,7 @@ public class grpc_AppointmentController extends AppointmentServiceGrpc.Appointme
                 return;
             }
 
-            AppointmentResponse appointmentResponse = getAppointmentResponse(appointment);
+            AppointmentResponse appointmentResponse = buildAppointmentResponse(appointment);
             response.onNext(appointmentResponse);
             response.onCompleted();
 

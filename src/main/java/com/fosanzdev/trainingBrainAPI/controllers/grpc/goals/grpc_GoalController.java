@@ -91,8 +91,8 @@ public class grpc_GoalController extends GoalsServiceGrpc.GoalsServiceImplBase {
     public GoalResponse buildGoal(Goal goal) {
         GoalResponse.Builder goalResponseBuilder = GoalResponse.newBuilder();
         goalResponseBuilder.setGoalId(goal.getId());
-        goalResponseBuilder.setTitle(goal.getTitle());
-        goalResponseBuilder.setDescription(goal.getDescription());
+        goalResponseBuilder.setTitle(goal.getTitle() == null ? "" : goal.getTitle());
+        goalResponseBuilder.setDescription(goal.getDescription() == null ? "" : goal.getDescription());
         goalResponseBuilder.setCompleted(goal.isCompleted());
         goalResponseBuilder.setHoursBetween(goal.getHoursBetween());
         goalResponseBuilder.setRepetitions(goal.getRepetitions());

@@ -70,7 +70,7 @@ public class ProfessionalSchedule {
         Map<Integer, List<ProfessionalSchedule>> schedulesByDay = professionalSchedules.stream()
                 .collect(Collectors.groupingBy(ProfessionalSchedule::getDayOfWeek));
 
-        return schedulesByDay.entrySet().stream()
+        Map<String, Object> schedule = schedulesByDay.entrySet().stream()
                 .collect(Collectors.toMap(
                         entry -> List.of("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday").get(entry.getKey() - 1),
                         entry -> entry.getValue().stream()
@@ -80,6 +80,9 @@ public class ProfessionalSchedule {
                                 ))
                                 .collect(Collectors.toList())
                 ));
+
+        schedule.put("intervalMinutes", professionalSchedules.get(0).getIntervalMinutes());
+        return schedule;
     }
 
     public static boolean checkHourFormat(String hour) {
