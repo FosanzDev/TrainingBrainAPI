@@ -50,6 +50,7 @@ public class Opinion {
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
         map.put("id", id);
+        map.put("professionalId", professional.getId());
         map.put("title", title);
         map.put("description", description);
         map.put("rating", rating);

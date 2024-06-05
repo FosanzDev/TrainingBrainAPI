@@ -70,13 +70,15 @@ public class OpinionController {
             @Parameter(description = "Token de autorización", required = true, example = "Bearer <token>")
             @RequestHeader("Authorization") String bearer,
 
-            @Parameter(description = "Datos de la opinión", required = true, example = """
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Datos de la opinión", required = true, content = @Content(mediaType = "application/json",
+                    schema = @Schema(
+                    example = """
                 {
                     "title": "Excelente profesional",
                     "description": "Muy buen trato y atención",
                     "rating": 10
                 }
-            """)
+            """)))
             @RequestBody Map<String, Object> jsonData,
 
             @Parameter(description = "ID del profesional", required = true, example = "daskc-23cas-23cas-23cas")
@@ -164,12 +166,14 @@ public class OpinionController {
                         {
                             "opinions": [
                                 {
+                                    "professionalId": "daskc-23cas-23cas-23cas",
                                     "id": "daskc-23cas-23cas-23cas",
                                     "title": "Excelente profesional",
                                     "description": "Muy buen trato y atención",
                                     "rating": 10
                                 },
                                 {
+                                    "professionalId": "daskc-23cas-23cas-23cas",
                                     "id": "daskc-23cas-23cas-23cas",
                                     "title": "Excelente profesional",
                                     "description": "Muy buen trato y atención",
