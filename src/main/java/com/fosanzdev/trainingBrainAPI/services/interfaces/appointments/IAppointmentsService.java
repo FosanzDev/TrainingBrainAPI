@@ -2,6 +2,7 @@ package com.fosanzdev.trainingBrainAPI.services.interfaces.appointments;
 
 import com.fosanzdev.trainingBrainAPI.models.appointments.Appointment;
 import com.fosanzdev.trainingBrainAPI.models.appointments.Diagnosis;
+import com.fosanzdev.trainingBrainAPI.models.appointments.ProfessionalHoliday;
 import com.fosanzdev.trainingBrainAPI.models.data.Professional;
 import com.fosanzdev.trainingBrainAPI.models.data.User;
 import com.fosanzdev.trainingBrainAPI.services.appointments.AppointmentException;
@@ -12,6 +13,7 @@ public interface IAppointmentsService {
 
     void isConflictive (Appointment appointment, boolean checkForOverlaps) throws AppointmentException;
     void rejectAllConflictingAppointments(Appointment appointment);
+    void rejectAllConflictingAppointments(ProfessionalHoliday holiday);
     void bookAppointment (Appointment appointment) throws AppointmentException;
     void acceptAppointment (String appointmentId, Professional professional, String professionalComment) throws AppointmentException;
     void rejectAppointment (User user, String appointmentId, String professionalComment) throws AppointmentException;

@@ -3,6 +3,7 @@ package com.fosanzdev.trainingBrainAPI.services.appointments;
 import com.fosanzdev.trainingBrainAPI.models.appointments.ProfessionalHoliday;
 import com.fosanzdev.trainingBrainAPI.models.data.Professional;
 import com.fosanzdev.trainingBrainAPI.repositories.appointments.ProfessionalHolidaysRepository;
+import com.fosanzdev.trainingBrainAPI.services.interfaces.appointments.IAppointmentsService;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.appointments.IProHolidaysService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,10 @@ public class ProHolidaysService implements IProHolidaysService {
 
     @Autowired
     private ProfessionalHolidaysRepository professionalHolidaysRepository;
+
+
+    @Autowired
+    private IAppointmentsService appointmentsService;
 
     @Override
     public List<ProfessionalHoliday> findByProfessionalId(String professionalId) {
@@ -41,6 +46,8 @@ public class ProHolidaysService implements IProHolidaysService {
         List<ProfessionalHoliday> activeHolidays = professionalHolidaysRepository.findByProfessionalId(professional.getId());
         if (hasConflicts(activeHolidays, holiday)) return false;
 
+
+        appointmentsService.rejectAllConflictingAppointments(holiday);
         holiday.setProfessional(professional);
         professionalHolidaysRepository.save(holiday);
         return true;

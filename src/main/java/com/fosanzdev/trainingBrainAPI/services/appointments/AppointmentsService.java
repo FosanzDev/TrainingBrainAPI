@@ -150,6 +150,24 @@ public class AppointmentsService implements IAppointmentsService {
         }
     }
 
+    @Transactional
+    @Override
+    public void rejectAllConflictingAppointments(ProfessionalHoliday holiday){
+        List<Appointment> conflictingAppointments = appointmentRepository.findPendingAppointmentByProfessionalId(holiday.getProfessional().getId());
+        for (Appointment conflictingAppointment : conflictingAppointments) {
+            try {
+                if (conflictingAppointment.getStartDateTime().isAfter(holiday.getStartDateTime()) &&
+                        conflictingAppointment.getEndDateTime().isBefore(holiday.getEndDateTime())) {
+                    throw new AppointmentException("Appointment conflicts with a holiday");
+                }
+            } catch (AppointmentException e) {
+                conflictingAppointment.setAppointmentStatus(Appointment.AppointmentStatus.CANCELLED_BY_PROFESSIONAL);
+                conflictingAppointment.setCancellationReason("Conflicts with a holiday");
+                appointmentRepository.save(conflictingAppointment);
+            }
+        }
+    }
+
 
     @Transactional
     @Override
