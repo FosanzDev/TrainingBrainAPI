@@ -65,8 +65,8 @@ public class RoutineController {
                                 "description": "Rutina de ejercicios para mantenerse en forma",
                                 "every": 1,
                                 "routineType": "DAYS",
-                                "startDateTime": "2021-09-01T00:00:00Z",
-                                "endDateTime": "2021-09-30T00:00:00Z"
+                                "startTime": "2021-09-01T09:00:00Z",
+                                "endTime": "2021-09-01T10:00:00Z"
                             }
                             """))
             @RequestBody Map<String, Object> body
