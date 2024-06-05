@@ -80,10 +80,13 @@ public class GoalService implements IGoalService {
         return goalRepository.findAllByUserId(user.getId());
     }
 
+    @Transactional
     @Override
     public boolean deleteGoal(User user, String id) {
         Goal goal = goalRepository.findById(id).orElse(null);
         if (goal != null && goal.getUser().getId().equals(user.getId())) {
+            List<GoalEntry> entries = goalEntryRepository.findAllByGoalId(goal.getId());
+            goalEntryRepository.deleteAll(entries);
             goalRepository.delete(goal);
             return true;
         }
