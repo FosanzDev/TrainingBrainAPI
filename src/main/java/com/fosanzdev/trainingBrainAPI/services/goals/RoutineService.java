@@ -59,7 +59,11 @@ public class RoutineService implements IRoutineService {
         Instant nextDueDate = routine.getSubmissionDate();
 
         // Calculate the next due date
-        while (nextDueDate.isBefore(Instant.now())) {
+        while (nextDueDate.isBefore(Instant.now().minus(routine.getEvery(), switch (routine.getRoutineType()) {
+            case DAYS -> ChronoUnit.DAYS;
+            case WEEKS -> ChronoUnit.WEEKS;
+            case MONTHS -> ChronoUnit.MONTHS;
+        }))) {
             nextDueDate = switch (routine.getRoutineType()) {
                 case DAYS -> nextDueDate.plus(routine.getEvery(), ChronoUnit.DAYS);
                 case WEEKS -> nextDueDate.plus(routine.getEvery(), ChronoUnit.WEEKS);
