@@ -158,7 +158,6 @@ public class AppointmentsService implements IAppointmentsService {
             try {
                 if (conflictingAppointment.getStartDateTime().isAfter(holiday.getStartDateTime()) &&
                         conflictingAppointment.getEndDateTime().isBefore(holiday.getEndDateTime())) {
-                    System.out.println("Conflicts with a holiday");
                     throw new AppointmentException("Appointment conflicts with a holiday");
                 }
             } catch (AppointmentException e) {

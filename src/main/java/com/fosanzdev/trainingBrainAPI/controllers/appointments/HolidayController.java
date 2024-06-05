@@ -3,7 +3,6 @@ package com.fosanzdev.trainingBrainAPI.controllers.appointments;
 import com.fosanzdev.trainingBrainAPI.models.appointments.ProfessionalHoliday;
 import com.fosanzdev.trainingBrainAPI.models.data.Professional;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.appointments.IProHolidaysService;
-import com.fosanzdev.trainingBrainAPI.services.interfaces.appointments.IProScheduleService;
 import com.fosanzdev.trainingBrainAPI.services.interfaces.data.IProDataService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -69,7 +68,6 @@ public class HolidayController {
             if (proHolidaysService.addHoliday(professional, holiday)) return ResponseEntity.ok(Map.of("message", "Holiday added"));
 
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(400).body(Map.of("message", "Bad request"));
         }
 
