@@ -69,6 +69,7 @@ public class HolidayController {
             if (proHolidaysService.addHoliday(professional, holiday)) return ResponseEntity.ok(Map.of("message", "Holiday added"));
 
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(400).body(Map.of("message", "Bad request"));
         }
 

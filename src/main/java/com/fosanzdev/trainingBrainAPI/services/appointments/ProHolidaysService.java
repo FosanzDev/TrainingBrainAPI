@@ -46,9 +46,8 @@ public class ProHolidaysService implements IProHolidaysService {
         List<ProfessionalHoliday> activeHolidays = professionalHolidaysRepository.findByProfessionalId(professional.getId());
         if (hasConflicts(activeHolidays, holiday)) return false;
 
-
-        appointmentsService.rejectAllConflictingAppointments(holiday);
         holiday.setProfessional(professional);
+        appointmentsService.rejectAllConflictingAppointments(holiday);
         professionalHolidaysRepository.save(holiday);
         return true;
     }
