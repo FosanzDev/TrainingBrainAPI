@@ -80,7 +80,7 @@ public class Appointment {
         map.put("professional", this.getProfessional() != null ? this.getProfessional().getId() : null);
         map.put("user", this.getUser() != null ? this.getUser().getId() : null);
         map.put("appointmentStatus", this.getAppointmentStatus() != null ? this.getAppointmentStatus().toString() : null);
-        map.put("diagnosis", this.getDiagnosis().toMap());
+        map.put("diagnosis", this.getDiagnosis().toMap() != null ? this.getDiagnosis().toMap() : null);
         return map;
     }
 }
